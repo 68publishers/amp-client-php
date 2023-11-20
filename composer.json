@@ -1,0 +1,40 @@
+{
+	"name": "68publishers/amp-client",
+	"description": "",
+	"keywords": ["68publishers", "amp", "amp-client"],
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Tomáš Glawaty",
+			"email": "tomasglawaty@icloud.com"
+		}
+	],
+	"require": {
+		"php": "^7.4 || ^8.0",
+		"ext-json": "*",
+		"guzzlehttp/guzzle": "^7.7"
+	},
+	"require-dev": {
+		"friendsofphp/php-cs-fixer": "^3.17",
+		"kubawerlos/php-cs-fixer-custom-fixers": "^3.14",
+		"mockery/mockery": "^1.6",
+		"nette/tester": "^2.4",
+		"phpstan/phpstan": "^1.10",
+		"phpstan/phpstan-nette": "^1.2",
+		"roave/security-advisories": "dev-latest",
+		"symplify/phpstan-rules": "12.0.2.72"
+	},
+	"config": {
+		"sort-packages": true
+	},
+	"autoload": {
+		"psr-4": {
+			"SixtyEightPublishers\\AmpClient\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"SixtyEightPublishers\\AmpClient\\Tests\\": "tests/"
+		}
+	}
+}
