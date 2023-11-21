@@ -41,6 +41,11 @@ final class CachedResponse
         return $this->maxAge;
     }
 
+    public function isFresh(): bool
+    {
+        return $this->getMaxAge()->isFresh();
+    }
+
     public function getEtag(): ?Etag
     {
         return $this->etag;

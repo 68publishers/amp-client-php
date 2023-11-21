@@ -1,0 +1,7 @@
+extensions:
+    amp_client: SixtyEightPublishers\AmpClient\Bridge\Nette\DI\AmpClientExtension
+
+amp_client:
+    url: https://www.example.com
+    channel: test
+    version: 1

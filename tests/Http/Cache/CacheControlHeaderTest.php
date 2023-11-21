@@ -63,6 +63,8 @@ final class CacheControlHeaderTest extends TestCase
             'no-store' => '',
             's-maxage' => '100',
         ], $header->all());
+
+        Assert::false($header->isEmpty());
     }
 }
 

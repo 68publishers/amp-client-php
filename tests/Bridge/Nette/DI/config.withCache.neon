@@ -1,0 +1,10 @@
+extensions:
+    amp_client: SixtyEightPublishers\AmpClient\Bridge\Nette\DI\AmpClientExtension
+
+amp_client:
+    url: https://www.example.com
+    channel: test
+    cache:
+        storage: Nette\Caching\Storages\MemoryStorage
+        expiration: '+1 hour'
+        cache_control_header_override: 'no-store'

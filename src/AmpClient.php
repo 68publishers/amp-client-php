@@ -22,6 +22,7 @@ use SixtyEightPublishers\AmpClient\Request\ValueObject\BannerResource;
 use SixtyEightPublishers\AmpClient\Response\BannersResponse;
 use SixtyEightPublishers\AmpClient\Response\Hydrator\BannersResponseHydratorHandler;
 use SixtyEightPublishers\AmpClient\Response\Hydrator\ResponseHydrator;
+use stdClass;
 use function array_map;
 use function count;
 use function sprintf;
@@ -110,10 +111,12 @@ final class AmpClient implements AmpClientInterface
 
         foreach ($positions as $position) {
             $position = $position->withResources($defaultResources);
-            $queryParam[$position->getCode()] = array_map(
+            $resources = array_map(
                 static fn (BannerResource $resource): array => $resource->getValues(),
                 $position->getResources(),
             );
+
+            $queryParam[$position->getCode()] = 0 >= count($resources) ? new stdClass() : $resources;
         }
 
         $options = [

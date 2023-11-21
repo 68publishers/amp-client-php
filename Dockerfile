@@ -7,7 +7,8 @@ RUN apk add --no-cache --update git
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN apk add --no-cache ${PHPIZE_DEPS} \
     && pecl install pcov \
-    && docker-php-ext-enable pcov
+    && pecl install uopz-6.1.2 \
+    && docker-php-ext-enable pcov uopz
 
 CMD tail -f /dev/null
 
@@ -20,7 +21,8 @@ RUN apk add --no-cache --update git
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN apk add --no-cache ${PHPIZE_DEPS} \
     && pecl install pcov \
-    && docker-php-ext-enable pcov
+    && pecl install uopz-7.1.1 \
+    && docker-php-ext-enable pcov uopz
 
 CMD tail -f /dev/null
 
@@ -33,7 +35,8 @@ RUN apk add --no-cache --update git
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN apk add --no-cache ${PHPIZE_DEPS} \
     && pecl install pcov \
-    && docker-php-ext-enable pcov
+    && pecl install uopz-7.1.1 \
+    && docker-php-ext-enable pcov uopz
 
 CMD tail -f /dev/null
 
@@ -46,6 +49,7 @@ RUN apk add --no-cache --update git
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN apk add --no-cache ${PHPIZE_DEPS} \
     && pecl install pcov \
-    && docker-php-ext-enable pcov
+    && pecl install uopz-7.1.1 \
+    && docker-php-ext-enable pcov uopz
 
 CMD tail -f /dev/null

@@ -12,5 +12,6 @@ if (!$loader) {
 }
 
 Environment::setup();
+Environment::bypassFinals();
 
 return $loader;

@@ -31,12 +31,12 @@ final class ClientConfig
 
     public const Version1 = 1;
 
-    private const Methods = [
+    public const Methods = [
         self::MethodGet,
         self::MethodPost,
     ];
 
-    private const Versions = [
+    public const Versions = [
         self::Version1,
     ];
 

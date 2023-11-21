@@ -26,6 +26,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           tools: composer:v2
+          extensions: uopz
 
       - name: Install dependencies
         run: composer update --no-progress --prefer-dist --prefer-stable --optimize-autoloader

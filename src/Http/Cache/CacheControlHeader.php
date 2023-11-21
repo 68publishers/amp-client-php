@@ -57,6 +57,11 @@ final class CacheControlHeader
         return $default;
     }
 
+    public function isEmpty(): bool
+    {
+        return 0 >= count($this->values);
+    }
+
     /**
      * @return array<string, string>
      */

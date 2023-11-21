@@ -22,13 +22,17 @@ final class EtagTest extends TestCase
 
     public function testCreatingEtagFromResponse(): void
     {
-        $response = new Response(200, [
+        $responseWithoutEtag = new Response(200);
+        $responseWithEtag = new Response(200, [
             'ETag' => 'test',
         ]);
 
-        $etag = Etag::fromResponse($response);
+        $missingEtag = Etag::fromResponse($responseWithoutEtag);
+        $existingEtag = Etag::fromResponse($responseWithEtag);
 
-        Assert::same('test', $etag->getValue());
+        Assert::null($missingEtag);
+        Assert::type(Etag::class, $existingEtag);
+        Assert::same('test', $existingEtag->getValue());
     }
 }
 

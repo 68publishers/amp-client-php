@@ -57,7 +57,7 @@ final class HttpClient implements HttpClientInterface
      */
     public function request(HttpRequest $request, string $responseClassname): object
     {
-        $url = $this->baseUrl . '/' . ltrim($request->getUrl());
+        $url = $this->baseUrl . '/' . ltrim($request->getUrl(), '/');
         $cacheComponents = $request->getCacheComponents();
 
         if (null !== $cacheComponents) {
@@ -69,7 +69,7 @@ final class HttpClient implements HttpClientInterface
         $cachedResponse = null !== $cacheKey ? $this->cacheStorage->get($cacheKey) : null;
 
         if (null !== $cachedResponse) {
-            if ($cachedResponse->getMaxAge()->isFresh()) {
+            if ($cachedResponse->isFresh()) {
                 assert($cachedResponse->getResponse() instanceof $responseClassname);
 
                 return $cachedResponse->getResponse();
@@ -95,7 +95,7 @@ final class HttpClient implements HttpClientInterface
         $cacheControlHeader = $this->cacheControl->getCacheControlHeaderOverride() ?? CacheControlHeader::fromResponse($response);
         $etag = Etag::fromResponse($response);
 
-        $canBeStored = !$cacheControlHeader->has('no-store');
+        $canBeStored = !$cacheControlHeader->isEmpty() && !$cacheControlHeader->has('no-store');
         $maxAge = 0;
 
         if ($canBeStored && !$cacheControlHeader->has('no-cache')) {
@@ -121,6 +121,8 @@ final class HttpClient implements HttpClientInterface
             );
 
             $this->cacheStorage->save($cachedResponse, $this->cacheControl->createExpiration());
+        } elseif (!$canBeStored && null !== $cachedResponse && null !== $cacheKey) {
+            $this->cacheStorage->delete($cacheKey);
         }
 
         return $mappedResponse;
