@@ -79,7 +79,7 @@ final class AmpClientExtension extends CompilerExtension
         $builder->addDefinition($this->prefix('config'))
             ->setAutowired(false)
             ->setType(ClientConfig::class)
-            ->setCreator($this->createClientConfigCreator($config));
+            ->setFactory($this->createClientConfigCreator($config));
 
         $cacheStorageCreator = null === $config->cache->storage
             ? new Statement(NoCacheStorage::class)
@@ -90,29 +90,29 @@ final class AmpClientExtension extends CompilerExtension
         $builder->addDefinition($this->prefix('cacheStorage'))
             ->setAutowired(false)
             ->setType(CacheStorageInterface::class)
-            ->setCreator($cacheStorageCreator);
+            ->setFactory($cacheStorageCreator);
 
         $builder->addDefinition($this->prefix('responseHydrator'))
             ->setAutowired(false)
             ->setType(ResponseHydratorInterface::class)
-            ->setCreator(ResponseHydrator::class);
+            ->setFactory(ResponseHydrator::class);
 
         $builder->addDefinition($this->prefix('responseHydrator.handler.bannersRequest'))
             ->setAutowired(false)
             ->setType(ResponseHydratorHandlerInterface::class)
-            ->setCreator(BannersResponseHydratorHandler::class);
+            ->setFactory(BannersResponseHydratorHandler::class);
 
         $builder->addDefinition($this->prefix('httpClientFactory'))
             ->setAutowired(false)
             ->setType(HttpClientFactoryInterface::class)
-            ->setCreator(HttpClientFactory::class, [
+            ->setFactory(HttpClientFactory::class, [
                 'responseHydrator' => $this->prefix('@responseHydrator'),
                 'guzzleClientConfig' => $config->http->guzzle_config,
             ]);
 
         $builder->addDefinition($this->prefix('ampClient'))
             ->setType(AmpClientInterface::class)
-            ->setCreator(AmpClient::class, [
+            ->setFactory(AmpClient::class, [
                 'config' => $this->prefix('@config'),
                 'httpClientFactory' => $this->prefix('@httpClientFactory'),
                 'cacheStorage' => $this->prefix('@cacheStorage'),
