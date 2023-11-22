@@ -15,8 +15,11 @@
 		"guzzlehttp/guzzle": "^7.7"
 	},
 	"require-dev": {
+		"ext-dom": "*",
+		"ext-libxml": "*",
 		"friendsofphp/php-cs-fixer": "^3.17",
 		"kubawerlos/php-cs-fixer-custom-fixers": "^3.14",
+		"latte/latte": "^2.11",
 		"mockery/mockery": "^1.6",
 		"nette/bootstrap": "^3.1",
 		"nette/caching": "^3.1",
@@ -27,7 +30,8 @@
 		"psr/log": "^1.1",
 		"roave/security-advisories": "dev-latest",
 		"slope-it/clock-mock": "^0.4.0",
-		"symplify/phpstan-rules": "12.0.2.72"
+		"symplify/phpstan-rules": "12.0.2.72",
+		"wa72/html-pretty-min": "^0.2.0"
 	},
 	"config": {
 		"sort-packages": true

@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SixtyEightPublishers\AmpClient\Renderer\Phtml;
+
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
+use SixtyEightPublishers\AmpClient\Renderer\Fingerprint;
+
+/** @var Position $position */
+/** @var array<int, Banner> $banners */
+?>
+<div data-amp-banner="<?= Helpers::escapeHtmlAttr($position->getCode()) ?>" data-amp-attached>
+    <?php $banners = array_filter($banners, static fn (Banner $banner): bool => 0 < count($banner->getContents())) ?>
+    <?php if (0 < count($banners)): ?>
+        <div class="amp-banner amp-banner--multiple">
+            <div class="amp-banner__list">
+                <?php foreach ($banners as $banner): ?>
+                    <div class="amp-banner__item"
+                         data-amp-banner-fingerprint="<?= Helpers::escapeHtmlAttr(Fingerprint::create($position, $banner)) ?>">
+                        <?php include __DIR__ . '/contents.fragment.phtml' ?>
+                    </div>
+                <?php endforeach ?>
+            </div>
+        </div>
+    <?php endif ?>
+</div>

@@ -1,0 +1,42 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SixtyEightPublishers\AmpClient\Renderer\Phtml;
+
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent;
+use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
+
+/** @var Position $position */
+/** @var ?Banner $banner */
+?>
+<?php foreach ($banner->getContents() as $content): ?>
+    <?php if ($content instanceof ImageContent) : ?>
+        <a data-amp-content-breakpoint="<?= Helpers::escapeHtmlAttr($content->getBreakpoint() ?? 'default') ?>"
+           class="amp-banner__content amp-banner__content--img"
+           href="<?= Helpers::escapeHtmlAttr($content->getHref()) ?>"
+           <?php if (NULL !== $content->getTarget()) : ?>target="<?= Helpers::escapeHtmlAttr($content->getTarget()) ?>"<?php endif ?>>
+            <picture>
+                <?php foreach ($content->getSources() as $source): ?>
+                    <source type="<?= Helpers::escapeHtmlAttr($source->getType()) ?>"
+                            srcset="<?= Helpers::escapeHtmlAttr($source->getSrcset()) ?>"
+                            sizes="<?= Helpers::escapeHtmlAttr($content->getSizes()) ?>">
+                <?php endforeach ?>
+                <img srcset="<?= Helpers::escapeHtmlAttr($content->getSrcset()) ?>"
+                     src="<?= Helpers::escapeHtmlAttr($content->getSrc()) ?>"
+                     sizes="<?= Helpers::escapeHtmlAttr($content->getSizes()) ?>"
+                     alt="<?= Helpers::escapeHtmlAttr($content->getAlt()) ?>"
+                     <?php if ('' !== $content->getTitle()) : ?>title="<?= Helpers::escapeHtmlAttr($content->getTitle()) ?>"<?php endif ?>>
+            </picture>
+        </a>
+    <?php elseif ($content instanceof HtmlContent) : ?>
+        <div data-amp-content-breakpoint="<?= Helpers::escapeHtmlAttr($content->getBreakpoint() ?? 'default') ?>"
+             class="amp-banner__content amp-banner__content--html">
+            <?= $content->getHtml() ?>
+        </div>
+    <?php endif ?>
+<?php endforeach ?>
+<?= new BreakpointStyle($position, $banner) ?>

@@ -12,3 +12,8 @@ parameters:
     level: 8
     paths:
         - src
+    ignoreErrors:
+        # ignore "unused" closure parameters for capturing the output buffer
+        -
+            message: '#Anonymous function has an unused use \$.+#'
+            path: src/Renderer/Phtml/PhtmlRendererBridge.php

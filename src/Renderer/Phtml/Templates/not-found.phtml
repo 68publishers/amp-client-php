@@ -1,0 +1,11 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SixtyEightPublishers\AmpClient\Renderer\Phtml;
+
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+
+/** @var Position $position */
+?>
+<div data-amp-banner="<?= Helpers::escapeHtmlAttr($position->getCode()) ?>" data-amp-attached></div>
