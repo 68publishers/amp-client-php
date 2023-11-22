@@ -25,8 +25,9 @@ final class BreakpointStyle
     public function __construct(Position $position, Banner $banner)
     {
         $selectorMask = sprintf(
-            '[data-amp-banner="%s"] [data-amp-content-breakpoint="%s"]',
+            '[data-amp-banner="%s"] [data-amp-banner-id="%s"] [data-amp-content-breakpoint="%s"]',
             Helpers::escapeHtmlAttr($position->getCode()),
+            Helpers::escapeHtmlAttr($banner->getId()),
             '%s',
         );
 

@@ -58,7 +58,7 @@ final class BreakpointStyleTest extends TestCase
         ]);
 
         $expected = <<<HTML
-<style>[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="500"]{display:none}@media(min-width: 500px){[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="500"]{display:block}}</style>
+<style>[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:none}@media(min-width: 500px){[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:block}}</style>
 HTML;
 
         Assert::same($expected, $style->getCss());
@@ -72,7 +72,7 @@ HTML;
         ]);
 
         $expected = <<<HTML
-<style>[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="500"]{display:none}@media(max-width: 500px){[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="500"]{display:block}}</style>
+<style>[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:none}@media(max-width: 500px){[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:block}}</style>
 HTML;
 
         Assert::same($expected, $style->getCss());
@@ -88,7 +88,7 @@ HTML;
         ]);
 
         $expected = <<<HTML
-<style>[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="500"]{display:none}[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="900"]{display:none}@media(min-width: 500px){[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="default"]{display:none}[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="500"]{display:block}[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="900"]{display:none}}@media(min-width: 900px){[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="default"]{display:none}[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="500"]{display:none}[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="900"]{display:block}}</style>
+<style>[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:none}@media(min-width: 500px){[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="default"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:block}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:none}}@media(min-width: 900px){[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="default"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:block}}</style>
 HTML;
 
         Assert::same($expected, $style->getCss());
@@ -104,7 +104,7 @@ HTML;
         ]);
 
         $expected = <<<HTML
-<style>[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="900"]{display:none}[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="500"]{display:none}@media(max-width: 900px){[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="default"]{display:none}[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="900"]{display:block}[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="500"]{display:none}}@media(max-width: 500px){[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="default"]{display:none}[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="900"]{display:none}[data-amp-banner="homepage.top"] [data-amp-content-breakpoint="500"]{display:block}}</style>
+<style>[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:none}@media(max-width: 900px){[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="default"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:block}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:none}}@media(max-width: 500px){[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="default"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:block}}</style>
 HTML;
 
         Assert::same($expected, $style->getCss());
