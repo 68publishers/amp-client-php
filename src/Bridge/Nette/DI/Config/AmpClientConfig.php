@@ -26,4 +26,6 @@ final class AmpClientConfig
     public CacheConfig $cache;
 
     public HttpConfig $http;
+
+    public RendererConfig $renderer;
 }

@@ -1,0 +1,10 @@
+<?php
+
+declare(strict_types=1);
+
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Renderer\Phtml\Helpers;
+
+/** @var Position $position */
+?>
+<span style="color: red;">Position "<?= Helpers::escapeHtml($position->getCode()) ?>" not found.</span>

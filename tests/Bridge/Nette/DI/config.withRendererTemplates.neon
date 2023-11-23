@@ -1,0 +1,13 @@
+extensions:
+    amp_client: SixtyEightPublishers\AmpClient\Bridge\Nette\DI\AmpClientExtension
+
+amp_client:
+    url: https://www.example.com
+    channel: test
+    renderer:
+        bridge: phtml
+        templates:
+            single: %resources%/renderer/single/templates/single1.phtml
+            random: %resources%/renderer/random/templates/random1.phtml
+            multiple: %resources%/renderer/multiple/templates/multiple1.phtml
+            not_found: %resources%/renderer/not-found/templates/not-found1.phtml

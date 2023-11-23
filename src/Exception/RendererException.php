@@ -41,6 +41,16 @@ final class RendererException extends RuntimeException implements AmpExceptionIn
         );
     }
 
+    public static function templateFileNotDefined(string $type): self
+    {
+        return new self(
+            sprintf(
+                'Template file of type "%s" not defined.',
+                $type,
+            ),
+        );
+    }
+
     public static function templateFileNotFound(string $filename): self
     {
         return new self(

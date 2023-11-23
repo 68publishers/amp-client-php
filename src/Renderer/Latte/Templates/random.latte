@@ -1,0 +1,10 @@
+{templateType SixtyEightPublishers\AmpClient\Bridge\Latte\Templates\RandomTemplate}
+
+<div data-amp-banner="{$position->getCode()}" data-amp-attached>
+    <div n:if="null !== $banner && 0 < count($banner->getContents())"
+         class="amp-banner amp-banner--random"
+         data-amp-banner-fingerprint="{SixtyEightPublishers\AmpClient\Renderer\Fingerprint::create($position, $banner)}"
+         data-amp-banner-id="{$banner->getId()}">
+        {include 'contents.fragment.latte', position: $position, banner: $banner}
+    </div>
+</div>

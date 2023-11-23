@@ -1,0 +1,35 @@
+{varType SixtyEightPublishers\AmpClient\Request\ValueObject\Position $position}
+{varType SixtyEightPublishers\AmpClient\Response\ValueObject\Banner|null $banner}
+
+{foreach $banner->getContents() as $content}
+    {if $content instanceof SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent}
+        {varType SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent $content}
+
+        <a data-amp-content-breakpoint="{$content->getBreakpoint() ?? 'default'}"
+           class="amp-banner__content amp-banner__content--img"
+           href="{$content->getHref()}"
+           n:attr="target => $content->getTarget()">
+           <picture>
+               <source n:foreach="$content->getSources() as $source"
+                       type="{$source->getType()}"
+                       srcset="{$source->getSrcset()}"
+                       sizes="{$content->getSizes()}">
+
+               <img srcset="{$content->getSrcset()}"
+                    src="{$content->getSrc()}"
+                    sizes="{$content->getSizes()}"
+                    alt="{$content->getAlt()}"
+                    n:attr="title => '' !== $content->getTitle() ? $content->getTitle() : null">
+           </picture>
+        </a>
+    {elseif $content instanceof SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent}
+        {varType SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent $content}
+
+        <div data-amp-content-breakpoint="{$content->getBreakpoint() ?? 'default'}"
+             class="amp-banner__content amp-banner__content--html">
+            {$content->getHtml()|noescape}
+        </div>
+    {/if}
+{/foreach}
+
+{= new SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle($position, $banner)|noescape}

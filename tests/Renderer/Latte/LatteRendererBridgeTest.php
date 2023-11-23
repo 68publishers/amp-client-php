@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\AmpClient\Tests\Renderer\Phtml;
+namespace SixtyEightPublishers\AmpClient\Tests\Renderer\Latte;
 
 use Closure;
-use SixtyEightPublishers\AmpClient\Renderer\Phtml\PhtmlRendererBridge;
+use Latte\Engine;
+use SixtyEightPublishers\AmpClient\Renderer\Latte\LatteRendererBridge;
 use SixtyEightPublishers\AmpClient\Renderer\Templates;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
@@ -16,17 +17,17 @@ use function call_user_func;
 
 require __DIR__ . '/../../bootstrap.php';
 
-final class PhtmlRendererBridgeTest extends TestCase
+final class LatteRendererBridgeTest extends TestCase
 {
     public function testTemplatesShouldBeOverridden(): void
     {
-        $renderer = new PhtmlRendererBridge();
+        $renderer = $this->createRendererBridge();
         $modifiedRenderer = $renderer->overrideTemplates(new Templates([
             Templates::TemplateSingle => '/path/to/file',
         ]));
 
-        $originalTemplates = call_user_func(Closure::bind(static fn () => $renderer->templates, null, PhtmlRendererBridge::class));
-        $overriddenTemplates = call_user_func(Closure::bind(static fn () => $modifiedRenderer->templates, null, PhtmlRendererBridge::class));
+        $originalTemplates = call_user_func(Closure::bind(static fn () => $renderer->templates, null, LatteRendererBridge::class));
+        $overriddenTemplates = call_user_func(Closure::bind(static fn () => $modifiedRenderer->templates, null, LatteRendererBridge::class));
 
         Assert::notSame($renderer, $modifiedRenderer);
         Assert::notSame($originalTemplates, $overriddenTemplates);
@@ -39,7 +40,7 @@ final class PhtmlRendererBridgeTest extends TestCase
         Position $position,
         string $expectationFile
     ): void {
-        $renderer = new PhtmlRendererBridge();
+        $renderer = $this->createRendererBridge();
 
         AssertHtml::assert($expectationFile, $renderer->renderNotFound($position));
     }
@@ -52,7 +53,7 @@ final class PhtmlRendererBridgeTest extends TestCase
         ?Banner $banner,
         string $expectationFile
     ): void {
-        $renderer = new PhtmlRendererBridge();
+        $renderer = $this->createRendererBridge();
 
         AssertHtml::assert($expectationFile, $renderer->renderSingle($position, $banner));
     }
@@ -65,20 +66,20 @@ final class PhtmlRendererBridgeTest extends TestCase
         ?Banner $banner,
         string $expectationFile
     ): void {
-        $renderer = new PhtmlRendererBridge();
+        $renderer = $this->createRendererBridge();
 
         AssertHtml::assert($expectationFile, $renderer->renderRandom($position, $banner));
     }
 
     /**
      * @dataProvider multipleTemplateDataProvider
-     */
+     * */
     public function testMultipleTemplateRendering(
         Position $position,
         array $banners,
         string $expectationFile
     ): void {
-        $renderer = new PhtmlRendererBridge();
+        $renderer = $this->createRendererBridge();
 
         AssertHtml::assert($expectationFile, $renderer->renderMultiple($position, $banners));
     }
@@ -102,6 +103,11 @@ final class PhtmlRendererBridgeTest extends TestCase
     {
         return require __DIR__ . '/../../resources/renderer/multiple/data-provider.php';
     }
+
+    private function createRendererBridge(): LatteRendererBridge
+    {
+        return LatteRendererBridge::fromEngine(new Engine());
+    }
 }
 
-(new PhtmlRendererBridgeTest())->run();
+(new LatteRendererBridgeTest())->run();

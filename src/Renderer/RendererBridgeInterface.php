@@ -9,6 +9,8 @@ use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 
 interface RendererBridgeInterface
 {
+    public function overrideTemplates(Templates $templates): self;
+
     public function renderNotFound(Position $position): string;
 
     public function renderSingle(Position $position, ?Banner $banner): string;

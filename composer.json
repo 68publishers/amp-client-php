@@ -21,6 +21,7 @@
 		"kubawerlos/php-cs-fixer-custom-fixers": "^3.14",
 		"latte/latte": "^2.11",
 		"mockery/mockery": "^1.6",
+		"nette/application": "^3.0.8",
 		"nette/bootstrap": "^3.1",
 		"nette/caching": "^3.1",
 		"nette/di": "^3.0",

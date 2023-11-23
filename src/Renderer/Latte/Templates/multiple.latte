@@ -1,0 +1,15 @@
+{templateType SixtyEightPublishers\AmpClient\Bridge\Latte\Templates\MultipleTemplate}
+
+<div data-amp-banner="{$position->getCode()}" data-amp-attached>
+    {do $banners = array_filter($banners, fn(SixtyEightPublishers\AmpClient\Response\ValueObject\Banner $banner) => 0 < count($banner->getContents()))}
+    <div n:if="0 < count($banners)" class="amp-banner amp-banner--multiple">
+        <div class="amp-banner__list">
+            <div n:foreach="$banners as $banner"
+                 class="amp-banner__item"
+                 data-amp-banner-fingerprint="{SixtyEightPublishers\AmpClient\Renderer\Fingerprint::create($position, $banner)}"
+                 data-amp-banner-id="{$banner->getId()}">
+                {include 'contents.fragment.latte', position: $position, banner: $banner}
+            </div>
+        </div>
+    </div>
+</div>

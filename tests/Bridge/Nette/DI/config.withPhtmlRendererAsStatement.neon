@@ -1,0 +1,8 @@
+extensions:
+    amp_client: SixtyEightPublishers\AmpClient\Bridge\Nette\DI\AmpClientExtension
+
+amp_client:
+    url: https://www.example.com
+    channel: test
+    renderer:
+        bridge: SixtyEightPublishers\AmpClient\Renderer\Phtml\PhtmlRendererBridge()
