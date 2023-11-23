@@ -6,6 +6,7 @@ namespace SixtyEightPublishers\AmpClient\Bridge\Nette\DI;
 
 use Closure;
 use Nette\Bridges\ApplicationDI\LatteExtension;
+use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\Bridges\ApplicationLatte\LatteFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\Reference;
@@ -43,6 +44,7 @@ use SixtyEightPublishers\AmpClient\Response\Hydrator\ResponseHydratorInterface;
 use function array_filter;
 use function array_values;
 use function assert;
+use function class_exists;
 use function count;
 use function is_string;
 use function sprintf;
@@ -257,7 +259,10 @@ final class AmpClientExtension extends CompilerExtension
             $rendererBridge = new Statement(LatteRendererBridge::class, [
                 'latteFactory' => new Statement(ClosureLatteFactory::class, [
                     'factory' => new Statement([Closure::class, 'fromCallable'], [
-                        [new Reference(LatteFactory::class), 'create'],
+                        [
+                            new Reference(class_exists(LatteFactory::class) ? LatteFactory::class : ILatteFactory::class),
+                            'create',
+                        ],
                     ]),
                 ]),
             ]);
