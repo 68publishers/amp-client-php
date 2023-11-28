@@ -1,5 +1,12 @@
 # Integration without a framework
 
+* [Client initialization](#client-initialization)
+  * [Cache](#cache)
+  * [Custom Guzzle options](#custom-guzzle-options)
+* [Fetching banners](#fetching-banners)
+* [Rendering banners](#rendering-banners)
+* [Latte templating system integration](#latte-templating-system-integration)
+
 ## Client initialization
 
 The client is simply instanced as follows:
