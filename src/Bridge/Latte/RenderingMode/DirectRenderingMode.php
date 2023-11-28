@@ -8,6 +8,11 @@ use SixtyEightPublishers\AmpClient\Request\ValueObject\Position;
 
 final class DirectRenderingMode implements RenderingModeInterface
 {
+    public function supportsQueues(): bool
+    {
+        return false;
+    }
+
     public function shouldBePositionQueued(Position $position, object $globals): bool
     {
         return false;

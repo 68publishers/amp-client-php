@@ -30,12 +30,12 @@ cs.check:
 	docker exec 68publishers.amp-client-php.74 vendor/bin/php-cs-fixer fix -v --dry-run
 
 stan:
-	PHP=74 make composer.update
-	docker exec 68publishers.amp-client-php.74 vendor/bin/phpstan analyse
+	PHP=81 make composer.update
+	docker exec 68publishers.amp-client-php.81 vendor/bin/phpstan analyse
 
 coverage:
-	PHP=74 make composer.update
-	docker exec 68publishers.amp-client-php.74 vendor/bin/tester -C -s --coverage ./coverage.xml --coverage-src ./src ./tests
+	PHP=81 make composer.update
+	docker exec 68publishers.amp-client-php.81 vendor/bin/tester -C -s --coverage ./coverage.xml --coverage-src ./src ./tests
 
 composer.update:
 ifndef PHP

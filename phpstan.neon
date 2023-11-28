@@ -2,12 +2,6 @@ includes:
     - vendor/phpstan/phpstan-nette/extension.neon
     - vendor/phpstan/phpstan-nette/rules.neon
 
-rules:
-    - Symplify\PHPStanRules\Rules\NoArrayAccessOnObjectRule
-
-services:
-    - Symplify\PHPStanRules\Matcher\ArrayStringAndFnMatcher
-
 parameters:
     level: 8
     paths:
@@ -17,3 +11,8 @@ parameters:
         -
             message: '#Anonymous function has an unused use \$.+#'
             path: src/Renderer/Phtml/PhtmlRendererBridge.php
+
+    excludePaths:
+        analyse:
+            - src/Bridge/Latte/AmpClientLatte2Extension.php # "extension" for Latte v2
+            - src/Bridge/Nette/Application/RenderQueuedPositionsOnPresenterShutdownHandler.php # using old Nette interfaces prefixed with `I` for back compatibility

@@ -9,6 +9,11 @@ use SixtyEightPublishers\AmpClient\Request\ValueObject\Position;
 
 final class QueuedRenderingInPresenterContextMode implements RenderingModeInterface
 {
+    public function supportsQueues(): bool
+    {
+        return true;
+    }
+
     public function shouldBePositionQueued(Position $position, object $globals): bool
     {
         return isset($globals->uiPresenter) && $globals->uiPresenter instanceof Presenter;

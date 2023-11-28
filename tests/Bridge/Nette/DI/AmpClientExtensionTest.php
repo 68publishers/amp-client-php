@@ -6,7 +6,6 @@ namespace SixtyEightPublishers\AmpClient\Tests\Bridge\Nette\DI;
 
 use Closure;
 use Nette\Caching\Storages\MemoryStorage;
-use Nette\Configurator;
 use Nette\DI\Container;
 use RuntimeException;
 use SixtyEightPublishers\AmpClient\AmpClient;
@@ -36,10 +35,7 @@ final class AmpClientExtensionTest extends TestCase
 {
     public function testContainerWithMinimalConfiguration(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.minimal.neon', function (Configurator $configurator): void {
-            # make sure the LatteExtension is still between the default extensions.
-            Assert::hasKey('latte', $configurator->defaultExtensions);
-        });
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.minimal.neon', ['latte']);
 
         $client = $this->getClientFromContainer($container);
         $httpClientFactory = $this->unwrapHttpClientFactory($client);
@@ -65,9 +61,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithoutLatteExtension(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.minimal.neon', function (Configurator $configurator): void {
-            unset($configurator->defaultExtensions['latte']);
-        });
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.minimal.neon');
 
         $renderer = $this->getRendererFromContainer($container);
         $rendererBridge = $this->unwrapRendererBridge($renderer);
@@ -77,7 +71,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithPhtmlRenderer(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withPhtmlRenderer.neon');
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withPhtmlRenderer.neon', ['latte']);
 
         $renderer = $this->getRendererFromContainer($container);
         $rendererBridge = $this->unwrapRendererBridge($renderer);
@@ -87,7 +81,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithPhtmlRendererAsStatement(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withPhtmlRendererAsStatement.neon');
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withPhtmlRendererAsStatement.neon', ['latte']);
 
         $renderer = $this->getRendererFromContainer($container);
         $rendererBridge = $this->unwrapRendererBridge($renderer);
@@ -97,7 +91,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithLatteRenderer(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withLatteRenderer.neon');
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withLatteRenderer.neon', ['latte']);
 
         $renderer = $this->getRendererFromContainer($container);
         $rendererBridge = $this->unwrapRendererBridge($renderer);
@@ -107,7 +101,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithLatteRendererAsStatement(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withLatteRendererAsStatement.neon');
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withLatteRendererAsStatement.neon', ['latte']);
 
         $renderer = $this->getRendererFromContainer($container);
         $rendererBridge = $this->unwrapRendererBridge($renderer);
@@ -117,9 +111,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithLatteRendererAsStatementAndMissingLatteExtension(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withLatteRendererAsStatement.neon', function (Configurator $configurator): void {
-            unset($configurator->defaultExtensions['latte']);
-        });
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withLatteRendererAsStatement.neon');
 
         $renderer = $this->getRendererFromContainer($container);
         $rendererBridge = $this->unwrapRendererBridge($renderer);
@@ -130,17 +122,15 @@ final class AmpClientExtensionTest extends TestCase
     public function testExceptionShouldBeThrownWhenLatteRendererIsExplicitlyConfiguredButLatteExtensionMissing(): void
     {
         Assert::exception(
-            static fn () => ContainerFactory::create(__DIR__ . '/config.withLatteRenderer.neon', function (Configurator $configurator): void {
-                unset($configurator->defaultExtensions['latte']);
-            }),
+            static fn () => ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withLatteRenderer.neon'),
             RuntimeException::class,
-            'Renderer of type %A%\LatteRendererBridge can not be used without the compiler extension of type Nette\Bridges\ApplicationDI\LatteExtension.',
+            'Renderer of type %A%\\LatteRendererBridge can not be used without the compiler extension of type Nette\\Bridges\\ApplicationDI\\LatteExtension.',
         );
     }
 
     public function testContainerWithRendererTemplates(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withRendererTemplates.neon');
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withRendererTemplates.neon', ['latte']);
 
         $renderer = $this->getRendererFromContainer($container);
         $rendererBridge = $this->unwrapRendererBridge($renderer);
@@ -155,7 +145,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithMethodOption(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withMethod.neon');
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withMethod.neon');
         $client = $this->getClientFromContainer($container);
 
         Assert::equal(
@@ -167,7 +157,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithVersionOption(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withVersion.neon');
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withVersion.neon');
         $client = $this->getClientFromContainer($container);
 
         Assert::equal(
@@ -179,7 +169,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithLocaleOption(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withLocale.neon');
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withLocale.neon');
         $client = $this->getClientFromContainer($container);
 
         Assert::equal(
@@ -191,7 +181,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithDefaultResourcesOption(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withDefaultResources.neon');
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withDefaultResources.neon');
         $client = $this->getClientFromContainer($container);
 
         Assert::equal(
@@ -206,7 +196,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithOriginOption(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withOrigin.neon');
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withOrigin.neon');
         $client = $this->getClientFromContainer($container);
 
         Assert::equal(
@@ -218,7 +208,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithCacheOptions(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withCache.neon');
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withCache.neon');
         $client = $this->getClientFromContainer($container);
 
         Assert::equal(
@@ -238,7 +228,7 @@ final class AmpClientExtensionTest extends TestCase
 
     public function testContainerWithGuzzleConfig(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/config.withGuzzleConfig.neon');
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientExtension/config.withGuzzleConfig.neon');
         $client = $this->getClientFromContainer($container);
         $httpClientFactory = $this->unwrapHttpClientFactory($client);
 

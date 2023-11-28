@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use DG\BypassFinals;
 use Tester\Environment;
 
 $loader = @include __DIR__ . '/../vendor/autoload.php';
@@ -12,7 +13,10 @@ if (!$loader) {
 }
 
 Environment::setup();
-Environment::bypassFinals();
+BypassFinals::enable();
+BypassFinals::setWhitelist([
+    '*/src/*',
+]);
 
 # disable E_DEPRECATED errors from the vendor code (some nette packages before v3.1 are not fully compatible with PHP 8.1/8.2)
 $previousHandler = set_error_handler(static function (int $errNo, string $errStr, string $errFile, int $errLine) use (&$previousHandler): bool {
