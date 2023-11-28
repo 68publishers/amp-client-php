@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\AmpClient\Bridge\Nette\Application;
 
 use Nette\Application\AbortException;
-use Nette\Application\Application;
-use Nette\Application\IPresenter;
-use Nette\Application\Response;
+use Nette\Application\IResponse;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Application\Responses\TextResponse;
+use Nette\Application\UI\ITemplate;
 use Nette\Application\UI\Presenter;
-use Nette\Application\UI\Template;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RendererProvider;
 use SixtyEightPublishers\AmpClient\Exception\AmpExceptionInterface;
 use SixtyEightPublishers\AmpClient\Renderer\OutputBuffer;
@@ -28,16 +26,7 @@ final class RenderQueuedPositionsOnPresenterShutdownHandler
         $this->rendererProvider = $rendererProvider;
     }
 
-    public static function attachOnApplication(Application $application, RendererProvider $rendererProvider): void
-    {
-        $application->onPresenter[] = static function (Application $application, IPresenter $presenter) use ($rendererProvider): void {
-            if ($presenter instanceof Presenter) {
-                self::attachOnPresenter($presenter, $rendererProvider);
-            }
-        };
-    }
-
-    public static function attachOnPresenter(Presenter $presenter, RendererProvider $rendererProvider): void
+    public static function attach(Presenter $presenter, RendererProvider $rendererProvider): void
     {
         $presenter->onShutdown[] = new self($rendererProvider);
     }
@@ -46,8 +35,12 @@ final class RenderQueuedPositionsOnPresenterShutdownHandler
      * @throws AmpExceptionInterface
      * @throws Throwable
      */
-    public function __invoke(Presenter $presenter, Response $response): void
+    public function __invoke(Presenter $presenter, IResponse $response): void
     {
+        if (!$this->rendererProvider->supportsQueues()) {
+            return;
+        }
+
         try {
             if ($response instanceof TextResponse) {
                 $this->processTextResponse($presenter, $response);
@@ -67,7 +60,7 @@ final class RenderQueuedPositionsOnPresenterShutdownHandler
     {
         $source = $response->getSource();
 
-        if ($source instanceof Template) {
+        if ($source instanceof ITemplate) {
             $output = OutputBuffer::capture(static function () use ($source): void {
                 $source->render();
             });

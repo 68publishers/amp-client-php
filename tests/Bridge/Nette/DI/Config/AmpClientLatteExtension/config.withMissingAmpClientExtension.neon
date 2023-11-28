@@ -1,0 +1,2 @@
+extensions:
+    amp_client.latte: SixtyEightPublishers\AmpClient\Bridge\Nette\DI\AmpClientLatteExtension

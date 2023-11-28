@@ -17,11 +17,13 @@ use Nette\DI\Definitions\Statement;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use RuntimeException;
-use SixtyEightPublishers\AmpClient\Bridge\Latte\AmpClientLatte3Extension;
+use SixtyEightPublishers\AmpClient\Bridge\Latte\AmpClientLatteExtension as AmpClientLatteExtensionRegister;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\Event\ConfigureClientEventHandlerInterface;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RendererProvider;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\DirectRenderingMode;
-use SixtyEightPublishers\AmpClient\Bridge\Nette\Application\RenderQueuedPositionsOnPresenterShutdownHandler;
+use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\QueuedRenderingInPresenterContextMode;
+use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\QueuedRenderingMode;
+use SixtyEightPublishers\AmpClient\Bridge\Nette\Application\AttachPresenterHandlersOnApplicationHandler;
 use SixtyEightPublishers\AmpClient\Bridge\Nette\DI\Config\AmpClientLatteConfig;
 use function assert;
 use function count;
@@ -29,6 +31,12 @@ use function sprintf;
 
 final class AmpClientLatteExtension extends CompilerExtension
 {
+    private const RenderingModes = [
+        'direct' => DirectRenderingMode::class,
+        'queued' => QueuedRenderingMode::class,
+        'queued_in_presenter_context' => QueuedRenderingInPresenterContextMode::class,
+    ];
+
     private bool $debugMode;
 
     public function __construct(bool $debugMode = false)
@@ -41,10 +49,7 @@ final class AmpClientLatteExtension extends CompilerExtension
         return Expect::structure([
             'banner_macro_name' => Expect::string('banner'),
             'rendering_mode' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))
-                ->default(new Statement(DirectRenderingMode::class))
-                ->before(static function ($factory): Statement {
-                    return $factory instanceof Statement ? $factory : new Statement($factory);
-                }),
+                ->default('direct'),
         ])->castTo(AmpClientLatteConfig::class);
     }
 
@@ -70,11 +75,21 @@ final class AmpClientLatteExtension extends CompilerExtension
         $config = $this->getConfig();
         assert($config instanceof AmpClientLatteConfig);
 
+        $renderingMode = $config->rendering_mode;
+
+        if (is_string($renderingMode) && isset(self::RenderingModes[$renderingMode])) {
+            $renderingMode = self::RenderingModes[$renderingMode];
+        }
+
+        if (!($renderingMode instanceof Statement)) {
+            $renderingMode = new Statement($renderingMode);
+        }
+
         $builder->addDefinition($this->prefix('rendererProvider'))
             ->setAutowired(false)
             ->setFactory(RendererProvider::class)
             ->addSetup('setRenderingMode', [
-                'renderingMode' => $config->rendering_mode,
+                'renderingMode' => $renderingMode,
             ])
             ->addSetup('setDebugMode', [
                 'debugMode' => $this->debugMode,
@@ -91,11 +106,11 @@ final class AmpClientLatteExtension extends CompilerExtension
         assert($latteFactory instanceof FactoryDefinition);
         $latteFactoryResultDefinition = $latteFactory->getResultDefinition();
 
-        $latteFactoryResultDefinition->addSetup('addExtension', [
-            new Statement(AmpClientLatte3Extension::class, [
-                'rendererProvider' => new Reference($this->prefix('rendererProvider')),
-                'tagName' => $config->banner_macro_name,
-            ]),
+        $latteFactoryResultDefinition->addSetup('?::register(?, ?, ?)', [
+            ContainerBuilder::literal(AmpClientLatteExtensionRegister::class),
+            new Reference('self'),
+            new Reference($this->prefix('rendererProvider')),
+            $config->banner_macro_name,
         ]);
 
         $rendererProviderDefinition = $builder->getDefinition($this->prefix('rendererProvider'));
@@ -112,8 +127,8 @@ final class AmpClientLatteExtension extends CompilerExtension
             $applicationDefinition = $builder->getDefinitionByType(Application::class);
             assert($applicationDefinition instanceof ServiceDefinition);
 
-            $applicationDefinition->addSetup('?::attachOnApplication(?, ?)', [
-                ContainerBuilder::literal(RenderQueuedPositionsOnPresenterShutdownHandler::class),
+            $applicationDefinition->addSetup('?::attach(?, ?)', [
+                ContainerBuilder::literal(AttachPresenterHandlersOnApplicationHandler::class),
                 new Reference('self'),
                 new Reference($this->prefix('rendererProvider')),
             ]);

@@ -8,5 +8,7 @@ use SixtyEightPublishers\AmpClient\Request\ValueObject\Position;
 
 interface RenderingModeInterface
 {
+    public function supportsQueues(): bool;
+
     public function shouldBePositionQueued(Position $position, object $globals): bool;
 }

@@ -17,6 +17,7 @@
 	"require-dev": {
 		"ext-dom": "*",
 		"ext-libxml": "*",
+		"dg/bypass-finals": "^1.5",
 		"friendsofphp/php-cs-fixer": "^3.17",
 		"kubawerlos/php-cs-fixer-custom-fixers": "^3.14",
 		"latte/latte": "^2.11 || ^3.0",
@@ -24,15 +25,20 @@
 		"nette/application": "^3.0.8",
 		"nette/bootstrap": "^3.1",
 		"nette/caching": "^3.1",
-		"nette/di": "^3.0",
+		"nette/di": "^3.0.13",
 		"nette/tester": "^2.4",
 		"phpstan/phpstan": "^1.10",
 		"phpstan/phpstan-nette": "^1.2",
 		"psr/log": "^1.1",
 		"roave/security-advisories": "dev-latest",
 		"slope-it/clock-mock": "^0.4.0",
-		"symplify/phpstan-rules": "12.0.2.72",
 		"wa72/html-pretty-min": "^0.2.0"
+	},
+	"conflict": {
+		"latte/latte": "<2.11",
+		"nette/application": "<3.0.8",
+		"nette/caching": "<3.1",
+		"nette/di": "<3.0.13"
 	},
 	"config": {
 		"sort-packages": true

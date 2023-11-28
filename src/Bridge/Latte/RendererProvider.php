@@ -121,6 +121,11 @@ final class RendererProvider
         return $comment;
     }
 
+    public function supportsQueues(): bool
+    {
+        return $this->renderingMode->supportsQueues();
+    }
+
     public function isAnythingQueued(): bool
     {
         return 0 < count($this->queue);
