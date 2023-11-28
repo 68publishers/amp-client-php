@@ -2,6 +2,11 @@
 
 For more information on how the client works, we also recommend reading the [Integration without a framework](./integration-without-framework.md) section.
 
+* [Client integration](#client-integration)
+* [Latte macros integration](#latte-macros-integration)
+  * [Configuring client before the first fetch](#configuring-client-before-the-first-fetch)
+  * [Renaming the macro](#renaming-the-macro)
+
 ## Client integration
 
 The minimum configuration is as follows:
