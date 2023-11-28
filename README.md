@@ -6,9 +6,9 @@
 <p align="center">
 <a href="https://github.com/68publishers/amp-client-php/actions"><img alt="Checks" src="https://badgen.net/github/checks/68publishers/amp-client-php/main"></a>
 <a href="https://coveralls.io/github/68publishers/amp-client-php?branch=main"><img alt="Coverage Status" src="https://coveralls.io/repos/github/68publishers/amp-client-php/badge.svg?branch=main"></a>
-<a href="https://packagist.org/packages/68publishers/amp-client-php"><img alt="Total Downloads" src="https://badgen.net/packagist/dt/68publishers/amp-client-php"></a>
-<a href="https://packagist.org/packages/68publishers/amp-client-php"><img alt="Latest Version" src="https://badgen.net/packagist/v/68publishers/amp-client-php"></a>
-<a href="https://packagist.org/packages/68publishers/amp-client-php"><img alt="PHP Version" src="https://badgen.net/packagist/php/68publishers/amp-client-php"></a>
+<a href="https://packagist.org/packages/68publishers/amp-client"><img alt="Total Downloads" src="https://badgen.net/packagist/dt/68publishers/amp-client"></a>
+<a href="https://packagist.org/packages/68publishers/amp-client"><img alt="Latest Version" src="https://badgen.net/packagist/v/68publishers/amp-client"></a>
+<a href="https://packagist.org/packages/68publishers/amp-client"><img alt="PHP Version" src="https://badgen.net/packagist/php/68publishers/amp-client"></a>
 </p>
 
 ## Installation
