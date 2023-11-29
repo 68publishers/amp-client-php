@@ -49,6 +49,7 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderNotFound')
             ->once()
+            ->with($position, [])
             ->andReturn('not found');
 
         Assert::same('not found', $renderer->render($position));
@@ -72,7 +73,7 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderSingle')
             ->once()
-            ->with($position, $banner)
+            ->with($position, $banner, [])
             ->andReturn('single');
 
         Assert::same('single', $renderer->render($position));
@@ -96,7 +97,7 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderRandom')
             ->once()
-            ->with($position, $banner)
+            ->with($position, $banner, [])
             ->andReturn('random');
 
         Assert::same('random', $renderer->render($position));
@@ -123,7 +124,7 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderMultiple')
             ->once()
-            ->with($position, $banners)
+            ->with($position, $banners, [])
             ->andReturn('multiple');
 
         Assert::same('multiple', $renderer->render($position));
@@ -140,6 +141,7 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderNotFound')
             ->once()
+            ->with($position, [])
             ->andThrow(new RendererException('Test exception'));
 
         Assert::exception(
@@ -160,6 +162,7 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderNotFound')
             ->once()
+            ->with($position, [])
             ->andThrow(new Exception('Test exception'));
 
         Assert::exception(

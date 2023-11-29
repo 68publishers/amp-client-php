@@ -14,13 +14,26 @@ return [
     'No banner' => [
         $position,
         [],
+        [],
         __DIR__ . '/noBanner.html',
+    ],
+    'No banner with attributes' => [
+        $position,
+        [],
+        [
+            'class' => 'custom-class',
+            'data-custom' => true,
+            'data-custom2' => false,
+            'data-custom3' => null,
+        ],
+        __DIR__ . '/noBanner.withAttributes.html',
     ],
     'Single banner without contents' => [
         $position,
         [
             new Banner('1234', 'Main', 0, null, null, null, []),
         ],
+        [],
         __DIR__ . '/singleBannerWithoutContents.html',
     ],
     'Multiple banners without contents' => [
@@ -29,6 +42,7 @@ return [
             new Banner('1234', 'Main 1', 0, null, null, null, []),
             new Banner('1235', 'Main 2', 0, null, null, null, []),
         ],
+        [],
         __DIR__ . '/multipleBannersWithoutContents.html',
     ],
     'Multiple banners - full featured' => [
@@ -83,6 +97,7 @@ return [
             ]),
             new Banner('1236', 'No contents', 0, null, null, null, []),
         ],
+        [],
         __DIR__ . '/multipleBannersFullFeatured.html',
     ],
 ];

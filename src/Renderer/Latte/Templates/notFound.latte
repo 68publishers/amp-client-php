@@ -1,3 +1,6 @@
 {templateType SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\NotFoundTemplate}
 
-<div data-amp-banner="{$position->getCode()}" data-amp-attached></div>
+<div data-amp-banner="{$position->getCode()}"
+     data-amp-banner-external="{=SixtyEightPublishers\AmpClient\Renderer\AmpBannerExternalAttribute::notFound($position)}"
+     n:attr="$elementAttributes">
+</div>

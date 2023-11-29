@@ -93,22 +93,26 @@ final class AmpClientLatteExtensionTest extends TestCase
             ],
             'Resources as array' => [
                 0 => <<<'LATTE'
-                {banner homepage.top, [product => '123', category => ['123', '456']]}
+                {banner homepage.top, resources: [product => '123', category => ['123', '456']]}
                 LATTE,
                 1 => [
                     'homepage.top',
-                    ['product' => '123', 'category' => ['123', '456']],
+                    [
+                        'resources' => ['product' => '123', 'category' => ['123', '456']],
+                    ],
                 ],
                 2 => null,
             ],
             'Resources as variable' => [
                 0 => <<<'LATTE'
                 {var $resources = [product => '123', category => ['123', '456']]}
-                {banner homepage.top, $resources}
+                {banner homepage.top, resources: $resources}
                 LATTE,
                 1 => [
                     'homepage.top',
-                    ['product' => '123', 'category' => ['123', '456']],
+                    [
+                        'resources' => ['product' => '123', 'category' => ['123', '456']],
+                    ],
                 ],
                 2 => null,
             ],

@@ -10,9 +10,17 @@ final class NotFoundTemplate
 {
     public Position $position;
 
+    /** @var array<string, scalar|null> */
+    public array $elementAttributes;
+
+    /**
+     * @param array<string, scalar|null> $elementAttributes
+     */
     public function __construct(
-        Position $position
+        Position $position,
+        array $elementAttributes
     ) {
         $this->position = $position;
+        $this->elementAttributes = $elementAttributes;
     }
 }

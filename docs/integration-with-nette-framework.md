@@ -111,7 +111,7 @@ Now we have the macro `{banner}` available in the application, and we can use it
 
 ```latte
 {banner homepage.top}
-{banner homepage.promo, ['role' => 'guest']}
+{banner homepage.promo, resources: ['role' => 'guest']}
 ```
 
 Banners are now requested via API and rendered to the template automatically.

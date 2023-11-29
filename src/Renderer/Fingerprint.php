@@ -11,7 +11,6 @@ use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use function base64_encode;
 use function json_encode;
 use function rawurlencode;
-use function rtrim;
 
 final class Fingerprint
 {
@@ -39,17 +38,14 @@ final class Fingerprint
         ];
 
         try {
-            $json = json_encode($components, JSON_THROW_ON_ERROR);
+            $json = json_encode($components, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         } catch (JsonException $e) {
             throw RendererException::unableToCreateFingerprint($position->getCode(), $banner->getId(), $e);
         }
 
         return new self(
-            rtrim(
-                base64_encode(
-                    rawurlencode($json),
-                ),
-                '=',
+            base64_encode(
+                rawurlencode($json),
             ),
         );
     }

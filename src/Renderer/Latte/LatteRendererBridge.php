@@ -48,35 +48,35 @@ final class LatteRendererBridge implements RendererBridgeInterface
         return $renderer;
     }
 
-    public function renderNotFound(Position $position): string
+    public function renderNotFound(Position $position, array $elementAttributes = []): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::TemplateNotFound),
-            new NotFoundTemplate($position),
+            new NotFoundTemplate($position, $elementAttributes),
         );
     }
 
-    public function renderSingle(Position $position, ?Banner $banner): string
+    public function renderSingle(Position $position, ?Banner $banner, array $elementAttributes = []): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::TemplateSingle),
-            new SingleTemplate($position, $banner),
+            new SingleTemplate($position, $banner, $elementAttributes),
         );
     }
 
-    public function renderRandom(Position $position, ?Banner $banner): string
+    public function renderRandom(Position $position, ?Banner $banner, array $elementAttributes = []): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::TemplateRandom),
-            new RandomTemplate($position, $banner),
+            new RandomTemplate($position, $banner, $elementAttributes),
         );
     }
 
-    public function renderMultiple(Position $position, array $banners): string
+    public function renderMultiple(Position $position, array $banners, array $elementAttributes = []): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::TemplateMultiple),
-            new MultipleTemplate($position, $banners),
+            new MultipleTemplate($position, $banners, $elementAttributes),
         );
     }
 

@@ -30,6 +30,8 @@ use function str_replace;
 
 final class RendererProvider
 {
+    private const OptionResources = 'resources';
+
     private AmpClientInterface $client;
 
     private RendererInterface $renderer;
@@ -62,13 +64,13 @@ final class RendererProvider
     }
 
     /**
-     * @param array<string, string|array<int, string>> $resources
+     * @param array<string, mixed> $options
      *
      * @throws AmpExceptionInterface
      */
-    public function __invoke(object $globals, string $positionCode, array $resources = []): string
+    public function __invoke(object $globals, string $positionCode, array $options = []): string
     {
-        $position = $this->createPosition($positionCode, $resources);
+        $position = $this->createPosition($positionCode, $options);
 
         if ($this->renderingMode->shouldBePositionQueued($position, $globals)) {
             return $this->addToQueue($position);
@@ -250,14 +252,15 @@ final class RendererProvider
     }
 
     /**
-     * @param array<string, string|array<int, string>> $resources
+     * @param array<string, mixed> $options
      */
-    private function createPosition(string $positionCode, array $resources): RequestPosition
+    private function createPosition(string $positionCode, array $options): RequestPosition
     {
+        $resources = (array) ($options[self::OptionResources] ?? []);
         $bannerResources = [];
 
         foreach ($resources as $resourceCode => $resourceValues) {
-            $bannerResources[] = new BannerResource($resourceCode, $resourceValues);
+            $bannerResources[] = $resourceValues instanceof BannerResource ? $resourceValues : new BannerResource($resourceCode, $resourceValues);
         }
 
         return new RequestPosition($positionCode, $bannerResources);
