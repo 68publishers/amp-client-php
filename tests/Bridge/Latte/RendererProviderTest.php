@@ -56,10 +56,45 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition)
+            ->with($responsePosition, [])
             ->andReturn('<homepage.top>');
 
         Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top'));
+    }
+
+    public function testInvokingDefaultInstanceWithAttributes(): void
+    {
+        $client = Mockery::mock(AmpClientInterface::class);
+        $renderer = Mockery::mock(RendererInterface::class);
+        $provider = new RendererProvider($client, $renderer);
+
+        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
+        $response = new BannersResponse([
+            'homepage.top' => $responsePosition,
+        ]);
+
+        $client
+            ->shouldReceive('fetchBanners')
+            ->once()
+            ->with(Mockery::type(BannersRequest::class))
+            ->andReturnUsing(static function (BannersRequest $request) use ($response): BannersResponse {
+                Assert::equal(
+                    new BannersRequest([
+                        new RequestPosition('homepage.top'),
+                    ]),
+                    $request,
+                );
+
+                return $response;
+            });
+
+        $renderer
+            ->shouldReceive('render')
+            ->once()
+            ->with($responsePosition, ['class' => 'my-custom-class'])
+            ->andReturn('<homepage.top>');
+
+        Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top', ['attributes' => ['class' => 'my-custom-class']]));
     }
 
     public function testInvokingDefaultInstanceWithResources(): void
@@ -94,7 +129,7 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition)
+            ->with($responsePosition, [])
             ->andReturn('<homepage.top>');
 
         Assert::same(
@@ -140,7 +175,7 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->twice()
-            ->with($responsePosition)
+            ->with($responsePosition, [])
             ->andReturn('<homepage.top>');
 
         Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top'));
@@ -242,7 +277,7 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition)
+            ->with($responsePosition, [])
             ->andThrow(new RendererException('Test renderer exception'));
 
         Assert::exception(
@@ -271,7 +306,7 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition)
+            ->with($responsePosition, [])
             ->andThrow(new RendererException('Test renderer exception'));
 
         Assert::same('', $provider(new stdClass(), 'homepage.top'));
@@ -298,7 +333,7 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition)
+            ->with($responsePosition, [])
             ->andThrow($exception);
 
         $logger
@@ -342,7 +377,7 @@ final class RendererProviderTest extends TestCase
                 return true;
             });
 
-        Assert::same('<!--AMP_POSITION:homepage.top-->', $provider($globals, 'homepage.top'));
+        Assert::same('<!--AMP_POSITION:homepage.top-->', $provider($globals, 'homepage.top', ['attributes' => ['class' => 'my-custom-class']]));
         Assert::same('<!--AMP_POSITION:homepage.bottom-->', $provider($globals, 'homepage.bottom', ['resources' => ['resource' => ['a']]]));
         Assert::true($provider->isAnythingQueued());
 
@@ -372,11 +407,11 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition1)
+            ->with($responsePosition1, ['class' => 'my-custom-class'])
             ->andReturn('<homepage.top>')
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition2)
+            ->with($responsePosition2, [])
             ->andReturn('<homepage.bottom>');
 
         Assert::same(
@@ -418,7 +453,7 @@ final class RendererProviderTest extends TestCase
                 return true;
             });
 
-        Assert::same('<!--AMP_POSITION:homepage.top-->', $provider($globals, 'homepage.top'));
+        Assert::same('<!--AMP_POSITION:homepage.top-->', $provider($globals, 'homepage.top', ['attributes' => ['class' => 'my-custom-class']]));
         Assert::same('<!--AMP_POSITION:homepage.bottom-->', $provider($globals, 'homepage.bottom', ['resources' => ['resource' => ['a']]]));
         Assert::true($provider->isAnythingQueued());
 
@@ -448,11 +483,11 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition1)
+            ->with($responsePosition1, ['class' => 'my-custom-class'])
             ->andReturn('<homepage.top>')
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition2)
+            ->with($responsePosition2, [])
             ->andReturn('<homepage.bottom>');
 
         Assert::same(

@@ -42,7 +42,7 @@ final class RendererProvider
 
     private bool $debugMode = false;
 
-    /** @var array<string, RequestPosition> */
+    /** @var array<string, array{0: RequestPosition, 1: array<string, mixed>}> */
     private array $queue = [];
 
     /** @var array<class-string, array<int, object>> */
@@ -73,9 +73,9 @@ final class RendererProvider
         $position = $this->createPosition($positionCode, $options);
 
         if ($this->renderingMode->shouldBePositionQueued($position, $globals)) {
-            return $this->addToQueue($position);
+            return $this->addToQueue($position, $options);
         } else {
-            return $this->render($position);
+            return $this->render($position, $options);
         }
     }
 
@@ -101,9 +101,11 @@ final class RendererProvider
     }
 
     /**
+     * @param array<string, mixed> $options
+     *
      * @throws AmpExceptionInterface
      */
-    private function render(RequestPosition $position): string
+    private function render(RequestPosition $position, array $options): string
     {
         $positionCode = $position->getCode();
         $response = $this->fetchResponse(new BannersRequest([$position]));
@@ -112,13 +114,16 @@ final class RendererProvider
             return '';
         }
 
-        return $this->renderPosition($response->getPosition($positionCode));
+        return $this->renderPosition($response->getPosition($positionCode), $options);
     }
 
-    private function addToQueue(RequestPosition $position): string
+    /**
+     * @param array<string, mixed> $options *
+     */
+    private function addToQueue(RequestPosition $position, array $options): string
     {
         $comment = $this->formatHtmlComment($position->getCode());
-        $this->queue[$comment] = $position;
+        $this->queue[$comment] = [$position, $options];
 
         return $comment;
     }
@@ -148,7 +153,10 @@ final class RendererProvider
         }
 
         $response = $this->fetchResponse(
-            new BannersRequest(array_values($this->queue)),
+            new BannersRequest(array_map(
+                static fn (array $item): RequestPosition => $item[0],
+                array_values($this->queue),
+            )),
         );
 
         if (null === $response) {
@@ -159,14 +167,14 @@ final class RendererProvider
 
         $replacements = array_filter(
             array_map(
-                function (RequestPosition $requestPosition) use ($response): ?string {
-                    $responsePosition = $response->getPosition($requestPosition->getCode());
+                function (array $item) use ($response): ?string {
+                    $responsePosition = $response->getPosition($item[0]->getCode());
 
                     if (null === $responsePosition) {
                         return null;
                     }
 
-                    return $this->renderPosition($responsePosition);
+                    return $this->renderPosition($responsePosition, $item[1]);
                 },
                 $this->queue,
             ),
@@ -230,12 +238,16 @@ final class RendererProvider
     }
 
     /**
+     * @param array<string, mixed> $options
+     *
      * @throws RendererException
      */
-    private function renderPosition(ResponsePosition $position): string
+    private function renderPosition(ResponsePosition $position, array $options): string
     {
         try {
-            return $this->renderer->render($position);
+            $elementAttributes = (array) ($options['attributes'] ?? []);
+
+            return $this->renderer->render($position, $elementAttributes);
         } catch (RendererException $e) {
             if ($this->debugMode) {
                 throw $e;
