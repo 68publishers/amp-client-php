@@ -13,11 +13,19 @@ final class SingleTemplate
 
     public ?Banner $banner;
 
+    /** @var array<string, scalar|null> */
+    public array $elementAttributes;
+
+    /**
+     * @param array<string, scalar|null> $elementAttributes
+     */
     public function __construct(
         Position $position,
-        ?Banner $banner
+        ?Banner $banner,
+        array $elementAttributes
     ) {
         $this->position = $position;
         $this->banner = $banner;
+        $this->elementAttributes = $elementAttributes;
     }
 }

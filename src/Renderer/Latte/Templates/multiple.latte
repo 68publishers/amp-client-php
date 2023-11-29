@@ -1,6 +1,8 @@
 {templateType SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\MultipleTemplate}
 
-<div data-amp-banner="{$position->getCode()}" data-amp-attached>
+<div data-amp-banner="{$position->getCode()}"
+     data-amp-banner-external="{=SixtyEightPublishers\AmpClient\Renderer\AmpBannerExternalAttribute::rendered($position)}"
+     n:attr="$elementAttributes">
     {do $banners = array_filter($banners, fn(SixtyEightPublishers\AmpClient\Response\ValueObject\Banner $banner) => 0 < count($banner->getContents()))}
     <div n:if="0 < count($banners)" class="amp-banner amp-banner--multiple">
         <div class="amp-banner__list">

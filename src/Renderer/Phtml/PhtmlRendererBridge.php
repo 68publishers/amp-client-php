@@ -36,11 +36,11 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderNotFound(Position $position): string
+    public function renderNotFound(Position $position, array $elementAttributes = []): string
     {
         $filename = $this->templates->getTemplateFile(Templates::TemplateNotFound);
 
-        return OutputBuffer::capture(function () use ($filename, $position) {
+        return OutputBuffer::capture(function () use ($filename, $position, $elementAttributes) {
             require $filename;
         });
     }
@@ -48,11 +48,11 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderSingle(Position $position, ?Banner $banner): string
+    public function renderSingle(Position $position, ?Banner $banner, array $elementAttributes = []): string
     {
         $filename = $this->templates->getTemplateFile(Templates::TemplateSingle);
 
-        return OutputBuffer::capture(function () use ($filename, $position, $banner) {
+        return OutputBuffer::capture(function () use ($filename, $position, $banner, $elementAttributes) {
             require $filename;
         });
     }
@@ -60,11 +60,11 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderRandom(Position $position, ?Banner $banner): string
+    public function renderRandom(Position $position, ?Banner $banner, array $elementAttributes = []): string
     {
         $filename = $this->templates->getTemplateFile(Templates::TemplateRandom);
 
-        return OutputBuffer::capture(function () use ($filename, $position, $banner) {
+        return OutputBuffer::capture(function () use ($filename, $position, $banner, $elementAttributes) {
             require $filename;
         });
     }
@@ -72,11 +72,11 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderMultiple(Position $position, array $banners): string
+    public function renderMultiple(Position $position, array $banners, array $elementAttributes = []): string
     {
         $filename = $this->templates->getTemplateFile(Templates::TemplateMultiple);
 
-        return OutputBuffer::capture(function () use ($filename, $position, $banners) {
+        return OutputBuffer::capture(function () use ($filename, $position, $banners, $elementAttributes) {
             require $filename;
         });
     }

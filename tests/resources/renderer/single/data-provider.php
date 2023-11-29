@@ -14,11 +14,24 @@ return [
     'No banner' => [
         $position,
         null,
+        [],
         __DIR__ . '/noBanner.html',
+    ],
+    'No banner with attributes' => [
+        $position,
+        null,
+        [
+            'class' => 'custom-class',
+            'data-custom' => true,
+            'data-custom2' => false,
+            'data-custom3' => null,
+        ],
+        __DIR__ . '/noBanner.withAttributes.html',
     ],
     'Banner without contents' => [
         $position,
         new Banner('1234', 'Main', 0, null, null, null, []),
+        [],
         __DIR__ . '/bannerWithoutContent.html',
     ],
     'Banner with default content only: image without optional values' => [
@@ -36,6 +49,7 @@ return [
                 [],
             ),
         ]),
+        [],
         __DIR__ . '/bannerWithDefaultImageContentOnly.withoutOptionalValues.html',
     ],
     'Banner with default content only: image with optional value' => [
@@ -56,6 +70,7 @@ return [
                 ],
             ),
         ]),
+        [],
         __DIR__ . '/bannerWithDefaultImageContentOnly.withOptionalValues.html',
     ],
     'Banner with breakpoint content only: image' => [
@@ -73,6 +88,7 @@ return [
                 [],
             ),
         ]),
+        [],
         __DIR__ . '/bannerWithBreakpointImageContentOnly.html',
     ],
     'Banner with default content only: html' => [
@@ -83,6 +99,7 @@ return [
                 '<p>My <span style="color:red;">Awesome</span> content!</p>',
             ),
         ]),
+        [],
         __DIR__ . '/bannerWithDefaultHtmlContentOnly.html',
     ],
     'Banner with breakpoint content only: html' => [
@@ -93,6 +110,7 @@ return [
                 '<p>My <span style="color:red;">Awesome</span> content!</p>',
             ),
         ]),
+        [],
         __DIR__ . '/bannerWithBreakpointHtmlContentOnly.html',
     ],
     'Banner with multiple contents' => [
@@ -131,6 +149,7 @@ return [
                 ],
             ),
         ]),
+        [],
         __DIR__ . '/bannerWithMultipleContents.html',
     ],
 ];

@@ -37,11 +37,12 @@ final class PhtmlRendererBridgeTest extends TestCase
      */
     public function testNotFoundTemplateRendering(
         Position $position,
+        array $elementAttributes,
         string $expectationFile
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderNotFound($position));
+        AssertHtml::assert($expectationFile, $renderer->renderNotFound($position, $elementAttributes));
     }
 
     /**
@@ -50,11 +51,12 @@ final class PhtmlRendererBridgeTest extends TestCase
     public function testSingleTemplateRendering(
         Position $position,
         ?Banner $banner,
+        array $elementAttributes,
         string $expectationFile
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderSingle($position, $banner));
+        AssertHtml::assert($expectationFile, $renderer->renderSingle($position, $banner, $elementAttributes));
     }
 
     /**
@@ -63,11 +65,12 @@ final class PhtmlRendererBridgeTest extends TestCase
     public function testRandomTemplateRendering(
         Position $position,
         ?Banner $banner,
+        array $elementAttributes,
         string $expectationFile
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderRandom($position, $banner));
+        AssertHtml::assert($expectationFile, $renderer->renderRandom($position, $banner, $elementAttributes));
     }
 
     /**
@@ -76,11 +79,12 @@ final class PhtmlRendererBridgeTest extends TestCase
     public function testMultipleTemplateRendering(
         Position $position,
         array $banners,
+        array $elementAttributes,
         string $expectationFile
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderMultiple($position, $banners));
+        AssertHtml::assert($expectationFile, $renderer->renderMultiple($position, $banners, $elementAttributes));
     }
 
     public function notFoundTemplateDataProvider(): array

@@ -6,6 +6,7 @@ namespace SixtyEightPublishers\AmpClient\Bridge\Latte\Node;
 
 use Generator;
 use Latte\CompileException;
+use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
@@ -18,7 +19,7 @@ final class BannerNode extends StatementNode
 {
     public ExpressionNode $positionCode;
 
-    public ?ExpressionNode $resources = null;
+    public ?ArrayNode $options = null;
 
     /**
      * @throws CompileException
@@ -30,7 +31,7 @@ final class BannerNode extends StatementNode
         $node->positionCode = $tag->parser->parseUnquotedStringOrExpression();
 
         if ($tag->parser->stream->tryConsume(',')) {
-            $node->resources = $tag->parser->parseExpression();
+            $node->options = $tag->parser->parseArguments();
         }
 
         return $node;
@@ -38,11 +39,11 @@ final class BannerNode extends StatementNode
 
     public function print(PrintContext $context): string
     {
-        if (null !== $this->resources) {
+        if (null !== $this->options) {
             return $context->format(
                 'echo ($this->global->ampClientRenderer)($this->global, %node, %node?);',
                 $this->positionCode,
-                $this->resources,
+                $this->options,
             );
         }
 
@@ -56,8 +57,8 @@ final class BannerNode extends StatementNode
     {
         yield $this->positionCode;
 
-        if (null !== $this->resources) {
-            yield $this->resources;
+        if (null !== $this->options) {
+            yield $this->options;
         }
     }
 }

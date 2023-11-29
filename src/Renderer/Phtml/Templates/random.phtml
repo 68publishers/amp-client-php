@@ -7,11 +7,15 @@ namespace SixtyEightPublishers\AmpClient\Renderer\Phtml;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Renderer\Fingerprint;
+use SixtyEightPublishers\AmpClient\Renderer\AmpBannerExternalAttribute;
 
 /** @var Position $position */
 /** @var ?Banner $banner */
+/** @var array<string, scalar|null> $elementAttributes */
 ?>
-<div data-amp-banner="<?= Helpers::escapeHtmlAttr($position->getCode()) ?>" data-amp-attached>
+<div data-amp-banner="<?= Helpers::escapeHtmlAttr($position->getCode()) ?>"
+     data-amp-banner-external="<?= Helpers::escapeHtmlAttr(AmpBannerExternalAttribute::rendered($position)) ?>"
+    <?= Helpers::printAttributes($elementAttributes) ?>>
     <?php if (NULL !== $banner && 0 < count($banner->getContents())): ?>
         <div class="amp-banner amp-banner--random"
              data-amp-banner-fingerprint="<?= Helpers::escapeHtmlAttr(Fingerprint::create($position, $banner)) ?>"

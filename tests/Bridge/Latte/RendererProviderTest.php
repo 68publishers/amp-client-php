@@ -97,7 +97,19 @@ final class RendererProviderTest extends TestCase
             ->with($responsePosition)
             ->andReturn('<homepage.top>');
 
-        Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top', ['resource1' => 'a', 'resource2' => ['a', 'b']]));
+        Assert::same(
+            '<homepage.top>',
+            $provider(
+                new stdClass(),
+                'homepage.top',
+                [
+                    'resources' => [
+                        'resource1' => 'a',
+                        new BannerResource('resource2', ['a', 'b']),
+                    ],
+                ],
+            ),
+        );
     }
 
     public function testClientConfigurationEventsShouldBeInvokedBeforeFirstFetch(): void
@@ -331,7 +343,7 @@ final class RendererProviderTest extends TestCase
             });
 
         Assert::same('<!--AMP_POSITION:homepage.top-->', $provider($globals, 'homepage.top'));
-        Assert::same('<!--AMP_POSITION:homepage.bottom-->', $provider($globals, 'homepage.bottom', ['resource' => ['a']]));
+        Assert::same('<!--AMP_POSITION:homepage.bottom-->', $provider($globals, 'homepage.bottom', ['resources' => ['resource' => ['a']]]));
         Assert::true($provider->isAnythingQueued());
 
         $responsePosition1 = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
@@ -407,7 +419,7 @@ final class RendererProviderTest extends TestCase
             });
 
         Assert::same('<!--AMP_POSITION:homepage.top-->', $provider($globals, 'homepage.top'));
-        Assert::same('<!--AMP_POSITION:homepage.bottom-->', $provider($globals, 'homepage.bottom', ['resource' => ['a']]));
+        Assert::same('<!--AMP_POSITION:homepage.bottom-->', $provider($globals, 'homepage.bottom', ['resources' => ['resource' => ['a']]]));
         Assert::true($provider->isAnythingQueued());
 
         $responsePosition1 = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);

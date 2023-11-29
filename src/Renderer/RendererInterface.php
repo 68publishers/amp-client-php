@@ -10,7 +10,9 @@ use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 interface RendererInterface
 {
     /**
+     * @param array<string, scalar|null> $elementAttributes
+     *
      * @throws RendererException
      */
-    public function render(Position $position): string;
+    public function render(Position $position, array $elementAttributes = []): string;
 }

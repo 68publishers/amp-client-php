@@ -1,6 +1,8 @@
 {templateType SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\RandomTemplate}
 
-<div data-amp-banner="{$position->getCode()}" data-amp-attached>
+<div data-amp-banner="{$position->getCode()}"
+     data-amp-banner-external="{=SixtyEightPublishers\AmpClient\Renderer\AmpBannerExternalAttribute::rendered($position)}"
+     n:attr="$elementAttributes">
     <div n:if="null !== $banner && 0 < count($banner->getContents())"
          class="amp-banner amp-banner--random"
          data-amp-banner-fingerprint="{SixtyEightPublishers\AmpClient\Renderer\Fingerprint::create($position, $banner)}"

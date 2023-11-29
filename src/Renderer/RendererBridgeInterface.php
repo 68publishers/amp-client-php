@@ -11,14 +11,24 @@ interface RendererBridgeInterface
 {
     public function overrideTemplates(Templates $templates): self;
 
-    public function renderNotFound(Position $position): string;
-
-    public function renderSingle(Position $position, ?Banner $banner): string;
-
-    public function renderRandom(Position $position, ?Banner $banner): string;
+    /**
+     * @param array<string, scalar|null> $elementAttributes
+     */
+    public function renderNotFound(Position $position, array $elementAttributes = []): string;
 
     /**
-     * @param array<int, Banner> $banners
+     * @param array<string, scalar|null> $elementAttributes
      */
-    public function renderMultiple(Position $position, array $banners): string;
+    public function renderSingle(Position $position, ?Banner $banner, array $elementAttributes = []): string;
+
+    /**
+     * @param array<string, scalar|null> $elementAttributes
+     */
+    public function renderRandom(Position $position, ?Banner $banner, array $elementAttributes = []): string;
+
+    /**
+     * @param array<int, Banner>         $banners
+     * @param array<string, scalar|null> $elementAttributes
+     */
+    public function renderMultiple(Position $position, array $banners, array $elementAttributes = []): string;
 }

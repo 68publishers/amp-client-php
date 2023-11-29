@@ -34,4 +34,30 @@ final class Helpers
 
         return str_replace('{', '&#123;', $string);
     }
+
+    /**
+     * @param array<string, scalar|null> $attributes
+     */
+    public static function printAttributes(array $attributes): string
+    {
+        $printed = [];
+
+        foreach ($attributes as $name => $value) {
+            if (null === $value || false === $value) {
+                continue;
+            }
+
+            if (true === $value) {
+                $printed[] = $name;
+
+                continue;
+            }
+
+            $printed[] = $name . '="' . self::escapeHtmlAttr($value) . '"';
+        }
+
+        $attrs = implode(' ', $printed);
+
+        return '' !== $attrs ? (' ' . $attrs) : '';
+    }
 }

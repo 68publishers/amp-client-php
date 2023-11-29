@@ -39,6 +39,6 @@ final class AmpClientLatte2Extension extends MacroSet
 
         return $writer
             ->using($node)
-            ->write('echo ($this->global->ampClientRenderer)($this->global, %node.word, %node.args?);');
+            ->write('echo ($this->global->ampClientRenderer)($this->global, %node.word, %node.array?);');
     }
 }

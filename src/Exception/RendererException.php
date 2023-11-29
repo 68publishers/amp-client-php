@@ -24,6 +24,19 @@ final class RendererException extends RuntimeException implements AmpExceptionIn
         );
     }
 
+    public static function unableToRenderAmpBannerExternalAttribute(string $positionCode, ?Throwable $previous = null): self
+    {
+        return new self(
+            sprintf(
+                'Unable to render amp-banner-external for the position %s. %s',
+                $positionCode,
+                null !== $previous ? $previous->getMessage() : '',
+            ),
+            0,
+            $previous,
+        );
+    }
+
     /**
      * @param class-string $rendererBridgeClassname
      */

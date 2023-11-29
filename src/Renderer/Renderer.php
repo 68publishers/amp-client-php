@@ -32,27 +32,30 @@ final class Renderer implements RendererInterface
         );
     }
 
-    public function render(Position $position): string
+    public function render(Position $position, array $elementAttributes = []): string
     {
         try {
             switch ($position->getDisplayType()) {
                 case null:
-                    return $this->rendererBridge->renderNotFound($position);
+                    return $this->rendererBridge->renderNotFound($position, $elementAttributes);
                 case Position::DisplayTypeMultiple:
                     return $this->rendererBridge->renderMultiple(
                         $position,
                         $this->bannersResolver->resolveMultiple($position),
+                        $elementAttributes,
                     );
                 case Position::DisplayTypeRandom:
                     return $this->rendererBridge->renderRandom(
                         $position,
                         $this->bannersResolver->resolveRandom($position),
+                        $elementAttributes,
                     );
                 case Position::DisplayTypeSingle:
                 default:
                     return $this->rendererBridge->renderSingle(
                         $position,
                         $this->bannersResolver->resolveSingle($position),
+                        $elementAttributes,
                     );
             }
         } catch (Throwable $e) {
