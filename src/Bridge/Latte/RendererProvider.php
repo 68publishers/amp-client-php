@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\AmpClient\Bridge\Latte;
 
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use SixtyEightPublishers\AmpClient\AmpClientInterface;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\Event\ConfigureClientEvent;
@@ -23,14 +24,19 @@ use function array_keys;
 use function array_values;
 use function assert;
 use function count;
+use function gettype;
 use function htmlspecialchars;
 use function is_array;
+use function is_scalar;
+use function is_string;
 use function sprintf;
 use function str_replace;
 
 final class RendererProvider
 {
     private const OptionResources = 'resources';
+    private const OptionAttributes = 'attributes';
+    private const OptionMode = 'mode';
 
     private AmpClientInterface $client;
 
@@ -40,9 +46,16 @@ final class RendererProvider
 
     private RenderingModeInterface $renderingMode;
 
+    /** @var array<string, RenderingModeInterface> */
+    private array $alternativeRenderingModes = [];
+
     private bool $debugMode = false;
 
-    /** @var array<string, array{0: RequestPosition, 1: array<string, mixed>}> */
+    /** @var array<string, array{
+     *     0: RequestPosition,
+     *     1: array<string, mixed>,
+     * }>
+     */
     private array $queue = [];
 
     /** @var array<class-string, array<int, object>> */
@@ -70,13 +83,24 @@ final class RendererProvider
      */
     public function __invoke(object $globals, string $positionCode, array $options = []): string
     {
+        $renderingMode = $this->resolveRenderingMode($options);
         $position = $this->createPosition($positionCode, $options);
 
-        if ($this->renderingMode->shouldBePositionQueued($position, $globals)) {
-            return $this->addToQueue($position, $options);
-        } else {
-            return $this->render($position, $options);
+        if ($renderingMode->shouldBePositionRenderedClientSide($position)) {
+            return $this->renderClientSidePosition($position, $options);
         }
+
+        if ($renderingMode->shouldBePositionQueued($position, $globals)) {
+            return $this->addToQueue($position, $options);
+        }
+
+        $response = $this->fetchResponse(new BannersRequest([$position]));
+
+        if (null === $response || null === $response->getPosition($positionCode)) {
+            return '';
+        }
+
+        return $this->renderPosition($response->getPosition($positionCode), $options);
     }
 
     public function setDebugMode(bool $debugMode): self
@@ -93,6 +117,22 @@ final class RendererProvider
         return $this;
     }
 
+    /**
+     * @param array<int, RenderingModeInterface> $renderingModes
+     */
+    public function setAlternativeRenderingModes(array $renderingModes): self
+    {
+        $this->alternativeRenderingModes = [];
+
+        foreach ($renderingModes as $renderingMode) {
+            assert($renderingMode instanceof RenderingModeInterface);
+
+            $this->alternativeRenderingModes[$renderingMode->getName()] = $renderingMode;
+        }
+
+        return $this;
+    }
+
     public function addConfigureClientEventHandler(ConfigureClientEventHandlerInterface $handler): self
     {
         $this->eventHandlers[ConfigureClientEventHandlerInterface::class][] = $handler;
@@ -102,23 +142,6 @@ final class RendererProvider
 
     /**
      * @param array<string, mixed> $options
-     *
-     * @throws AmpExceptionInterface
-     */
-    private function render(RequestPosition $position, array $options): string
-    {
-        $positionCode = $position->getCode();
-        $response = $this->fetchResponse(new BannersRequest([$position]));
-
-        if (null === $response || null === $response->getPosition($positionCode)) {
-            return '';
-        }
-
-        return $this->renderPosition($response->getPosition($positionCode), $options);
-    }
-
-    /**
-     * @param array<string, mixed> $options *
      */
     private function addToQueue(RequestPosition $position, array $options): string
     {
@@ -130,7 +153,17 @@ final class RendererProvider
 
     public function supportsQueues(): bool
     {
-        return $this->renderingMode->supportsQueues();
+        if ($this->renderingMode->supportsQueues()) {
+            return true;
+        }
+
+        foreach ($this->alternativeRenderingModes as $alternativeRenderingMode) {
+            if ($alternativeRenderingMode->supportsQueues()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function isAnythingQueued(): bool
@@ -245,9 +278,33 @@ final class RendererProvider
     private function renderPosition(ResponsePosition $position, array $options): string
     {
         try {
-            $elementAttributes = (array) ($options['attributes'] ?? []);
+            $elementAttributes = (array) ($options[self::OptionAttributes] ?? []);
 
             return $this->renderer->render($position, $elementAttributes);
+        } catch (RendererException $e) {
+            if ($this->debugMode) {
+                throw $e;
+            }
+
+            if (null !== $this->logger) {
+                $this->logger->error($e->getMessage(), [
+                    'exception' => $e,
+                ]);
+            }
+
+            return '';
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    private function renderClientSidePosition(RequestPosition $position, array $options): string
+    {
+        try {
+            $elementAttributes = (array) ($options[self::OptionAttributes] ?? []);
+
+            return $this->renderer->renderClientSide($position, $elementAttributes);
         } catch (RendererException $e) {
             if ($this->debugMode) {
                 throw $e;
@@ -276,6 +333,36 @@ final class RendererProvider
         }
 
         return new RequestPosition($positionCode, $bannerResources);
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    private function resolveRenderingMode(array $options): RenderingModeInterface
+    {
+        if (!isset($options[self::OptionMode])) {
+            return $this->renderingMode;
+        }
+
+        $mode = $options[self::OptionMode];
+
+        if ($mode instanceof RenderingModeInterface) {
+            $mode = $mode->getName();
+        }
+
+        if ($this->renderingMode->getName() === $mode) {
+            return $this->renderingMode;
+        }
+
+        if (!is_string($mode) || !isset($this->alternativeRenderingModes[$mode])) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid value for option "%s". The value %s is not registered between alternative rendering modes.',
+                self::OptionMode,
+                is_scalar($mode) ? "\"$mode\"" : gettype($mode),
+            ));
+        }
+
+        return $this->alternativeRenderingModes[$mode];
     }
 
     private function formatHtmlComment(string $positionCode): string

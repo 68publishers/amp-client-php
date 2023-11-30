@@ -8,6 +8,13 @@ use SixtyEightPublishers\AmpClient\Request\ValueObject\Position;
 
 final class QueuedRenderingMode implements RenderingModeInterface
 {
+    public const Name = 'queued';
+
+    public function getName(): string
+    {
+        return self::Name;
+    }
+
     public function supportsQueues(): bool
     {
         return true;
@@ -16,5 +23,10 @@ final class QueuedRenderingMode implements RenderingModeInterface
     public function shouldBePositionQueued(Position $position, object $globals): bool
     {
         return true;
+    }
+
+    public function shouldBePositionRenderedClientSide(Position $position): bool
+    {
+        return false;
     }
 }

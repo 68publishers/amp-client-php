@@ -6,9 +6,9 @@ namespace SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode;
 
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position;
 
-final class DirectRenderingMode implements RenderingModeInterface
+final class ClientSideRenderingMode implements RenderingModeInterface
 {
-    public const Name = 'direct';
+    public const Name = 'client_side';
 
     public function getName(): string
     {
@@ -27,6 +27,6 @@ final class DirectRenderingMode implements RenderingModeInterface
 
     public function shouldBePositionRenderedClientSide(Position $position): bool
     {
-        return false;
+        return true;
     }
 }

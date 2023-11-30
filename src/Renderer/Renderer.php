@@ -6,7 +6,8 @@ namespace SixtyEightPublishers\AmpClient\Renderer;
 
 use SixtyEightPublishers\AmpClient\Exception\RendererException;
 use SixtyEightPublishers\AmpClient\Renderer\Phtml\PhtmlRendererBridge;
-use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 use Throwable;
 use function get_class;
 
@@ -32,25 +33,25 @@ final class Renderer implements RendererInterface
         );
     }
 
-    public function render(Position $position, array $elementAttributes = []): string
+    public function render(ResponsePosition $position, array $elementAttributes = []): string
     {
         try {
             switch ($position->getDisplayType()) {
                 case null:
                     return $this->rendererBridge->renderNotFound($position, $elementAttributes);
-                case Position::DisplayTypeMultiple:
+                case ResponsePosition::DisplayTypeMultiple:
                     return $this->rendererBridge->renderMultiple(
                         $position,
                         $this->bannersResolver->resolveMultiple($position),
                         $elementAttributes,
                     );
-                case Position::DisplayTypeRandom:
+                case ResponsePosition::DisplayTypeRandom:
                     return $this->rendererBridge->renderRandom(
                         $position,
                         $this->bannersResolver->resolveRandom($position),
                         $elementAttributes,
                     );
-                case Position::DisplayTypeSingle:
+                case ResponsePosition::DisplayTypeSingle:
                 default:
                     return $this->rendererBridge->renderSingle(
                         $position,
@@ -58,6 +59,23 @@ final class Renderer implements RendererInterface
                         $elementAttributes,
                     );
             }
+        } catch (Throwable $e) {
+            if ($e instanceof RendererException) {
+                throw $e;
+            }
+
+            throw RendererException::rendererBridgeThrownError(
+                get_class($this->rendererBridge),
+                $position->getCode(),
+                $e,
+            );
+        }
+    }
+
+    public function renderClientSide(RequestPosition $position, array $elementAttributes = []): string
+    {
+        try {
+            return $this->rendererBridge->renderClientSide($position, $elementAttributes);
         } catch (Throwable $e) {
             if ($e instanceof RendererException) {
                 throw $e;

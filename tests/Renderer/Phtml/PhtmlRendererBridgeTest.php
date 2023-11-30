@@ -7,8 +7,9 @@ namespace SixtyEightPublishers\AmpClient\Tests\Renderer\Phtml;
 use Closure;
 use SixtyEightPublishers\AmpClient\Renderer\Phtml\PhtmlRendererBridge;
 use SixtyEightPublishers\AmpClient\Renderer\Templates;
+use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
-use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 use SixtyEightPublishers\AmpClient\Tests\Renderer\AssertHtml;
 use Tester\Assert;
 use Tester\TestCase;
@@ -22,7 +23,7 @@ final class PhtmlRendererBridgeTest extends TestCase
     {
         $renderer = new PhtmlRendererBridge();
         $modifiedRenderer = $renderer->overrideTemplates(new Templates([
-            Templates::TemplateSingle => '/path/to/file',
+            Templates::Single => '/path/to/file',
         ]));
 
         $originalTemplates = call_user_func(Closure::bind(static fn () => $renderer->templates, null, PhtmlRendererBridge::class));
@@ -36,7 +37,7 @@ final class PhtmlRendererBridgeTest extends TestCase
      * @dataProvider notFoundTemplateDataProvider
      */
     public function testNotFoundTemplateRendering(
-        Position $position,
+        ResponsePosition $position,
         array $elementAttributes,
         string $expectationFile
     ): void {
@@ -49,7 +50,7 @@ final class PhtmlRendererBridgeTest extends TestCase
      * @dataProvider singleTemplateDataProvider
      */
     public function testSingleTemplateRendering(
-        Position $position,
+        ResponsePosition $position,
         ?Banner $banner,
         array $elementAttributes,
         string $expectationFile
@@ -63,7 +64,7 @@ final class PhtmlRendererBridgeTest extends TestCase
      * @dataProvider randomTemplateDataProvider
      */
     public function testRandomTemplateRendering(
-        Position $position,
+        ResponsePosition $position,
         ?Banner $banner,
         array $elementAttributes,
         string $expectationFile
@@ -77,7 +78,7 @@ final class PhtmlRendererBridgeTest extends TestCase
      * @dataProvider multipleTemplateDataProvider
      */
     public function testMultipleTemplateRendering(
-        Position $position,
+        ResponsePosition $position,
         array $banners,
         array $elementAttributes,
         string $expectationFile
@@ -85,6 +86,19 @@ final class PhtmlRendererBridgeTest extends TestCase
         $renderer = new PhtmlRendererBridge();
 
         AssertHtml::assert($expectationFile, $renderer->renderMultiple($position, $banners, $elementAttributes));
+    }
+
+    /**
+     * @dataProvider clientSideTemplateDataProvider
+     */
+    public function testClientSideTemplateRendering(
+        RequestPosition $position,
+        array $elementAttributes,
+        string $expectationFile
+    ): void {
+        $renderer = new PhtmlRendererBridge();
+
+        AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $elementAttributes));
     }
 
     public function notFoundTemplateDataProvider(): array
@@ -105,6 +119,11 @@ final class PhtmlRendererBridgeTest extends TestCase
     public function multipleTemplateDataProvider(): array
     {
         return require __DIR__ . '/../../resources/renderer/multiple/data-provider.php';
+    }
+
+    public function clientSideTemplateDataProvider(): array
+    {
+        return require __DIR__ . '/../../resources/renderer/client-side/data-provider.php';
     }
 }
 

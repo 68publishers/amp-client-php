@@ -10,6 +10,9 @@ final class AmpClientLatteConfig
 {
     public string $banner_macro_name;
 
-    /** @var string|Statement|null */
+    /** @var string|Statement */
     public $rendering_mode;
+
+    /** @var array<string|Statement> */
+    public array $alternative_rendering_modes = [];
 }

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\AmpClient\Renderer;
 
+use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
-use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 
 interface RendererBridgeInterface
 {
@@ -14,21 +15,26 @@ interface RendererBridgeInterface
     /**
      * @param array<string, scalar|null> $elementAttributes
      */
-    public function renderNotFound(Position $position, array $elementAttributes = []): string;
+    public function renderNotFound(ResponsePosition $position, array $elementAttributes = []): string;
 
     /**
      * @param array<string, scalar|null> $elementAttributes
      */
-    public function renderSingle(Position $position, ?Banner $banner, array $elementAttributes = []): string;
+    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes = []): string;
 
     /**
      * @param array<string, scalar|null> $elementAttributes
      */
-    public function renderRandom(Position $position, ?Banner $banner, array $elementAttributes = []): string;
+    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes = []): string;
 
     /**
      * @param array<int, Banner>         $banners
      * @param array<string, scalar|null> $elementAttributes
      */
-    public function renderMultiple(Position $position, array $banners, array $elementAttributes = []): string;
+    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes = []): string;
+
+    /**
+     * @param array<string, scalar|null> $elementAttributes
+     */
+    public function renderClientSide(RequestPosition $position, array $elementAttributes = []): string;
 }

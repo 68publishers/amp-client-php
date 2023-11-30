@@ -99,6 +99,7 @@ final class AmpClientExtension extends CompilerExtension
                     'random' => Expect::string(),
                     'multiple' => Expect::string(),
                     'not_found' => Expect::string(),
+                    'client_side' => Expect::string(),
                 ])->castTo('array'),
             ])->castTo(RendererConfig::class),
         ])->castTo(AmpClientConfig::class);
@@ -273,10 +274,11 @@ final class AmpClientExtension extends CompilerExtension
         }
 
         $templatesOverride = array_filter([
-            Templates::TemplateSingle => $config->templates['single'] ?? null,
-            Templates::TemplateRandom => $config->templates['random'] ?? null,
-            Templates::TemplateMultiple => $config->templates['multiple'] ?? null,
-            Templates::TemplateNotFound => $config->templates['not_found'] ?? null,
+            Templates::Single => $config->templates['single'] ?? null,
+            Templates::Random => $config->templates['random'] ?? null,
+            Templates::Multiple => $config->templates['multiple'] ?? null,
+            Templates::NotFound => $config->templates['not_found'] ?? null,
+            Templates::ClientSide => $config->templates['client_side'] ?? null,
         ]);
 
         if (0 < count($templatesOverride)) {

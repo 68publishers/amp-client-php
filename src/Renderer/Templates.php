@@ -9,17 +9,19 @@ use function array_merge;
 
 final class Templates
 {
-    public const TemplateSingle = 'single';
-    public const TemplateRandom = 'random';
-    public const TemplateMultiple = 'multiple';
-    public const TemplateNotFound = 'notFound';
+    public const Single = 'single';
+    public const Random = 'random';
+    public const Multiple = 'multiple';
+    public const NotFound = 'notFound';
+    public const ClientSide = 'clientSide';
 
     /**
      * @var array{
      *      single?: string,
      *      random?: string,
      *      multiple?: string,
-     *      'notFound'?: string,
+     *      notFound?: string,
+     *      clientSide?: string,
      *  }
      */
     private array $filesMap;
@@ -30,6 +32,7 @@ final class Templates
      *      random?: string,
      *      multiple?: string,
      *      notFound?: string,
+     *      clientSide?: string,
      *  } $filesMap
      */
     public function __construct(array $filesMap)

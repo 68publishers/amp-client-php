@@ -7,8 +7,9 @@ namespace SixtyEightPublishers\AmpClient\Renderer\Phtml;
 use SixtyEightPublishers\AmpClient\Renderer\OutputBuffer;
 use SixtyEightPublishers\AmpClient\Renderer\RendererBridgeInterface;
 use SixtyEightPublishers\AmpClient\Renderer\Templates;
+use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
-use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 use Throwable;
 
 final class PhtmlRendererBridge implements RendererBridgeInterface
@@ -18,10 +19,11 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     public function __construct()
     {
         $this->templates = new Templates([
-            Templates::TemplateSingle => __DIR__ . '/Templates/single.phtml',
-            Templates::TemplateRandom => __DIR__ . '/Templates/random.phtml',
-            Templates::TemplateMultiple => __DIR__ . '/Templates/multiple.phtml',
-            Templates::TemplateNotFound => __DIR__ . '/Templates/notFound.phtml',
+            Templates::Single => __DIR__ . '/Templates/single.phtml',
+            Templates::Random => __DIR__ . '/Templates/random.phtml',
+            Templates::Multiple => __DIR__ . '/Templates/multiple.phtml',
+            Templates::NotFound => __DIR__ . '/Templates/notFound.phtml',
+            Templates::ClientSide => __DIR__ . '/Templates/clientSide.phtml',
         ]);
     }
 
@@ -36,9 +38,9 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderNotFound(Position $position, array $elementAttributes = []): string
+    public function renderNotFound(ResponsePosition $position, array $elementAttributes = []): string
     {
-        $filename = $this->templates->getTemplateFile(Templates::TemplateNotFound);
+        $filename = $this->templates->getTemplateFile(Templates::NotFound);
 
         return OutputBuffer::capture(function () use ($filename, $position, $elementAttributes) {
             require $filename;
@@ -48,9 +50,9 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderSingle(Position $position, ?Banner $banner, array $elementAttributes = []): string
+    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes = []): string
     {
-        $filename = $this->templates->getTemplateFile(Templates::TemplateSingle);
+        $filename = $this->templates->getTemplateFile(Templates::Single);
 
         return OutputBuffer::capture(function () use ($filename, $position, $banner, $elementAttributes) {
             require $filename;
@@ -60,9 +62,9 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderRandom(Position $position, ?Banner $banner, array $elementAttributes = []): string
+    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes = []): string
     {
-        $filename = $this->templates->getTemplateFile(Templates::TemplateRandom);
+        $filename = $this->templates->getTemplateFile(Templates::Random);
 
         return OutputBuffer::capture(function () use ($filename, $position, $banner, $elementAttributes) {
             require $filename;
@@ -72,11 +74,23 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderMultiple(Position $position, array $banners, array $elementAttributes = []): string
+    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes = []): string
     {
-        $filename = $this->templates->getTemplateFile(Templates::TemplateMultiple);
+        $filename = $this->templates->getTemplateFile(Templates::Multiple);
 
         return OutputBuffer::capture(function () use ($filename, $position, $banners, $elementAttributes) {
+            require $filename;
+        });
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function renderClientSide(RequestPosition $position, array $elementAttributes = []): string
+    {
+        $filename = $this->templates->getTemplateFile(Templates::ClientSide);
+
+        return OutputBuffer::capture(function () use ($filename, $position, $elementAttributes) {
             require $filename;
         });
     }
