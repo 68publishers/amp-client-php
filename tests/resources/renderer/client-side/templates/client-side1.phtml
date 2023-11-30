@@ -1,0 +1,10 @@
+<?php
+
+declare(strict_types=1);
+
+use SixtyEightPublishers\AmpClient\Request\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Renderer\Phtml\Helpers;
+
+/** @var Position $position */
+?>
+<span style="color: red;">Client-side position "<?= Helpers::escapeHtml($position->getCode()) ?>".</span>

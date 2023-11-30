@@ -116,6 +116,70 @@ final class AmpClientLatteExtensionTest extends TestCase
                 ],
                 2 => null,
             ],
+            'Attributes as array' => [
+                0 => <<<'LATTE'
+                {banner homepage.top, attributes: ['class' => 'test-class']}
+                LATTE,
+                1 => [
+                    'homepage.top',
+                    [
+                        'attributes' => ['class' => 'test-class'],
+                    ],
+                ],
+                2 => null,
+            ],
+            'Attributes as variable' => [
+                0 => <<<'LATTE'
+                {var $attributes = ['class' => 'test-class']}
+                {banner homepage.top, attributes: $attributes}
+                LATTE,
+                1 => [
+                    'homepage.top',
+                    [
+                        'attributes' => ['class' => 'test-class'],
+                    ],
+                ],
+                2 => null,
+            ],
+            'Mode as string' => [
+                0 => <<<'LATTE'
+                {banner homepage.top, mode: 'client_side'}
+                LATTE,
+                1 => [
+                    'homepage.top',
+                    [
+                        'mode' => 'client_side',
+                    ],
+                ],
+                2 => null,
+            ],
+            'Mode as variable' => [
+                0 => <<<'LATTE'
+                {var $mode = 'client_side'}
+                {banner homepage.top, mode: $mode}
+                LATTE,
+                1 => [
+                    'homepage.top',
+                    [
+                        'mode' => 'client_side',
+                    ],
+                ],
+                2 => null,
+            ],
+            'Full featured' => [
+                0 => <<<'LATTE'
+                {banner homepage.top, resources: [product => '123', category => ['123', '456']], attributes: ['class' => 'test-class'], mode: 'client_side'}
+                LATTE,
+                1 => [
+                    'homepage.top',
+                    [
+                        'resources' => ['product' => '123', 'category' => ['123', '456']],
+                        'attributes' => ['class' => 'test-class'],
+                        'mode' => 'client_side',
+                    ],
+                ],
+                2 => null,
+            ],
         ];
     }
 

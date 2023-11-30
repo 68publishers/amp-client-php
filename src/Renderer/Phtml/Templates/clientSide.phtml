@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SixtyEightPublishers\AmpClient\Renderer\Phtml;
+
+use SixtyEightPublishers\AmpClient\Request\ValueObject\Position;
+
+/** @var Position $position */
+/** @var array<string, scalar|null> $elementAttributes */
+?>
+<div data-amp-banner="<?= Helpers::escapeHtmlAttr($position->getCode()) ?>"
+    <?php foreach ($position->getResources() as $resource) : ?><?= 'data-amp-resource-' . $resource->getCode() . '="' . implode(',', $resource->getValues()) . '"' ?><?php endforeach ?>
+    <?= Helpers::printAttributes($elementAttributes) ?>>
+</div>

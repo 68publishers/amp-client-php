@@ -1,9 +1,14 @@
-# Integration with Nette framework
+<div align="center" style="text-align: center; margin-bottom: 50px">
+<img src="images/logo.png" alt="AMP Client PHP Logo" align="center" width="100">
+<h1>AMP Client PHP</h1>
+<h2 align="center">Integration with Nette framework</h2>
+</div>
 
 For more information on how the client works, we also recommend reading the [Integration without a framework](./integration-without-framework.md) section.
 
 * [Client integration](#client-integration)
 * [Latte macros integration](#latte-macros-integration)
+  * [Using multiple rendering modes](#using-multiple-rendering-modes)
   * [Configuring client before the first fetch](#configuring-client-before-the-first-fetch)
   * [Renaming the macro](#renaming-the-macro)
 
@@ -64,6 +69,7 @@ amp_client:
             random: %appDir%/templates/amp/random.latte
             multiple: %appDir%/templates/amp/multiple.latte
             not_found: %appDir%/templates/amp/not_found.latte
+            client_side: %appDir%/templates/amp/client_side.latte
 ```
 
 Two important services are now available in the DI Container - `AmpClientInterface` and `RendererInterface`.
@@ -100,23 +106,24 @@ final class MyPresenter extends Presenter {
 
 ## Latte macros integration
 
-Banners can be rendered directly from the Latte template without having to manually call the client. We need to register another extension for this:
+Banners can be rendered directly from the Latte template without having to manually call the client. Another extension must be registered for this:
 
 ```neon
 extensions:
     amp_client.latte: SixtyEightPublishers\AmpClient\Bridge\Nette\DI\AmpClientLatteExtension(%debugMode%)
 ```
 
-Now we have the macro `{banner}` available in the application, and we can use it in templates:
+Now the macro `{banner}` is available in the application and can be used in templates:
 
 ```latte
 {banner homepage.top}
 {banner homepage.promo, resources: ['role' => 'guest']}
+{banner homepage.bottom, attributes: ['class' => 'my-awesome-class']}
 ```
 
 Banners are now requested via API and rendered to the template automatically.
 
-Each `{banner}` macro makes a separate request to the AMP API, so in our example above, two requests are sent.
+Each `{banner}` macro makes a separate request to the AMP API, so in our example above, three requests are sent.
 This can be solved by the following configuration:
 
 ```neon
@@ -126,6 +133,32 @@ amp_client.latte:
 
 Now when rendering a page via `nette/application`, information about all banners to be rendered is collected and a request to the AMP API is sent only once the whole template is rendered.
 The banners are then inserted back into the rendered page. This behavior also works automatically with AJAX snippets.
+
+The following rendering modes are available:
+
+- **direct** ([DirectRenderingMode](../src/Bridge/Latte/RenderingMode/DirectRenderingMode.php)) - The default mode, API is requested separately for each banner.
+- **client_side** ([ClientSideRenderingMode](../src/Bridge/Latte/RenderingMode/ClientSideRenderingMode.php)) - Renders only a wrapper element and leaves loading banners on the JavaScript client. Banners are loaded by calling the `attachBanners()` function.
+- **queued_in_presenter_context** ([QueuedRenderingInPresenterContextMode](../src/Bridge/Latte/RenderingMode/QueuedRenderingInPresenterContextMode.php)) - Renders only HTML comments as placeholders and stores requested positions in a queue. It will request, render and place all banners to them positions at once before the presenter returns a response.
+- **queued** ([QueuedRenderingMode](../src/Bridge/Latte/RenderingMode/QueuedRenderingMode.php)) - Same behavior as `queued_in_presenter_context`, but it doesn't take into account whether the website template is currently being rendered through the Nette application. It is more suited for an integration without a framework.
+
+### Using multiple rendering modes
+
+Besides the default rendering mode, which is set by the option `rendering_mode`, it is possible to configure alternative modes that can be used in templates.
+
+```neon
+amp_client.latte:
+    rendering_mode: queued_in_presenter_context # the default value is "direct"
+    alternative_rendering_modes:
+        - client_side
+```
+
+```latte
+{* The first banner will be rendered with the default mode *}
+{banner homepage.top}
+
+{* The second banner will be rendered client side *}
+{banner homepage.promo, mode: 'client_side'}
+```
 
 ### Configuring client before the first fetch
 

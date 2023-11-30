@@ -137,10 +137,11 @@ final class AmpClientExtensionTest extends TestCase
         $templates = call_user_func(Closure::bind(static fn (): Templates => $rendererBridge->templates, null, PhtmlRendererBridge::class));
         assert($templates instanceof Templates);
 
-        Assert::same(__DIR__ . '/../../../resources/renderer/single/templates/single1.phtml', $templates->getTemplateFile(Templates::TemplateSingle));
-        Assert::same(__DIR__ . '/../../../resources/renderer/random/templates/random1.phtml', $templates->getTemplateFile(Templates::TemplateRandom));
-        Assert::same(__DIR__ . '/../../../resources/renderer/multiple/templates/multiple1.phtml', $templates->getTemplateFile(Templates::TemplateMultiple));
-        Assert::same(__DIR__ . '/../../../resources/renderer/not-found/templates/not-found1.phtml', $templates->getTemplateFile(Templates::TemplateNotFound));
+        Assert::same(__DIR__ . '/../../../resources/renderer/single/templates/single1.phtml', $templates->getTemplateFile(Templates::Single));
+        Assert::same(__DIR__ . '/../../../resources/renderer/random/templates/random1.phtml', $templates->getTemplateFile(Templates::Random));
+        Assert::same(__DIR__ . '/../../../resources/renderer/multiple/templates/multiple1.phtml', $templates->getTemplateFile(Templates::Multiple));
+        Assert::same(__DIR__ . '/../../../resources/renderer/not-found/templates/not-found1.phtml', $templates->getTemplateFile(Templates::NotFound));
+        Assert::same(__DIR__ . '/../../../resources/renderer/client-side/templates/client-side1.phtml', $templates->getTemplateFile(Templates::ClientSide));
     }
 
     public function testContainerWithMethodOption(): void

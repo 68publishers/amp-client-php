@@ -8,8 +8,9 @@ use Closure;
 use Latte\Engine;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\LatteRendererBridge;
 use SixtyEightPublishers\AmpClient\Renderer\Templates;
+use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
-use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 use SixtyEightPublishers\AmpClient\Tests\Renderer\AssertHtml;
 use Tester\Assert;
 use Tester\TestCase;
@@ -23,7 +24,7 @@ final class LatteRendererBridgeTest extends TestCase
     {
         $renderer = $this->createRendererBridge();
         $modifiedRenderer = $renderer->overrideTemplates(new Templates([
-            Templates::TemplateSingle => '/path/to/file',
+            Templates::Single => '/path/to/file',
         ]));
 
         $originalTemplates = call_user_func(Closure::bind(static fn () => $renderer->templates, null, LatteRendererBridge::class));
@@ -37,7 +38,7 @@ final class LatteRendererBridgeTest extends TestCase
      * @dataProvider notFoundTemplateDataProvider
      */
     public function testNotFoundTemplateRendering(
-        Position $position,
+        ResponsePosition $position,
         array $elementAttributes,
         string $expectationFile
     ): void {
@@ -50,7 +51,7 @@ final class LatteRendererBridgeTest extends TestCase
      * @dataProvider singleTemplateDataProvider
      */
     public function testSingleTemplateRendering(
-        Position $position,
+        ResponsePosition $position,
         ?Banner $banner,
         array $elementAttributes,
         string $expectationFile
@@ -64,7 +65,7 @@ final class LatteRendererBridgeTest extends TestCase
      * @dataProvider randomTemplateDataProvider
      */
     public function testRandomTemplateRendering(
-        Position $position,
+        ResponsePosition $position,
         ?Banner $banner,
         array $elementAttributes,
         string $expectationFile
@@ -78,7 +79,7 @@ final class LatteRendererBridgeTest extends TestCase
      * @dataProvider multipleTemplateDataProvider
      * */
     public function testMultipleTemplateRendering(
-        Position $position,
+        ResponsePosition $position,
         array $banners,
         array $elementAttributes,
         string $expectationFile
@@ -86,6 +87,19 @@ final class LatteRendererBridgeTest extends TestCase
         $renderer = $this->createRendererBridge();
 
         AssertHtml::assert($expectationFile, $renderer->renderMultiple($position, $banners, $elementAttributes));
+    }
+
+    /**
+     * @dataProvider clientSideTemplateDataProvider
+     */
+    public function testClientSideTemplateRendering(
+        RequestPosition $position,
+        array $elementAttributes,
+        string $expectationFile
+    ): void {
+        $renderer = $this->createRendererBridge();
+
+        AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $elementAttributes));
     }
 
     public function notFoundTemplateDataProvider(): array
@@ -106,6 +120,11 @@ final class LatteRendererBridgeTest extends TestCase
     public function multipleTemplateDataProvider(): array
     {
         return require __DIR__ . '/../../resources/renderer/multiple/data-provider.php';
+    }
+
+    public function clientSideTemplateDataProvider(): array
+    {
+        return require __DIR__ . '/../../resources/renderer/client-side/data-provider.php';
     }
 
     private function createRendererBridge(): LatteRendererBridge

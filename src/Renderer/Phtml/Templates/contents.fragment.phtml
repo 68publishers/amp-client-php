@@ -13,14 +13,14 @@ use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
 /** @var Position $position */
 /** @var ?Banner $banner */
 ?>
-<?php foreach ($banner->getContents() as $content): ?>
+<?php foreach ($banner->getContents() as $content) : ?>
     <?php if ($content instanceof ImageContent) : ?>
         <a data-amp-content-breakpoint="<?= Helpers::escapeHtmlAttr($content->getBreakpoint() ?? 'default') ?>"
            class="amp-banner__content amp-banner__content--img"
            href="<?= Helpers::escapeHtmlAttr($content->getHref()) ?>"
            <?php if (NULL !== $content->getTarget()) : ?>target="<?= Helpers::escapeHtmlAttr($content->getTarget()) ?>"<?php endif ?>>
             <picture>
-                <?php foreach ($content->getSources() as $source): ?>
+                <?php foreach ($content->getSources() as $source) : ?>
                     <source type="<?= Helpers::escapeHtmlAttr($source->getType()) ?>"
                             srcset="<?= Helpers::escapeHtmlAttr($source->getSrcset()) ?>"
                             sizes="<?= Helpers::escapeHtmlAttr($content->getSizes()) ?>">

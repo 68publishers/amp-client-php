@@ -12,6 +12,7 @@ use Nette\DI\Container;
 use RuntimeException;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\Event\ConfigureClientEventHandlerInterface;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RendererProvider;
+use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\ClientSideRenderingMode;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\DirectRenderingMode;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\QueuedRenderingInPresenterContextMode;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\QueuedRenderingMode;
@@ -53,9 +54,6 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new DirectRenderingMode(),
-            [
-                ConfigureClientEventHandlerInterface::class => [],
-            ],
         );
     }
 
@@ -67,9 +65,6 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new DirectRenderingMode(),
-            [
-                ConfigureClientEventHandlerInterface::class => [],
-            ],
         );
 
         $this->assertApplicationHandlerAttached($container);
@@ -83,9 +78,6 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             true,
             new DirectRenderingMode(),
-            [
-                ConfigureClientEventHandlerInterface::class => [],
-            ],
         );
     }
 
@@ -97,9 +89,6 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new DirectRenderingMode(),
-            [
-                ConfigureClientEventHandlerInterface::class => [],
-            ],
         );
     }
 
@@ -111,9 +100,6 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new DirectRenderingMode(),
-            [
-                ConfigureClientEventHandlerInterface::class => [],
-            ],
         );
     }
 
@@ -125,9 +111,6 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new DirectRenderingMode(),
-            [
-                ConfigureClientEventHandlerInterface::class => [],
-            ],
         );
     }
 
@@ -139,9 +122,6 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new QueuedRenderingMode(),
-            [
-                ConfigureClientEventHandlerInterface::class => [],
-            ],
         );
     }
 
@@ -153,9 +133,6 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new QueuedRenderingMode(),
-            [
-                ConfigureClientEventHandlerInterface::class => [],
-            ],
         );
     }
 
@@ -167,9 +144,6 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new QueuedRenderingMode(),
-            [
-                ConfigureClientEventHandlerInterface::class => [],
-            ],
         );
     }
 
@@ -181,9 +155,6 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new QueuedRenderingInPresenterContextMode(),
-            [
-                ConfigureClientEventHandlerInterface::class => [],
-            ],
         );
     }
 
@@ -195,9 +166,6 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new QueuedRenderingInPresenterContextMode(),
-            [
-                ConfigureClientEventHandlerInterface::class => [],
-            ],
         );
     }
 
@@ -209,8 +177,54 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new QueuedRenderingInPresenterContextMode(),
+        );
+    }
+
+    public function testContainerWithClientSideRenderingInPresenterModeModeAsString(): void
+    {
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withClientSideRenderingModeAsString.neon', ['latte']);
+
+        $this->assertLatteExtension(
+            $container,
+            false,
+            new ClientSideRenderingMode(),
+        );
+    }
+
+    public function testContainerWithClientSideRenderingInPresenterModeModeAsClassname(): void
+    {
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withClientSideRenderingModeAsClassname.neon', ['latte']);
+
+        $this->assertLatteExtension(
+            $container,
+            false,
+            new ClientSideRenderingMode(),
+        );
+    }
+
+    public function testContainerWithClientSideRenderingInPresenterModeModeAsStatement(): void
+    {
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withClientSideRenderingModeAsStatement.neon', ['latte']);
+
+        $this->assertLatteExtension(
+            $container,
+            false,
+            new ClientSideRenderingMode(),
+        );
+    }
+
+    public function testContainerWithAlternativeRenderingModes(): void
+    {
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withAlternativeRenderingModes.neon', ['latte']);
+
+        $this->assertLatteExtension(
+            $container,
+            false,
+            new DirectRenderingMode(),
             [
-                ConfigureClientEventHandlerInterface::class => [],
+                ClientSideRenderingMode::Name => new ClientSideRenderingMode(),
+                QueuedRenderingMode::Name => new QueuedRenderingMode(),
+                QueuedRenderingInPresenterContextMode::Name => new QueuedRenderingInPresenterContextMode(),
             ],
         );
     }
@@ -223,6 +237,7 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new DirectRenderingMode(),
+            [],
             [
                 ConfigureClientEventHandlerInterface::class => [
                     new ConfigureClientEventHandlerFixture(null),
@@ -231,8 +246,19 @@ final class AmpClientLatteExtensionTest extends TestCase
         );
     }
 
-    private function assertLatteExtension(Container $container, bool $debugMode, RenderingModeInterface $renderingMode, array $eventHandlers): void
-    {
+    private function assertLatteExtension(
+        Container $container,
+        bool $debugMode,
+        RenderingModeInterface $renderingMode,
+        array $alternativeRenderingModes = [],
+        ?array $eventHandlers = null
+    ): void {
+        if (null === $eventHandlers) {
+            $eventHandlers = [
+                ConfigureClientEventHandlerInterface::class => [],
+            ];
+        }
+
         $latteFactory = $container->getByType(class_exists(LatteFactory::class) ? LatteFactory::class : ILatteFactory::class);
         $latte = $latteFactory->create();
         $providers = $latte->getProviders();
@@ -244,9 +270,10 @@ final class AmpClientLatteExtensionTest extends TestCase
         Assert::type(RendererProvider::class, $provider);
 
         call_user_func(Closure::bind(
-            static function () use ($provider, $debugMode, $renderingMode, $eventHandlers): void {
+            static function () use ($provider, $debugMode, $renderingMode, $alternativeRenderingModes, $eventHandlers): void {
                 Assert::same($debugMode, $provider->debugMode);
                 Assert::equal($renderingMode, $provider->renderingMode);
+                Assert::equal($alternativeRenderingModes, $provider->alternativeRenderingModes);
                 Assert::equal($eventHandlers, $provider->eventHandlers);
             },
             null,

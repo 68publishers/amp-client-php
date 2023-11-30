@@ -1,11 +1,20 @@
-# Integration without a framework
+<div align="center" style="text-align: center; margin-bottom: 50px">
+<img src="images/logo.png" alt="AMP Client PHP Logo" align="center" width="100">
+<h1>AMP Client PHP</h1>
+<h2 align="center">Integration without a framework</h2>
+</div>
 
 * [Client initialization](#client-initialization)
   * [Cache](#cache)
   * [Custom Guzzle options](#custom-guzzle-options)
 * [Fetching banners](#fetching-banners)
 * [Rendering banners](#rendering-banners)
+  * [Rendering banners on the client side](#rendering-banners-on-the-client-side)
+  * [Templates overwriting](#templates-overwriting)
+  * [Rendering banners using Latte](#rendering-banners-using-latte)
 * [Latte templating system integration](#latte-templating-system-integration)
+  * [Using multiple rendering modes](#using-multiple-rendering-modes)
+  * [Renaming the macro](#renaming-the-macro)
 
 ## Client initialization
 
@@ -143,7 +152,6 @@ $homepagePromo = $response->getPosition('homepage.promo');
 Banners can be rendered simply by using the `Renderer` class:
 
 ```php
-use SixtyEightPublishers\AmpClient\AmpClientInterface;
 use SixtyEightPublishers\AmpClient\Renderer\Renderer;
 use SixtyEightPublishers\AmpClient\Response\BannersResponse;
 
@@ -154,6 +162,30 @@ $renderer = Renderer::create();
 echo $renderer->render($response->getPosition('homepage.top'));
 ```
 
+The second argument can be used to pass an array of attributes to be contained in the banner's HTML wrapper element.
+
+```php
+echo $renderer->render($response->getPosition('homepage.top', ['class' => 'my-awesome-class']));
+```
+
+### Rendering banners on the client side
+
+Banner rendering can be left to the [JavaScript client](https://github.com/68publishers/amp-client-js) using the `Renderer::renderClientSide()` method.
+
+```php
+use SixtyEightPublishers\AmpClient\Renderer\Renderer;
+use SixtyEightPublishers\AmpClient\Request\ValueObject\Position;
+
+$renderer = Renderer::create();
+
+echo $renderer->renderClientSide(new Position('homepage.top'));
+echo $renderer->renderClientSide(new Position('homepage.promo'), ['class' => 'my-awesome-class']);
+```
+
+Banners rendered in this way will be loaded by the JavaScript client when its `attachBanners()` function is called.
+
+### Templates overwriting
+
 The default templates are written as `.phtml` templates and can be found [here](../src/Renderer/Phtml/Templates). Templates can be also overwritten:
 
 ```php
@@ -163,7 +195,7 @@ use SixtyEightPublishers\AmpClient\Renderer\Templates;
 
 $bridge = new PhtmlRendererBridge();
 $bridge = $bridge->overrideTemplates(new Templates([
-    Templates::TemplateSingle => '/my_custom_template_for_single_position.phtml',
+    Templates::Single => '/my_custom_template_for_single_position.phtml',
 ]));
 
 $renderer = Renderer::create($bridge);
@@ -175,10 +207,11 @@ The following template types can be overwritten:
 use SixtyEightPublishers\AmpClient\Renderer\Templates;
 
 new Templates([
-    Templates::TemplateSingle => '/single.phtml', # for positions with the display type "single"
-    Templates::TemplateMultiple => '/multiple.phtml', # for positions with the display type "multiple"
-    Templates::TemplateRandom => '/random.phtml', # for positions with the display type "random"
-    Templates::TemplateNotFound => '/notFound.phtml',  # for positions that were not found
+    Templates::Single => '/single.phtml', # for positions with the display type "single"
+    Templates::Multiple => '/multiple.phtml', # for positions with the display type "multiple"
+    Templates::Random => '/random.phtml', # for positions with the display type "random"
+    Templates::NotFound => '/notFound.phtml',  # for positions that were not found
+    Templates::ClientSide => '/clientSide.phtml',
 ])
 ```
 
@@ -245,12 +278,13 @@ $engine->render(__DIR__ . '/template.latte');
 
 {banner homepage.top}
 {banner homepage.promo, resources: ['role' => 'guest']}
+{banner homepage.bottom, attributes: ['class' => 'my-awesome-class']}
 ```
 
 Banners are now requested via API and rendered to the template automatically.
 
-Each `{banner}` macro makes a separate request to the AMP API, so in our example above, two requests are sent.
-This can be solved, however you need to render the Latte to a text string, not a buffer.
+By default, each `{banner}` macro makes a separate request to the AMP API, so in our example above, three requests are sent.
+This can be solved, however you need to render the Latte to a string, not a buffer.
 
 ```php
 use SixtyEightPublishers\AmpClient\AmpClientInterface;
@@ -265,7 +299,7 @@ use Latte\Engine;
 
 $engine = new Engine();
 $provider = (new RendererProvider($client,$renderer))
-    ->setDebugMode(true) # exceptions from Client and Renderer are suppressed in non-debug mode
+    ->setDebugMode(true)
     ->setRenderingMode(new QueuedRenderingMode());
 
 AmpClientLatteExtension::register($engine, $provider);
@@ -276,3 +310,55 @@ echo $provider->renderQueuedPositions($output);
 ```
 
 Now the client requests both banners in the template with one request.
+
+The following rendering modes are available:
+
+- **direct** ([DirectRenderingMode](../src/Bridge/Latte/RenderingMode/DirectRenderingMode.php)) - The default mode, API is requested separately for each banner.
+- **client_side** ([ClientSideRenderingMode](../src/Bridge/Latte/RenderingMode/ClientSideRenderingMode.php)) - Renders only a wrapper element and leaves loading banners on the JavaScript client. Banners are loaded by calling the `attachBanners()` function.
+- **queued** ([QueuedRenderingMode](../src/Bridge/Latte/RenderingMode/QueuedRenderingMode.php)) - Renders only HTML comments as placeholders and stores requested positions in a queue. It will request and render all banners at once when the `RendererProvider::renderQueuedPositions()` method is called.
+- **queued_in_presenter_context** ([QueuedRenderingInPresenterContextMode](../src/Bridge/Latte/RenderingMode/QueuedRenderingInPresenterContextMode.php)) - Same behavior as `queued` but in the context of a Presenter only. Usable with Nette applications only.
+
+### Using multiple rendering modes
+
+Besides the default rendering mode, which is set by the method `RendererProvider::setRenderingMode()`, it is possible to configure alternative modes that can be used in templates.
+
+```php
+use SixtyEightPublishers\AmpClient\Bridge\Latte\RendererProvider;
+use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\DirectRenderingMode;
+use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\ClientSideRenderingMode;
+
+/** @var AmpClientInterface $client */
+/** @var RendererInterface $renderer */
+
+$provider = new RendererProvider($client, $renderer);
+
+$provider->setRenderingMode(new DirectRenderingMode()); # No need to actually set it up, this mode is the default.
+$provider->setAlternativeRenderingModes([
+    new ClientSideRenderingMode(),
+]);
+```
+
+```latte
+{* The first banner will be rendered with the default mode (directly) *}
+{banner homepage.top}
+
+{* The second banner will be rendered client side *}
+{banner homepage.promo, mode: 'client_side'}
+```
+
+### Renaming the macro
+
+Macro `{banner}` can be renamed. This can be done by specifying the third argument of the method `AmpClientLatteExtension::register()`.
+
+```php
+use SixtyEightPublishers\AmpClient\Bridge\Latte\AmpClientLatteExtension;
+use SixtyEightPublishers\AmpClient\Bridge\Latte\RendererProvider;
+use Latte\Engine;
+
+/** @var RendererProvider $provider */
+/** @var Engine $engine */
+
+AmpClientLatteExtension::register($engine, $provider, 'ampBanner');
+```
+
+The macro will now be named `{ampBanner}`.

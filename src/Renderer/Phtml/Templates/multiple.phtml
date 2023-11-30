@@ -20,7 +20,7 @@ use SixtyEightPublishers\AmpClient\Renderer\AmpBannerExternalAttribute;
     <?php if (0 < count($banners)): ?>
         <div class="amp-banner amp-banner--multiple">
             <div class="amp-banner__list">
-                <?php foreach ($banners as $banner): ?>
+                <?php foreach ($banners as $banner) : ?>
                     <div class="amp-banner__item"
                          data-amp-banner-fingerprint="<?= Helpers::escapeHtmlAttr(Fingerprint::create($position, $banner)) ?>"
                          data-amp-banner-id="<?= Helpers::escapeHtmlAttr($banner->getId()) ?>">

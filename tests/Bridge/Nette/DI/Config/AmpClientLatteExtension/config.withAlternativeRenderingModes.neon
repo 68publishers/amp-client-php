@@ -1,0 +1,13 @@
+extensions:
+    amp_client: SixtyEightPublishers\AmpClient\Bridge\Nette\DI\AmpClientExtension
+    amp_client.latte: SixtyEightPublishers\AmpClient\Bridge\Nette\DI\AmpClientLatteExtension
+
+amp_client:
+    url: https://www.example.com
+    channel: test
+
+amp_client.latte:
+    alternative_rendering_modes:
+        - client_side
+        - SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\QueuedRenderingMode
+        - SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\QueuedRenderingInPresenterContextMode()

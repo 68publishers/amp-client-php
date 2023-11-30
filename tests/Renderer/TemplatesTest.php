@@ -17,11 +17,11 @@ final class TemplatesTest extends TestCase
     public function testExceptionShouldBeThrownWhenTemplateFileNotFound(): void
     {
         $templates = new Templates([
-            Templates::TemplateSingle => __DIR__ . '/path/to/missing-file.phtml',
+            Templates::Single => __DIR__ . '/path/to/missing-file.phtml',
         ]);
 
         Assert::exception(
-            static fn () => $templates->getTemplateFile(Templates::TemplateSingle),
+            static fn () => $templates->getTemplateFile(Templates::Single),
             RendererException::class,
             'Template file "%A%/path/to/missing-file.phtml" not found.',
         );
@@ -30,11 +30,11 @@ final class TemplatesTest extends TestCase
     public function testExceptionShouldBeThrownWhenTemplateFileNotDefined(): void
     {
         $templates = new Templates([
-            Templates::TemplateSingle => __DIR__ . '/path/to/missing-file.phtml',
+            Templates::Single => __DIR__ . '/path/to/missing-file.phtml',
         ]);
 
         Assert::exception(
-            static fn () => $templates->getTemplateFile(Templates::TemplateMultiple),
+            static fn () => $templates->getTemplateFile(Templates::Multiple),
             RendererException::class,
             'Template file of type "multiple" not defined.',
         );
@@ -44,10 +44,10 @@ final class TemplatesTest extends TestCase
     {
         $filename = realpath(__DIR__ . '/../resources/renderer/not-found/templates/not-found1.phtml');
         $templates = new Templates([
-            Templates::TemplateNotFound => $filename,
+            Templates::NotFound => $filename,
         ]);
 
-        Assert::same($filename, $templates->getTemplateFile(Templates::TemplateNotFound));
+        Assert::same($filename, $templates->getTemplateFile(Templates::NotFound));
     }
 
     public function testTemplatesShouldBeOverridden(): void
@@ -58,21 +58,21 @@ final class TemplatesTest extends TestCase
         $notFoundOverridden = realpath(__DIR__ . '/../resources/renderer/not-found/templates/not-found2.phtml');
 
         $templates = new Templates([
-            Templates::TemplateNotFound => $notFound,
-            Templates::TemplateSingle => $single,
+            Templates::NotFound => $notFound,
+            Templates::Single => $single,
         ]);
 
         $overriddenTemplates = $templates->override(new Templates([
-            Templates::TemplateNotFound => $notFoundOverridden,
+            Templates::NotFound => $notFoundOverridden,
         ]));
 
         Assert::notSame($templates, $overriddenTemplates);
 
-        Assert::same($notFound, $templates->getTemplateFile(Templates::TemplateNotFound));
-        Assert::same($single, $templates->getTemplateFile(Templates::TemplateSingle));
+        Assert::same($notFound, $templates->getTemplateFile(Templates::NotFound));
+        Assert::same($single, $templates->getTemplateFile(Templates::Single));
 
-        Assert::same($notFoundOverridden, $overriddenTemplates->getTemplateFile(Templates::TemplateNotFound));
-        Assert::same($single, $overriddenTemplates->getTemplateFile(Templates::TemplateSingle));
+        Assert::same($notFoundOverridden, $overriddenTemplates->getTemplateFile(Templates::NotFound));
+        Assert::same($single, $overriddenTemplates->getTemplateFile(Templates::Single));
     }
 }
 
