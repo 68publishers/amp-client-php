@@ -20,9 +20,9 @@ $ composer require 68publishers/amp-client
 
 ## Versions compatibility matrix
 
-| PHP client version | PHP version |   AMP version    | API version |
-|:------------------:|-------------|:----------------:|:-----------:|
-|      `>=1.0`       | `>=7.4`     |     `>=2.12`     |     `1`     |
+| PHP client version | JS client version | PHP version  | AMP version | API version |
+|:------------------:|:-----------------:|:------------:|:-----------:|:-----------:|
+|     `>=1.0.0`      |     `>=1.4.0`     |   `>=7.4`    | `>=2.12.0`  |     `1`     |
 
 ## Integration without a framework
 
