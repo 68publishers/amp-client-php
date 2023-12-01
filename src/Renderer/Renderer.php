@@ -33,23 +33,29 @@ final class Renderer implements RendererInterface
         );
     }
 
-    public function render(ResponsePosition $position, array $elementAttributes = []): string
+    public function render(ResponsePosition $position, array $elementAttributes = [], array $options = []): string
     {
         try {
             switch ($position->getDisplayType()) {
                 case null:
-                    return $this->rendererBridge->renderNotFound($position, $elementAttributes);
+                    return $this->rendererBridge->renderNotFound(
+                        $position,
+                        $elementAttributes,
+                        $options,
+                    );
                 case ResponsePosition::DisplayTypeMultiple:
                     return $this->rendererBridge->renderMultiple(
                         $position,
                         $this->bannersResolver->resolveMultiple($position),
                         $elementAttributes,
+                        $options,
                     );
                 case ResponsePosition::DisplayTypeRandom:
                     return $this->rendererBridge->renderRandom(
                         $position,
                         $this->bannersResolver->resolveRandom($position),
                         $elementAttributes,
+                        $options,
                     );
                 case ResponsePosition::DisplayTypeSingle:
                 default:
@@ -57,6 +63,7 @@ final class Renderer implements RendererInterface
                         $position,
                         $this->bannersResolver->resolveSingle($position),
                         $elementAttributes,
+                        $options,
                     );
             }
         } catch (Throwable $e) {
@@ -72,10 +79,14 @@ final class Renderer implements RendererInterface
         }
     }
 
-    public function renderClientSide(RequestPosition $position, array $elementAttributes = []): string
+    public function renderClientSide(RequestPosition $position, array $elementAttributes = [], array $options = []): string
     {
         try {
-            return $this->rendererBridge->renderClientSide($position, $elementAttributes);
+            return $this->rendererBridge->renderClientSide(
+                $position,
+                $elementAttributes,
+                $options,
+            );
         } catch (Throwable $e) {
             if ($e instanceof RendererException) {
                 throw $e;

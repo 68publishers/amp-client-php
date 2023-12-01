@@ -1,16 +1,25 @@
 {templateType SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\MultipleTemplate}
 
+{var $helpers = SixtyEightPublishers\AmpClient\Renderer\Latte\Helpers::class}
+
 <div data-amp-banner="{$position->getCode()}"
      data-amp-banner-external="{=SixtyEightPublishers\AmpClient\Renderer\AmpBannerExternalAttribute::rendered($position)}"
-     n:attr="$elementAttributes">
+     n:attr="array_merge($helpers::createOptionAttributes($options), $elementAttributes)">
     {do $banners = array_filter($banners, fn(SixtyEightPublishers\AmpClient\Response\ValueObject\Banner $banner) => 0 < count($banner->getContents()))}
     <div n:if="0 < count($banners)" class="amp-banner amp-banner--multiple">
         <div class="amp-banner__list">
-            <div n:foreach="$banners as $banner"
+            <div n:foreach="$banners as $index => $banner"
                  class="amp-banner__item"
                  data-amp-banner-fingerprint="{SixtyEightPublishers\AmpClient\Renderer\Fingerprint::create($position, $banner)}"
                  data-amp-banner-id="{$banner->getId()}">
-                {include 'contents.fragment.latte', position: $position, banner: $banner}
+
+                {var $optionsCopy = $options}
+
+                {if isset($optionsCopy['loading']) && $index < ((int) ($optionsCopy['loading-offset'] ?? 0))}
+                    {do $optionsCopy['loading'] = null}
+                {/if}
+
+                {include 'contents.fragment.latte', position: $position, banner: $banner, options: $optionsCopy}
             </div>
         </div>
     </div>

@@ -9,6 +9,7 @@ return [
     'Position only' => [
         new Position('homepage.top'),
         [],
+        [],
         __DIR__ . '/positionOnly.html',
     ],
     'With resources' => [
@@ -16,6 +17,7 @@ return [
             new BannerResource('role', 'vip'),
             new BannerResource('category', [123, 456]),
         ]),
+        [],
         [],
         __DIR__ . '/withResources.html',
     ],
@@ -27,9 +29,18 @@ return [
             'data-custom2' => false,
             'data-custom3' => null,
         ],
+        [],
         __DIR__ . '/withAttributes.html',
     ],
-    'With resources and attributes' => [
+    'With lazy loading' => [
+        new Position('homepage.top'),
+        [],
+        [
+            'loading' => 'lazy',
+        ],
+        __DIR__ . '/withLazyLoading.html',
+    ],
+    'Full featured' => [
         new Position('homepage.top', [
             new BannerResource('role', 'vip'),
             new BannerResource('category', [123, 456]),
@@ -40,6 +51,10 @@ return [
             'data-custom2' => false,
             'data-custom3' => null,
         ],
-        __DIR__ . '/withResourcesAndAttributes.html',
+        [
+            'loading' => 'lazy',
+            'custom' => 'value',
+        ],
+        __DIR__ . '/fullFeatured.html',
     ],
 ];

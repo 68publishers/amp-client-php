@@ -11,6 +11,8 @@ use function strpos;
 
 final class Helpers
 {
+    private function __construct() {}
+
     /**
      * @param mixed $string
      */
@@ -59,5 +61,21 @@ final class Helpers
         $attrs = implode(' ', $printed);
 
         return '' !== $attrs ? (' ' . $attrs) : '';
+    }
+
+    /**
+     * @param array<string, mixed> $array
+     *
+     * @return array<string, mixed>
+     */
+    public static function prefixKeys(array $array, string $prefix): array
+    {
+        $attributes = [];
+
+        foreach ($array as $key => $value) {
+            $attributes[$prefix . $key] = $value;
+        }
+
+        return $attributes;
     }
 }

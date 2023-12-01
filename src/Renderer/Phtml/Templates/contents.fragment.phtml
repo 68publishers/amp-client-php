@@ -12,8 +12,9 @@ use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
 
 /** @var Position $position */
 /** @var ?Banner $banner */
+/** @var array<string, scalar> $options */
 ?>
-<?php foreach ($banner->getContents() as $content) : ?>
+<?php foreach ($banner->getContents() as $index => $content) : ?>
     <?php if ($content instanceof ImageContent) : ?>
         <a data-amp-content-breakpoint="<?= Helpers::escapeHtmlAttr($content->getBreakpoint() ?? 'default') ?>"
            class="amp-banner__content amp-banner__content--img"
@@ -29,7 +30,8 @@ use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
                      src="<?= Helpers::escapeHtmlAttr($content->getSrc()) ?>"
                      sizes="<?= Helpers::escapeHtmlAttr($content->getSizes()) ?>"
                      alt="<?= Helpers::escapeHtmlAttr($content->getAlt()) ?>"
-                     <?php if ('' !== $content->getTitle()) : ?>title="<?= Helpers::escapeHtmlAttr($content->getTitle()) ?>"<?php endif ?>>
+                     <?php if ('' !== $content->getTitle()) : ?>title="<?= Helpers::escapeHtmlAttr($content->getTitle()) ?>"<?php endif ?>
+                     <?php if (isset($options['loading'])) : ?>loading="<?= Helpers::escapeHtmlAttr($options['loading']) ?>"<?php endif ?>>
             </picture>
         </a>
     <?php elseif ($content instanceof HtmlContent) : ?>

@@ -15,6 +15,7 @@ return [
         $position,
         null,
         [],
+        [],
         __DIR__ . '/noBanner.html',
     ],
     'No banner with attributes' => [
@@ -26,11 +27,13 @@ return [
             'data-custom2' => false,
             'data-custom3' => null,
         ],
+        [],
         __DIR__ . '/noBanner.withAttributes.html',
     ],
     'Banner without contents' => [
         $position,
         new Banner('1234', 'Main', 0, null, null, null, []),
+        [],
         [],
         __DIR__ . '/bannerWithoutContent.html',
     ],
@@ -49,6 +52,7 @@ return [
                 [],
             ),
         ]),
+        [],
         [],
         __DIR__ . '/bannerWithDefaultImageContentOnly.withoutOptionalValues.html',
     ],
@@ -71,7 +75,32 @@ return [
             ),
         ]),
         [],
+        [],
         __DIR__ . '/bannerWithDefaultImageContentOnly.withOptionalValues.html',
+    ],
+    'Banner with default content only: image with lazy loading' => [
+        $position,
+        new Banner('1234', 'Main', 0, null, null, null, [
+            new ImageContent(
+                null,
+                'https://www.example.com/main1',
+                '_blank',
+                'Main 1',
+                'Main 1',
+                'https://img.example.com/1000/main1.png',
+                'https://img.example.com/500/main1.png 500w, https://img.example.com/1000/main1.png 1000w',
+                '(min-width: 1000px) calc(1000px - 2 * 16px), (min-width: 600px) calc(100vw - 2 * 16px), 100vw',
+                [
+                    new Source('image/avif', 'https://img.example.com/500/main1.avif 500w, https://img.example.com/1000/main1.avif 1000w'),
+                    new Source('image/webp', 'https://img.example.com/500/main1.webp 500w, https://img.example.com/1000/main1.webp 1000w'),
+                ],
+            ),
+        ]),
+        [],
+        [
+            'loading' => 'lazy',
+        ],
+        __DIR__ . '/bannerWithDefaultImageContentOnly.withLazyLoading.html',
     ],
     'Banner with breakpoint content only: image' => [
         $position,
@@ -89,6 +118,7 @@ return [
             ),
         ]),
         [],
+        [],
         __DIR__ . '/bannerWithBreakpointImageContentOnly.html',
     ],
     'Banner with default content only: html' => [
@@ -100,6 +130,7 @@ return [
             ),
         ]),
         [],
+        [],
         __DIR__ . '/bannerWithDefaultHtmlContentOnly.html',
     ],
     'Banner with breakpoint content only: html' => [
@@ -110,6 +141,7 @@ return [
                 '<p>My <span style="color:red;">Awesome</span> content!</p>',
             ),
         ]),
+        [],
         [],
         __DIR__ . '/bannerWithBreakpointHtmlContentOnly.html',
     ],
@@ -150,6 +182,9 @@ return [
             ),
         ]),
         [],
+        [
+            'loading' => 'lazy',
+        ],
         __DIR__ . '/bannerWithMultipleContents.html',
     ],
 ];

@@ -10,6 +10,7 @@ return [
     'Not found' => [
         $position,
         [],
+        [],
         __DIR__ . '/notFound.html',
     ],
     'Not found with attributes' => [
@@ -20,6 +21,15 @@ return [
             'data-custom2' => false,
             'data-custom3' => null,
         ],
+        [],
         __DIR__ . '/notFound.withAttributes.html',
+    ],
+    'Not found with lazy loading' => [
+        $position,
+        [],
+        [
+            'loading' => 'lazy',
+        ],
+        __DIR__ . '/notFound.withLazyLoading.html',
     ],
 ];

@@ -10,23 +10,23 @@ final class ClientSideTemplate
 {
     public Position $position;
 
-    /** @var array<string, string> */
-    public array $resourceAttributes;
-
     /** @var array<string, scalar|null> */
     public array $elementAttributes;
 
+    /** @var array<string, scalar> */
+    public array $options;
+
     /**
-     * @param array<string, string>      $resourceAttributes
      * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, scalar>      $options
      */
     public function __construct(
         Position $position,
-        array $resourceAttributes,
-        array $elementAttributes
+        array $elementAttributes,
+        array $options
     ) {
         $this->position = $position;
-        $this->resourceAttributes = $resourceAttributes;
         $this->elementAttributes = $elementAttributes;
+        $this->options = $options;
     }
 }

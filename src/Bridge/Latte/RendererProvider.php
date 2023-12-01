@@ -37,6 +37,7 @@ final class RendererProvider
     private const OptionResources = 'resources';
     private const OptionAttributes = 'attributes';
     private const OptionMode = 'mode';
+    private const OptionOptions = 'options';
 
     private AmpClientInterface $client;
 
@@ -279,8 +280,9 @@ final class RendererProvider
     {
         try {
             $elementAttributes = (array) ($options[self::OptionAttributes] ?? []);
+            $bannerOptions = (array) ($options[self::OptionOptions] ?? []);
 
-            return $this->renderer->render($position, $elementAttributes);
+            return $this->renderer->render($position, $elementAttributes, $bannerOptions);
         } catch (RendererException $e) {
             if ($this->debugMode) {
                 throw $e;
@@ -303,8 +305,9 @@ final class RendererProvider
     {
         try {
             $elementAttributes = (array) ($options[self::OptionAttributes] ?? []);
+            $bannerOptions = (array) ($options[self::OptionOptions] ?? []);
 
-            return $this->renderer->renderClientSide($position, $elementAttributes);
+            return $this->renderer->renderClientSide($position, $elementAttributes, $bannerOptions);
         } catch (RendererException $e) {
             if ($this->debugMode) {
                 throw $e;

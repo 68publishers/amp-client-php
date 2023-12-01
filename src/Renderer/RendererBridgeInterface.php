@@ -14,27 +14,32 @@ interface RendererBridgeInterface
 
     /**
      * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, scalar>      $options
      */
-    public function renderNotFound(ResponsePosition $position, array $elementAttributes = []): string;
+    public function renderNotFound(ResponsePosition $position, array $elementAttributes = [], array $options = []): string;
 
     /**
      * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, scalar>      $options
      */
-    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes = []): string;
+    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes = [], array $options = []): string;
 
     /**
      * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, scalar>      $options
      */
-    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes = []): string;
+    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes = [], array $options = []): string;
 
     /**
      * @param array<int, Banner>         $banners
      * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, scalar>      $options
      */
-    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes = []): string;
+    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes = [], array $options = []): string;
 
     /**
      * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, scalar>      $options
      */
-    public function renderClientSide(RequestPosition $position, array $elementAttributes = []): string;
+    public function renderClientSide(RequestPosition $position, array $elementAttributes = [], array $options = []): string;
 }

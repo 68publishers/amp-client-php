@@ -116,8 +116,16 @@ extensions:
 Now the macro `{banner}` is available in the application and can be used in templates:
 
 ```latte
+{*
+    Available arguments are:
+    * `resources` - An array of banner resources,
+    * `options` - An array of custom options. Can be also used for enabling native lazy loading.
+    * `attributes` - An array of HTML attributes
+    * `mode` - Allows to switch a rendering mode. See the "Using multiple rendering modes" section below
+*}
+
 {banner homepage.top}
-{banner homepage.promo, resources: ['role' => 'guest']}
+{banner homepage.promo, resources: ['role' => 'guest'], options: ['loading' => 'lazy']}
 {banner homepage.bottom, attributes: ['class' => 'my-awesome-class']}
 ```
 

@@ -10,6 +10,7 @@
 * [Fetching banners](#fetching-banners)
 * [Rendering banners](#rendering-banners)
   * [Rendering banners on the client side](#rendering-banners-on-the-client-side)
+  * [Lazy loading of image banners](#lazy-loading-of-image-banners)
   * [Templates overwriting](#templates-overwriting)
   * [Rendering banners using Latte](#rendering-banners-using-latte)
 * [Latte templating system integration](#latte-templating-system-integration)
@@ -165,7 +166,14 @@ echo $renderer->render($response->getPosition('homepage.top'));
 The second argument can be used to pass an array of attributes to be contained in the banner's HTML wrapper element.
 
 ```php
-echo $renderer->render($response->getPosition('homepage.top', ['class' => 'my-awesome-class']));
+echo $renderer->render($response->getPosition('homepage.top'), ['class' => 'my-awesome-class']);
+```
+
+The third argument can be used to provide custom options.
+These options are available in the banner templates and will also be available to the JavaScript client, so they can be accessed in event handlers.
+
+```php
+echo $renderer->render($response->getPosition('homepage.top'), [], ['customOption' => 'customValue']);
 ```
 
 ### Rendering banners on the client side
@@ -183,6 +191,42 @@ echo $renderer->renderClientSide(new Position('homepage.promo'), ['class' => 'my
 ```
 
 Banners rendered in this way will be loaded by the JavaScript client when its `attachBanners()` function is called.
+
+### Lazy loading of image banners
+
+The default client templates support [native lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading#images_and_iframes) of images.
+To activate lazy loading the option `'loading' => 'lazy'` must be passed to the renderer.
+
+```php
+# server-side rendering:
+echo $renderer->render($response->getPosition('homepage.top'), [], [
+    'loading' => 'lazy',
+]);
+
+# client-side rendering:
+echo $renderer->renderClientSide(new Position('homepage.top'), [], [
+    'loading' => 'lazy',
+]);
+```
+
+A special case is a position of type `multiple`, where it may be desirable to lazily load all banners except the first.
+This can be achieved by adding the option `loading-offset`, whose value specifies from which banner the attribute `loading` should be rendered.
+
+```php
+# server-side rendering:
+echo $renderer->render($response->getPosition('homepage.top'), [], [
+    'loading' => 'lazy',
+    'loading-offset' => 1,
+]);
+
+# client-side rendering:
+echo $renderer->renderClientSide(new Position('homepage.top'), [], [
+    'loading' => 'lazy',
+    'loading-offset' => 1,
+]);
+```
+
+If you prefer a different implementation of lazy loading, it is possible to use own templates instead of the default ones and integrate a different solution in these templates.
 
 ### Templates overwriting
 
@@ -211,7 +255,7 @@ new Templates([
     Templates::Multiple => '/multiple.phtml', # for positions with the display type "multiple"
     Templates::Random => '/random.phtml', # for positions with the display type "random"
     Templates::NotFound => '/notFound.phtml',  # for positions that were not found
-    Templates::ClientSide => '/clientSide.phtml',
+    Templates::ClientSide => '/clientSide.phtml', # for positions that should be rendered by JS client
 ])
 ```
 
@@ -276,8 +320,16 @@ $engine->render(__DIR__ . '/template.latte');
 ```latte
 {* ./template.latte *}
 
+{*
+    Available arguments are:
+    * `resources` - An array of banner resources,
+    * `options` - An array of custom options. Can be also used for enabling native lazy loading.
+    * `attributes` - An array of HTML attributes
+    * `mode` - Allows to switch a rendering mode. See the "Using multiple rendering modes" section below
+*}
+
 {banner homepage.top}
-{banner homepage.promo, resources: ['role' => 'guest']}
+{banner homepage.promo, resources: ['role' => 'guest'], options: ['loading' => 'lazy']}
 {banner homepage.bottom, attributes: ['class' => 'my-awesome-class']}
 ```
 

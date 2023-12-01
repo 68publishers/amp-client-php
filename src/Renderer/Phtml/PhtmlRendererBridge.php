@@ -38,11 +38,11 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderNotFound(ResponsePosition $position, array $elementAttributes = []): string
+    public function renderNotFound(ResponsePosition $position, array $elementAttributes = [], array $options = []): string
     {
         $filename = $this->templates->getTemplateFile(Templates::NotFound);
 
-        return OutputBuffer::capture(function () use ($filename, $position, $elementAttributes) {
+        return OutputBuffer::capture(function () use ($filename, $position, $elementAttributes, $options) {
             require $filename;
         });
     }
@@ -50,11 +50,11 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes = []): string
+    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes = [], array $options = []): string
     {
         $filename = $this->templates->getTemplateFile(Templates::Single);
 
-        return OutputBuffer::capture(function () use ($filename, $position, $banner, $elementAttributes) {
+        return OutputBuffer::capture(function () use ($filename, $position, $banner, $elementAttributes, $options) {
             require $filename;
         });
     }
@@ -62,11 +62,11 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes = []): string
+    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes = [], array $options = []): string
     {
         $filename = $this->templates->getTemplateFile(Templates::Random);
 
-        return OutputBuffer::capture(function () use ($filename, $position, $banner, $elementAttributes) {
+        return OutputBuffer::capture(function () use ($filename, $position, $banner, $elementAttributes, $options) {
             require $filename;
         });
     }
@@ -74,11 +74,11 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes = []): string
+    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes = [], array $options = []): string
     {
         $filename = $this->templates->getTemplateFile(Templates::Multiple);
 
-        return OutputBuffer::capture(function () use ($filename, $position, $banners, $elementAttributes) {
+        return OutputBuffer::capture(function () use ($filename, $position, $banners, $elementAttributes, $options) {
             require $filename;
         });
     }
@@ -86,11 +86,11 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderClientSide(RequestPosition $position, array $elementAttributes = []): string
+    public function renderClientSide(RequestPosition $position, array $elementAttributes = [], array $options = []): string
     {
         $filename = $this->templates->getTemplateFile(Templates::ClientSide);
 
-        return OutputBuffer::capture(function () use ($filename, $position, $elementAttributes) {
+        return OutputBuffer::capture(function () use ($filename, $position, $elementAttributes, $options) {
             require $filename;
         });
     }

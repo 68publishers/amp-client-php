@@ -39,11 +39,12 @@ final class PhtmlRendererBridgeTest extends TestCase
     public function testNotFoundTemplateRendering(
         ResponsePosition $position,
         array $elementAttributes,
+        array $options,
         string $expectationFile
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderNotFound($position, $elementAttributes));
+        AssertHtml::assert($expectationFile, $renderer->renderNotFound($position, $elementAttributes, $options));
     }
 
     /**
@@ -53,11 +54,12 @@ final class PhtmlRendererBridgeTest extends TestCase
         ResponsePosition $position,
         ?Banner $banner,
         array $elementAttributes,
+        array $options,
         string $expectationFile
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderSingle($position, $banner, $elementAttributes));
+        AssertHtml::assert($expectationFile, $renderer->renderSingle($position, $banner, $elementAttributes, $options));
     }
 
     /**
@@ -67,11 +69,12 @@ final class PhtmlRendererBridgeTest extends TestCase
         ResponsePosition $position,
         ?Banner $banner,
         array $elementAttributes,
+        array $options,
         string $expectationFile
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderRandom($position, $banner, $elementAttributes));
+        AssertHtml::assert($expectationFile, $renderer->renderRandom($position, $banner, $elementAttributes, $options));
     }
 
     /**
@@ -81,11 +84,12 @@ final class PhtmlRendererBridgeTest extends TestCase
         ResponsePosition $position,
         array $banners,
         array $elementAttributes,
+        array $options,
         string $expectationFile
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderMultiple($position, $banners, $elementAttributes));
+        AssertHtml::assert($expectationFile, $renderer->renderMultiple($position, $banners, $elementAttributes, $options));
     }
 
     /**
@@ -94,11 +98,12 @@ final class PhtmlRendererBridgeTest extends TestCase
     public function testClientSideTemplateRendering(
         RequestPosition $position,
         array $elementAttributes,
+        array $options,
         string $expectationFile
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $elementAttributes));
+        AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $elementAttributes, $options));
     }
 
     public function notFoundTemplateDataProvider(): array

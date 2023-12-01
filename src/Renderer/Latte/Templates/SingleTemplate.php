@@ -16,16 +16,22 @@ final class SingleTemplate
     /** @var array<string, scalar|null> */
     public array $elementAttributes;
 
+    /** @var array<string, scalar> */
+    public array $options;
+
     /**
      * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, scalar>      $options
      */
     public function __construct(
         Position $position,
         ?Banner $banner,
-        array $elementAttributes
+        array $elementAttributes,
+        array $options
     ) {
         $this->position = $position;
         $this->banner = $banner;
         $this->elementAttributes = $elementAttributes;
+        $this->options = $options;
     }
 }

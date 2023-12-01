@@ -1,5 +1,7 @@
 {templateType SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\ClientSideTemplate}
 
+{var $helpers = SixtyEightPublishers\AmpClient\Renderer\Latte\Helpers::class}
+
 <div data-amp-banner="{$position->getCode()}"
-     n:attr="array_merge($resourceAttributes, $elementAttributes)">
+     n:attr="array_merge($helpers::createResourceAttributes($position), $helpers::createOptionAttributes($options), $elementAttributes)">
 </div>

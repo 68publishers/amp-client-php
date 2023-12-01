@@ -1,6 +1,8 @@
 {templateType SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\NotFoundTemplate}
 
+{var $helpers = SixtyEightPublishers\AmpClient\Renderer\Latte\Helpers::class}
+
 <div data-amp-banner="{$position->getCode()}"
      data-amp-banner-external="{=SixtyEightPublishers\AmpClient\Renderer\AmpBannerExternalAttribute::notFound($position)}"
-     n:attr="$elementAttributes">
+     n:attr="array_merge($helpers::createOptionAttributes($options), $elementAttributes)">
 </div>

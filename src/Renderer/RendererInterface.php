@@ -12,15 +12,17 @@ interface RendererInterface
 {
     /**
      * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, scalar>      $options
      *
      * @throws RendererException
      */
-    public function render(ResponsePosition $position, array $elementAttributes = []): string;
+    public function render(ResponsePosition $position, array $elementAttributes = [], array $options = []): string;
 
     /**
      * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, scalar>      $options
      *
      * @throws RendererException
      */
-    public function renderClientSide(RequestPosition $position, array $elementAttributes = []): string;
+    public function renderClientSide(RequestPosition $position, array $elementAttributes = [], array $options = []): string;
 }

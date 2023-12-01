@@ -15,7 +15,6 @@ use SixtyEightPublishers\AmpClient\Renderer\Templates;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
-use function implode;
 
 final class LatteRendererBridge implements RendererBridgeInterface
 {
@@ -52,49 +51,43 @@ final class LatteRendererBridge implements RendererBridgeInterface
         return $renderer;
     }
 
-    public function renderNotFound(ResponsePosition $position, array $elementAttributes = []): string
+    public function renderNotFound(ResponsePosition $position, array $elementAttributes = [], array $options = []): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::NotFound),
-            new NotFoundTemplate($position, $elementAttributes),
+            new NotFoundTemplate($position, $elementAttributes, $options),
         );
     }
 
-    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes = []): string
+    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes = [], array $options = []): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::Single),
-            new SingleTemplate($position, $banner, $elementAttributes),
+            new SingleTemplate($position, $banner, $elementAttributes, $options),
         );
     }
 
-    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes = []): string
+    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes = [], array $options = []): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::Random),
-            new RandomTemplate($position, $banner, $elementAttributes),
+            new RandomTemplate($position, $banner, $elementAttributes, $options),
         );
     }
 
-    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes = []): string
+    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes = [], array $options = []): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::Multiple),
-            new MultipleTemplate($position, $banners, $elementAttributes),
+            new MultipleTemplate($position, $banners, $elementAttributes, $options),
         );
     }
 
-    public function renderClientSide(RequestPosition $position, array $elementAttributes = []): string
+    public function renderClientSide(RequestPosition $position, array $elementAttributes = [], array $options = []): string
     {
-        $resourceAttributes = [];
-
-        foreach ($position->getResources() as $resource) {
-            $resourceAttributes['data-amp-resource-' . $resource->getCode()] = implode(',', $resource->getValues());
-        }
-
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::ClientSide),
-            new ClientSideTemplate($position, $resourceAttributes, $elementAttributes),
+            new ClientSideTemplate($position, $elementAttributes, $options),
         );
     }
 

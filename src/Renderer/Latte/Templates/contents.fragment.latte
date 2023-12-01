@@ -1,5 +1,6 @@
-{varType SixtyEightPublishers\AmpClient\Request\ValueObject\Position $position}
+{varType SixtyEightPublishers\AmpClient\Response\ValueObject\Position $position}
 {varType SixtyEightPublishers\AmpClient\Response\ValueObject\Banner|null $banner}
+{varType array $options}
 
 {foreach $banner->getContents() as $content}
     {if $content instanceof SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent}
@@ -19,7 +20,7 @@
                     src="{$content->getSrc()}"
                     sizes="{$content->getSizes()}"
                     alt="{$content->getAlt()}"
-                    n:attr="title => '' !== $content->getTitle() ? $content->getTitle() : null">
+                    n:attr="title => '' !== $content->getTitle() ? $content->getTitle() : null, loading => $options['loading'] ?? null">
            </picture>
         </a>
     {elseif $content instanceof SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent}
