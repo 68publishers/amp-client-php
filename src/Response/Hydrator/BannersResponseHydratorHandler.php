@@ -52,6 +52,7 @@ use function array_map;
  *     rotation_seconds: int,
  *     display_type: string|null,
  *     breakpoint_type: string,
+ *     mode?: string,
  *     banners: array<int, BannerData>,
  * }
  *
@@ -83,6 +84,7 @@ final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInt
                 $positionData['rotation_seconds'],
                 $positionData['display_type'] ?? null,
                 $positionData['breakpoint_type'],
+                $positionData['mode'] ?? Position::ModeManaged,
                 $this->hydrateBanners($positionData['banners']),
             );
         }

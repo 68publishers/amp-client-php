@@ -10,9 +10,11 @@ use SixtyEightPublishers\AmpClient\AmpClientInterface;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\Event\ConfigureClientEvent;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\Event\ConfigureClientEventHandlerInterface;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\DirectRenderingMode;
+use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\EmbedRenderingMode;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\RenderingModeInterface;
 use SixtyEightPublishers\AmpClient\Exception\AmpExceptionInterface;
 use SixtyEightPublishers\AmpClient\Exception\RendererException;
+use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
 use SixtyEightPublishers\AmpClient\Renderer\RendererInterface;
 use SixtyEightPublishers\AmpClient\Request\BannersRequest;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\BannerResource;
@@ -88,7 +90,11 @@ final class RendererProvider
         $position = $this->createPosition($positionCode, $options);
 
         if ($renderingMode->shouldBePositionRenderedClientSide($position)) {
-            return $this->renderClientSidePosition($position, $options);
+            return $this->renderClientSidePosition(
+                $position,
+                $options,
+                $renderingMode instanceof EmbedRenderingMode ? ClientSideMode::embed() : ClientSideMode::managed(),
+            );
         }
 
         if ($renderingMode->shouldBePositionQueued($position, $globals)) {
@@ -101,7 +107,17 @@ final class RendererProvider
             return '';
         }
 
-        return $this->renderPosition($response->getPosition($positionCode), $options);
+        $responsePosition = $response->getPosition($positionCode);
+
+        if ($responsePosition::ModeEmbed === $responsePosition->getMode()) {
+            return $this->renderClientSidePosition(
+                $position,
+                $options,
+                ClientSideMode::embed(),
+            );
+        }
+
+        return $this->renderPosition($responsePosition, $options);
     }
 
     public function setDebugMode(bool $debugMode): self
@@ -202,13 +218,23 @@ final class RendererProvider
         $replacements = array_filter(
             array_map(
                 function (array $item) use ($response): ?string {
-                    $responsePosition = $response->getPosition($item[0]->getCode());
+                    $requestPosition = $item[0];
+                    $options = $item[1];
+                    $responsePosition = $response->getPosition($requestPosition->getCode());
 
                     if (null === $responsePosition) {
                         return null;
                     }
 
-                    return $this->renderPosition($responsePosition, $item[1]);
+                    if ($responsePosition::ModeEmbed === $responsePosition->getMode()) {
+                        return $this->renderClientSidePosition(
+                            $requestPosition,
+                            $options,
+                            ClientSideMode::embed(),
+                        );
+                    }
+
+                    return $this->renderPosition($responsePosition, $options);
                 },
                 $this->queue,
             ),
@@ -301,13 +327,13 @@ final class RendererProvider
     /**
      * @param array<string, mixed> $options
      */
-    private function renderClientSidePosition(RequestPosition $position, array $options): string
+    private function renderClientSidePosition(RequestPosition $position, array $options, ClientSideMode $mode): string
     {
         try {
             $elementAttributes = (array) ($options[self::OptionAttributes] ?? []);
             $bannerOptions = (array) ($options[self::OptionOptions] ?? []);
 
-            return $this->renderer->renderClientSide($position, $elementAttributes, $bannerOptions);
+            return $this->renderer->renderClientSide($position, $elementAttributes, $bannerOptions, $mode);
         } catch (RendererException $e) {
             if ($this->debugMode) {
                 throw $e;

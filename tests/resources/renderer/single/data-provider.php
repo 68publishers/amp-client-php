@@ -6,9 +6,10 @@ use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Source;
 
-$position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeSingle, Position::BreakpointTypeMin, []);
+$position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeSingle, Position::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
 
 return [
     'No banner' => [

@@ -13,6 +13,9 @@ final class Position
     public const BreakpointTypeMin = 'min';
     public const BreakpointTypeMax = 'max';
 
+    public const ModeManaged = 'managed';
+    public const ModeEmbed = 'embed';
+
     private ?string $id;
 
     private string $code;
@@ -24,6 +27,8 @@ final class Position
     private ?string $displayType;
 
     private string $breakpointType;
+
+    private string $mode;
 
     /** @var array<int, Banner> */
     private array $banners;
@@ -38,6 +43,7 @@ final class Position
         int $rotationSeconds,
         ?string $displayType,
         string $breakpointType,
+        string $mode,
         array $banners
     ) {
         $this->id = $id;
@@ -46,6 +52,7 @@ final class Position
         $this->rotationSeconds = $rotationSeconds;
         $this->displayType = $displayType;
         $this->breakpointType = $breakpointType;
+        $this->mode = $mode;
         $this->banners = $banners;
     }
 
@@ -77,6 +84,11 @@ final class Position
     public function getBreakpointType(): string
     {
         return $this->breakpointType;
+    }
+
+    public function getMode(): string
+    {
+        return $this->mode;
     }
 
     /**

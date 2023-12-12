@@ -7,8 +7,4 @@ amp_client:
     channel: test
 
 amp_client.latte:
-    alternative_rendering_modes:
-        - client_side
-        - embed
-        - SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\QueuedRenderingMode
-        - SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\QueuedRenderingInPresenterContextMode()
+    rendering_mode: embed

@@ -41,5 +41,5 @@ interface RendererBridgeInterface
      * @param array<string, scalar|null> $elementAttributes
      * @param array<string, scalar>      $options
      */
-    public function renderClientSide(RequestPosition $position, array $elementAttributes = [], array $options = []): string;
+    public function renderClientSide(RequestPosition $position, ClientSideMode $mode, array $elementAttributes = [], array $options = []): string;
 }

@@ -24,5 +24,5 @@ interface RendererInterface
      *
      * @throws RendererException
      */
-    public function renderClientSide(RequestPosition $position, array $elementAttributes = [], array $options = []): string;
+    public function renderClientSide(RequestPosition $position, array $elementAttributes = [], array $options = [], ?ClientSideMode $mode = null): string;
 }

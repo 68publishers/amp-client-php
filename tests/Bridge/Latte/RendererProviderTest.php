@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\AmpClient\Tests\Bridge\Latte;
 
+use Hamcrest\Matchers;
 use InvalidArgumentException;
 use Mockery;
 use Psr\Log\LoggerInterface;
 use SixtyEightPublishers\AmpClient\AmpClientInterface;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\Event\ConfigureClientEvent;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RendererProvider;
+use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\EmbedRenderingMode;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\RenderingModeInterface;
 use SixtyEightPublishers\AmpClient\Exception\RendererException;
+use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
 use SixtyEightPublishers\AmpClient\Renderer\RendererInterface;
 use SixtyEightPublishers\AmpClient\Request\BannersRequest;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\BannerResource;
@@ -34,7 +37,7 @@ final class RendererProviderTest extends TestCase
         $renderer = Mockery::mock(RendererInterface::class);
         $provider = new RendererProvider($client, $renderer);
 
-        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
+        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
         $response = new BannersResponse([
             'homepage.top' => $responsePosition,
         ]);
@@ -69,7 +72,7 @@ final class RendererProviderTest extends TestCase
         $renderer = Mockery::mock(RendererInterface::class);
         $provider = new RendererProvider($client, $renderer);
 
-        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
+        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
         $response = new BannersResponse([
             'homepage.top' => $responsePosition,
         ]);
@@ -104,7 +107,7 @@ final class RendererProviderTest extends TestCase
         $renderer = Mockery::mock(RendererInterface::class);
         $provider = new RendererProvider($client, $renderer);
 
-        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
+        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
         $response = new BannersResponse([
             'homepage.top' => $responsePosition,
         ]);
@@ -139,7 +142,7 @@ final class RendererProviderTest extends TestCase
         $renderer = Mockery::mock(RendererInterface::class);
         $provider = new RendererProvider($client, $renderer);
 
-        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
+        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
         $response = new BannersResponse([
             'homepage.top' => $responsePosition,
         ]);
@@ -174,7 +177,7 @@ final class RendererProviderTest extends TestCase
         $renderer = Mockery::mock(RendererInterface::class);
         $provider = new RendererProvider($client, $renderer);
 
-        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
+        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
         $response = new BannersResponse([
             'homepage.top' => $responsePosition,
         ]);
@@ -218,6 +221,42 @@ final class RendererProviderTest extends TestCase
         );
     }
 
+    public function testInvokingDefaultInstanceWithPositionInEmbedMode(): void
+    {
+        $client = Mockery::mock(AmpClientInterface::class);
+        $renderer = Mockery::mock(RendererInterface::class);
+        $provider = new RendererProvider($client, $renderer);
+
+        $positionMode = ResponsePosition::ModeEmbed;
+        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, $positionMode, []);
+        $response = new BannersResponse([
+            'homepage.top' => $responsePosition,
+        ]);
+
+        $client
+            ->shouldReceive('fetchBanners')
+            ->once()
+            ->with(Mockery::type(BannersRequest::class))
+            ->andReturnUsing(static function (BannersRequest $request) use ($response): BannersResponse {
+                Assert::equal(
+                    new BannersRequest([
+                        new RequestPosition('homepage.top'),
+                    ]),
+                    $request,
+                );
+
+                return $response;
+            });
+
+        $renderer
+            ->shouldReceive('renderClientSide')
+            ->once()
+            ->with(Matchers::equalTo(new RequestPosition('homepage.top')), [], [], Matchers::equalTo(ClientSideMode::embed()))
+            ->andReturn('<homepage.top>');
+
+        Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top'));
+    }
+
     public function testClientConfigurationEventsShouldBeInvokedBeforeFirstFetch(): void
     {
         $client = Mockery::mock(AmpClientInterface::class);
@@ -225,7 +264,7 @@ final class RendererProviderTest extends TestCase
         $renderer = Mockery::mock(RendererInterface::class);
         $provider = new RendererProvider($client, $renderer);
 
-        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
+        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
 
         $handler = new ConfigureClientEventHandlerFixture(static function (ConfigureClientEvent $event) use ($client, $modifiedClient) {
             Assert::same($client, $event->getClient());
@@ -335,7 +374,7 @@ final class RendererProviderTest extends TestCase
 
         $provider->setDebugMode(true);
 
-        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
+        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
 
         $client
             ->shouldReceive('fetchBanners')
@@ -364,7 +403,7 @@ final class RendererProviderTest extends TestCase
         $renderer = Mockery::mock(RendererInterface::class);
         $provider = new RendererProvider($client, $renderer);
 
-        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
+        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
 
         $client
             ->shouldReceive('fetchBanners')
@@ -391,7 +430,7 @@ final class RendererProviderTest extends TestCase
         $exception = new RendererException('Test renderer exception');
         $provider = new RendererProvider($client, $renderer, $logger);
 
-        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
+        $responsePosition = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
 
         $client
             ->shouldReceive('fetchBanners')
@@ -468,8 +507,8 @@ final class RendererProviderTest extends TestCase
         Assert::same('<!--AMP_POSITION:homepage.bottom-->', $provider($globals, 'homepage.bottom', ['resources' => ['resource' => ['a']]]));
         Assert::true($provider->isAnythingQueued());
 
-        $responsePosition1 = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
-        $responsePosition2 = new ResponsePosition('1235', 'homepage.bottom', 'Homepage bottom', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
+        $responsePosition1 = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
+        $responsePosition2 = new ResponsePosition('1235', 'homepage.bottom', 'Homepage bottom', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
         $response = new BannersResponse([
             'homepage.top' => $responsePosition1,
             'homepage.bottom' => $responsePosition2,
@@ -560,8 +599,8 @@ final class RendererProviderTest extends TestCase
         Assert::same('<!--AMP_POSITION:homepage.bottom-->', $provider($globals, 'homepage.bottom', ['resources' => ['resource' => ['a']]]));
         Assert::true($provider->isAnythingQueued());
 
-        $responsePosition1 = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
-        $responsePosition2 = new ResponsePosition('1235', 'homepage.bottom', 'Homepage bottom', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, []);
+        $responsePosition1 = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
+        $responsePosition2 = new ResponsePosition('1235', 'homepage.bottom', 'Homepage bottom', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
         $response = new BannersResponse([
             'homepage.top' => $responsePosition1,
             'homepage.bottom' => $responsePosition2,
@@ -607,6 +646,73 @@ final class RendererProviderTest extends TestCase
         );
     }
 
+    public function testEmbedPositionReturnedFromApiShouldBeQueuedAndReplacedInStringOutput(): void
+    {
+        $client = Mockery::mock(AmpClientInterface::class);
+        $renderer = Mockery::mock(RendererInterface::class);
+        $renderingMode = Mockery::mock(RenderingModeInterface::class);
+        $globals = new stdClass();
+        $requestPosition1 = new RequestPosition('homepage.bottom', [
+            new BannerResource('resource', 'a'),
+        ]);
+
+        $provider = new RendererProvider($client, $renderer);
+
+        $provider->setRenderingMode($renderingMode);
+
+        $renderingMode
+            ->shouldReceive('shouldBePositionRenderedClientSide')
+            ->once()
+            ->with(Mockery::type(RequestPosition::class))
+            ->andReturnUsing(static function (RequestPosition $position) use ($requestPosition1): bool {
+                Assert::equal($requestPosition1, $position);
+
+                return false;
+            })
+            ->shouldReceive('shouldBePositionQueued')
+            ->once()
+            ->with(Mockery::type(RequestPosition::class), $globals)
+            ->andReturnUsing(static function (RequestPosition $position) use ($requestPosition1): bool {
+                Assert::equal($requestPosition1, $position);
+
+                return true;
+            });
+
+        Assert::same('<!--AMP_POSITION:homepage.bottom-->', $provider($globals, 'homepage.bottom', ['resources' => ['resource' => ['a']]]));
+        Assert::true($provider->isAnythingQueued());
+
+        $responsePosition1 = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeEmbed, []);
+        $response = new BannersResponse([
+            'homepage.bottom' => $responsePosition1,
+        ]);
+
+        $client
+            ->shouldReceive('fetchBanners')
+            ->once()
+            ->with(Mockery::type(BannersRequest::class))
+            ->andReturnUsing(static function (BannersRequest $request) use ($response, $requestPosition1): BannersResponse {
+                Assert::equal(
+                    new BannersRequest([
+                        $requestPosition1,
+                    ]),
+                    $request,
+                );
+
+                return $response;
+            });
+
+        $renderer
+            ->shouldReceive('renderClientSide')
+            ->once()
+            ->with(Matchers::equalTo($requestPosition1), [], [], Matchers::equalTo(ClientSideMode::embed()))
+            ->andReturn('<homepage.bottom>');
+
+        Assert::same(
+            '<div><homepage.bottom></div>',
+            $provider->renderQueuedPositions('<div><!--AMP_POSITION:homepage.bottom--></div>'),
+        );
+    }
+
     public function testPositionShouldBeRenderedClientSide(): void
     {
         $client = Mockery::mock(AmpClientInterface::class);
@@ -631,7 +737,7 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('renderClientSide')
             ->once()
-            ->with(Mockery::type(RequestPosition::class), [], [])
+            ->with(Mockery::type(RequestPosition::class), [], [], Matchers::equalTo(ClientSideMode::managed()))
             ->andReturnUsing(static function (RequestPosition $position) use ($requestPosition): string {
                 Assert::equal($requestPosition, $position);
 
@@ -669,7 +775,7 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('renderClientSide')
             ->once()
-            ->with(Mockery::type(RequestPosition::class), [], [])
+            ->with(Mockery::type(RequestPosition::class), [], [], Matchers::equalTo(ClientSideMode::managed()))
             ->andReturnUsing(static function (RequestPosition $position) use ($requestPosition): string {
                 Assert::equal($requestPosition, $position);
 
@@ -679,6 +785,54 @@ final class RendererProviderTest extends TestCase
         $provider->setAlternativeRenderingModes([$clientSideRenderingMode]);
 
         Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top', ['mode' => 'client_side']));
+    }
+
+    public function testPositionShouldBeRenderedEmbed(): void
+    {
+        $client = Mockery::mock(AmpClientInterface::class);
+        $renderer = Mockery::mock(RendererInterface::class);
+        $clientSideRenderingMode = new EmbedRenderingMode();
+        $requestPosition = new RequestPosition('homepage.top');
+
+        $provider = new RendererProvider($client, $renderer);
+
+        $provider->setRenderingMode($clientSideRenderingMode);
+
+        $renderer
+            ->shouldReceive('renderClientSide')
+            ->once()
+            ->with(Mockery::type(RequestPosition::class), [], [], Matchers::equalTo(ClientSideMode::embed()))
+            ->andReturnUsing(static function (RequestPosition $position) use ($requestPosition): string {
+                Assert::equal($requestPosition, $position);
+
+                return '<homepage.top>';
+            });
+
+        Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top'));
+    }
+
+    public function testPositionShouldBeRenderedEmbedWithAlternativeMode(): void
+    {
+        $client = Mockery::mock(AmpClientInterface::class);
+        $renderer = Mockery::mock(RendererInterface::class);
+        $clientSideRenderingMode = new EmbedRenderingMode();
+        $requestPosition = new RequestPosition('homepage.top');
+
+        $provider = new RendererProvider($client, $renderer);
+
+        $renderer
+            ->shouldReceive('renderClientSide')
+            ->once()
+            ->with(Mockery::type(RequestPosition::class), [], [], Matchers::equalTo(ClientSideMode::embed()))
+            ->andReturnUsing(static function (RequestPosition $position) use ($requestPosition): string {
+                Assert::equal($requestPosition, $position);
+
+                return '<homepage.top>';
+            });
+
+        $provider->setAlternativeRenderingModes([$clientSideRenderingMode]);
+
+        Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top', ['mode' => EmbedRenderingMode::Name]));
     }
 
     public function testExceptionShouldBeThrownWhenProviderIsInvokedWithModeThatIsNotRegisteredBetweenAlternativeModes(): void

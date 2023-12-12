@@ -16,7 +16,7 @@ final class BannersResolverTest extends TestCase
 {
     public function testNullShouldBeReturnedWhenResolvingSinglePositionWithoutBanners(): void
     {
-        $position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeSingle, Position::BreakpointTypeMin, []);
+        $position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeSingle, Position::BreakpointTypeMin, Position::ModeManaged, []);
         $resolver = new BannersResolver();
 
         Assert::null($resolver->resolveSingle($position));
@@ -28,7 +28,7 @@ final class BannersResolverTest extends TestCase
         $banner2 = new Banner('2', '2', 2, null, null, null, []);
         $banner3 = new Banner('3', '3', 1, null, null, null, []);
         $banner4 = new Banner('4', '4', 2, null, null, null, []);
-        $position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeSingle, Position::BreakpointTypeMin, [$banner1, $banner2, $banner3, $banner4]);
+        $position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeSingle, Position::BreakpointTypeMin, Position::ModeManaged, [$banner1, $banner2, $banner3, $banner4]);
         $resolver = new BannersResolver();
 
         Assert::same($banner2, $resolver->resolveSingle($position));
@@ -36,7 +36,7 @@ final class BannersResolverTest extends TestCase
 
     public function testEmptyArrayShouldBeReturnedWhenResolvingMultiplePositionWithoutBanners(): void
     {
-        $position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeMultiple, Position::BreakpointTypeMin, []);
+        $position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeMultiple, Position::BreakpointTypeMin, Position::ModeManaged, []);
         $resolver = new BannersResolver();
 
         Assert::same([], $resolver->resolveMultiple($position));
@@ -48,7 +48,7 @@ final class BannersResolverTest extends TestCase
         $banner2 = new Banner('2', '2', 2, null, null, null, []);
         $banner3 = new Banner('3', '3', 1, null, null, null, []);
         $banner4 = new Banner('4', '4', 2, null, null, null, []);
-        $position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeMultiple, Position::BreakpointTypeMin, [$banner1, $banner2, $banner3, $banner4]);
+        $position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeMultiple, Position::BreakpointTypeMin, Position::ModeManaged, [$banner1, $banner2, $banner3, $banner4]);
         $resolver = new BannersResolver();
 
         Assert::same([
@@ -61,7 +61,7 @@ final class BannersResolverTest extends TestCase
 
     public function testNullShouldBeReturnedWhenResolvingRandomPositionWithoutBanners(): void
     {
-        $position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeRandom, Position::BreakpointTypeMin, []);
+        $position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeRandom, Position::BreakpointTypeMin, Position::ModeManaged, []);
         $resolver = new BannersResolver();
 
         Assert::null($resolver->resolveRandom($position));
@@ -73,7 +73,7 @@ final class BannersResolverTest extends TestCase
         $banner2 = new Banner('2', '2', 3, null, null, null, []);
         $banner3 = new Banner('3', '3', 2, null, null, null, []);
         $banner4 = new Banner('4', '4', 3, null, null, null, []);
-        $position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeRandom, Position::BreakpointTypeMin, [$banner1, $banner2, $banner3, $banner4]);
+        $position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeRandom, Position::BreakpointTypeMin, Position::ModeManaged, [$banner1, $banner2, $banner3, $banner4]);
         $resolver = new BannersResolver();
 
         Assert::type(Banner::class, $resolver->resolveRandom($position)); # @todo: Mock mt_rand() ?

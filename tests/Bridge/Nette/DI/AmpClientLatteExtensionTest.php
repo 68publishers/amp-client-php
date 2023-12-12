@@ -14,6 +14,7 @@ use SixtyEightPublishers\AmpClient\Bridge\Latte\Event\ConfigureClientEventHandle
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RendererProvider;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\ClientSideRenderingMode;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\DirectRenderingMode;
+use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\EmbedRenderingMode;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\QueuedRenderingInPresenterContextMode;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\QueuedRenderingMode;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\RenderingModeInterface;
@@ -180,7 +181,7 @@ final class AmpClientLatteExtensionTest extends TestCase
         );
     }
 
-    public function testContainerWithClientSideRenderingInPresenterModeModeAsString(): void
+    public function testContainerWithClientSideRenderingModeAsString(): void
     {
         $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withClientSideRenderingModeAsString.neon', ['latte']);
 
@@ -191,7 +192,7 @@ final class AmpClientLatteExtensionTest extends TestCase
         );
     }
 
-    public function testContainerWithClientSideRenderingInPresenterModeModeAsClassname(): void
+    public function testContainerWithClientSideRenderingModeAsClassname(): void
     {
         $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withClientSideRenderingModeAsClassname.neon', ['latte']);
 
@@ -202,7 +203,7 @@ final class AmpClientLatteExtensionTest extends TestCase
         );
     }
 
-    public function testContainerWithClientSideRenderingInPresenterModeModeAsStatement(): void
+    public function testContainerWithClientSideRenderingModeAsStatement(): void
     {
         $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withClientSideRenderingModeAsStatement.neon', ['latte']);
 
@@ -210,6 +211,39 @@ final class AmpClientLatteExtensionTest extends TestCase
             $container,
             false,
             new ClientSideRenderingMode(),
+        );
+    }
+
+    public function testContainerWithEmbedRenderingModeAsString(): void
+    {
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withEmbedRenderingModeAsString.neon', ['latte']);
+
+        $this->assertLatteExtension(
+            $container,
+            false,
+            new EmbedRenderingMode(),
+        );
+    }
+
+    public function testContainerWithEmbedRenderingModeAsClassname(): void
+    {
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withEmbedRenderingModeAsClassname.neon', ['latte']);
+
+        $this->assertLatteExtension(
+            $container,
+            false,
+            new EmbedRenderingMode(),
+        );
+    }
+
+    public function testContainerWithEmbedRenderingModeAsStatement(): void
+    {
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withEmbedRenderingModeAsStatement.neon', ['latte']);
+
+        $this->assertLatteExtension(
+            $container,
+            false,
+            new EmbedRenderingMode(),
         );
     }
 
@@ -223,6 +257,7 @@ final class AmpClientLatteExtensionTest extends TestCase
             new DirectRenderingMode(),
             [
                 ClientSideRenderingMode::Name => new ClientSideRenderingMode(),
+                EmbedRenderingMode::Name => new EmbedRenderingMode(),
                 QueuedRenderingMode::Name => new QueuedRenderingMode(),
                 QueuedRenderingInPresenterContextMode::Name => new QueuedRenderingInPresenterContextMode(),
             ],

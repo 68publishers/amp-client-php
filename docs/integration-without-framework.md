@@ -10,6 +10,7 @@
 * [Fetching banners](#fetching-banners)
 * [Rendering banners](#rendering-banners)
   * [Rendering banners on the client side](#rendering-banners-on-the-client-side)
+  * [Rendering embed (iframe) banners](#rendering-embed-iframe-banners)
   * [Lazy loading of image banners](#lazy-loading-of-image-banners)
   * [Templates overwriting](#templates-overwriting)
   * [Rendering banners using Latte](#rendering-banners-using-latte)
@@ -192,6 +193,54 @@ echo $renderer->renderClientSide(new Position('homepage.promo'), ['class' => 'my
 
 Banners rendered in this way will be loaded by the JavaScript client when its `attachBanners()` function is called.
 
+### Rendering embed (iframe) banners
+
+Banners can be rendered in "embed" mode, which means they are inside the `<iframe>` tag.
+This rendering mode is again controlled by the JavaScript client.
+
+```php
+use SixtyEightPublishers\AmpClient\Renderer\Renderer;
+use SixtyEightPublishers\AmpClient\Request\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
+
+$renderer = Renderer::create();
+
+echo $renderer->renderClientSide(
+    position: new Position('homepage.top'),
+    mode: ClientSideMode::embed(),
+);
+```
+
+The information that the banner should be rendered in the `<iframe>` tag can also be returned by AMP.
+If we want to follow this behavior, we need to condition the rendering ourselves.
+
+```php
+use SixtyEightPublishers\AmpClient\AmpClientInterface;
+use SixtyEightPublishers\AmpClient\Renderer\RendererInterface;
+use SixtyEightPublishers\AmpClient\Request\BannersRequest;
+use SixtyEightPublishers\AmpClient\Request\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
+
+/** @var AmpClientInterface $client */
+/** @var RendererInterface $renderer */
+
+$request = new BannersRequest([
+    new Position('homepage.top'),
+]);
+
+$response = $client->fetchBanners($request);
+$position = $response->getPosition('homepage.top');
+
+if ($position::ModeEmbed === $position->getMode()) {
+    echo $renderer->renderClientSide(
+        position: $request->getPosition('homepage.top'),
+        mode: ClientSideMode::embed(),
+    );
+} else {
+    echo $renderer->render($position);
+}
+```
+
 ### Lazy loading of image banners
 
 The default client templates support [native lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading#images_and_iframes) of images.
@@ -367,6 +416,7 @@ The following rendering modes are available:
 
 - **direct** ([DirectRenderingMode](../src/Bridge/Latte/RenderingMode/DirectRenderingMode.php)) - The default mode, API is requested separately for each banner.
 - **client_side** ([ClientSideRenderingMode](../src/Bridge/Latte/RenderingMode/ClientSideRenderingMode.php)) - Renders only a wrapper element and leaves loading banners on the JavaScript client. Banners are loaded by calling the `attachBanners()` function.
+- **embed** ([EmbedRenderingMode](../src/Bridge/Latte/RenderingMode/EmbedRenderingMode.php)) - Same behavior as `client_side`, but passes the information to the JavaScript client that the banner should be rendered as `embed`.
 - **queued** ([QueuedRenderingMode](../src/Bridge/Latte/RenderingMode/QueuedRenderingMode.php)) - Renders only HTML comments as placeholders and stores requested positions in a queue. It will request and render all banners at once when the `RendererProvider::renderQueuedPositions()` method is called.
 - **queued_in_presenter_context** ([QueuedRenderingInPresenterContextMode](../src/Bridge/Latte/RenderingMode/QueuedRenderingInPresenterContextMode.php)) - Same behavior as `queued` but in the context of a Presenter only. Usable with Nette applications only.
 
