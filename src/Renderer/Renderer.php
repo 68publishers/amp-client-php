@@ -79,11 +79,18 @@ final class Renderer implements RendererInterface
         }
     }
 
-    public function renderClientSide(RequestPosition $position, array $elementAttributes = [], array $options = []): string
+    public function renderClientSide(RequestPosition $position, array $elementAttributes = [], array $options = [], ?ClientSideMode $mode = null): string
     {
+        $mode = $mode ?? ClientSideMode::managed();
+
+        if ($mode->isEmbed()) {
+            $options['omit-default-resources'] = '1';
+        }
+
         try {
             return $this->rendererBridge->renderClientSide(
                 $position,
+                $mode,
                 $elementAttributes,
                 $options,
             );

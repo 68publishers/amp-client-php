@@ -6,10 +6,12 @@ namespace SixtyEightPublishers\AmpClient\Tests\Renderer;
 
 use Closure;
 use Exception;
+use Hamcrest\Matchers;
 use Mockery;
 use SixtyEightPublishers\AmpClient\Exception\RendererException;
 use SixtyEightPublishers\AmpClient\Renderer\BannersResolver;
 use SixtyEightPublishers\AmpClient\Renderer\BannersResolverInterface;
+use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
 use SixtyEightPublishers\AmpClient\Renderer\Phtml\PhtmlRendererBridge;
 use SixtyEightPublishers\AmpClient\Renderer\Renderer;
 use SixtyEightPublishers\AmpClient\Renderer\RendererBridgeInterface;
@@ -46,7 +48,7 @@ final class RendererTest extends TestCase
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
         $renderer = new Renderer($bannersResolver, $rendererBridge);
 
-        $position = new ResponsePosition(null, 'homepage.top', null, 0, null, ResponsePosition::BreakpointTypeMin, []);
+        $position = new ResponsePosition(null, 'homepage.top', null, 0, null, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
 
         $rendererBridge
             ->shouldReceive('renderNotFound')
@@ -64,7 +66,7 @@ final class RendererTest extends TestCase
         $renderer = new Renderer($bannersResolver, $rendererBridge);
 
         $banner = new Banner('1234', 'Main', 0, null, null, null, []);
-        $position = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, [$banner]);
+        $position = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeSingle, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, [$banner]);
 
         $bannersResolver
             ->shouldReceive('resolveSingle')
@@ -88,7 +90,7 @@ final class RendererTest extends TestCase
         $renderer = new Renderer($bannersResolver, $rendererBridge);
 
         $banner = new Banner('1234', 'Main', 0, null, null, null, []);
-        $position = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeRandom, ResponsePosition::BreakpointTypeMin, [$banner]);
+        $position = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeRandom, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, [$banner]);
 
         $bannersResolver
             ->shouldReceive('resolveRandom')
@@ -115,7 +117,7 @@ final class RendererTest extends TestCase
             new Banner('1234', 'Main', 0, null, null, null, []),
             new Banner('1235', 'Secondary', 0, null, null, null, []),
         ];
-        $position = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeMultiple, ResponsePosition::BreakpointTypeMin, $banners);
+        $position = new ResponsePosition('1234', 'homepage.top', 'Homepage top', 0, ResponsePosition::DisplayTypeMultiple, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, $banners);
 
         $bannersResolver
             ->shouldReceive('resolveMultiple')
@@ -145,10 +147,29 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderClientSide')
             ->once()
-            ->with($position, [], [])
+            ->with($position, Matchers::equalTo(ClientSideMode::managed()), [], [])
             ->andReturn('client-side');
 
         Assert::same('client-side', $renderer->renderClientSide($position));
+    }
+
+    public function testClientSideTemplateWithEmbedModeShouldBeRendered(): void
+    {
+        $bannersResolver = Mockery::mock(BannersResolverInterface::class);
+        $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge);
+
+        $position = new RequestPosition('homepage.top', [
+            new BannerResource('role', 'vip'),
+        ]);
+
+        $rendererBridge
+            ->shouldReceive('renderClientSide')
+            ->once()
+            ->with($position, Matchers::equalTo(ClientSideMode::embed()), [], ['omit-default-resources' => '1'])
+            ->andReturn('client-side');
+
+        Assert::same('client-side', $renderer->renderClientSide($position, [], [], ClientSideMode::embed()));
     }
 
     public function testRendererExceptionShouldBeThrownOnRenderingWhenBridgeThrowsTheException(): void
@@ -157,7 +178,7 @@ final class RendererTest extends TestCase
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
         $renderer = new Renderer($bannersResolver, $rendererBridge);
 
-        $position = new ResponsePosition(null, 'homepage.top', null, 0, null, ResponsePosition::BreakpointTypeMin, []);
+        $position = new ResponsePosition(null, 'homepage.top', null, 0, null, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
 
         $rendererBridge
             ->shouldReceive('renderNotFound')
@@ -183,7 +204,7 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderClientSide')
             ->once()
-            ->with($position, [], [])
+            ->with($position, Matchers::equalTo(ClientSideMode::managed()), [], [])
             ->andThrow(new RendererException('Test exception'));
 
         Assert::exception(
@@ -199,7 +220,7 @@ final class RendererTest extends TestCase
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
         $renderer = new Renderer($bannersResolver, $rendererBridge);
 
-        $position = new ResponsePosition(null, 'homepage.top', null, 0, null, ResponsePosition::BreakpointTypeMin, []);
+        $position = new ResponsePosition(null, 'homepage.top', null, 0, null, ResponsePosition::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
 
         $rendererBridge
             ->shouldReceive('renderNotFound')
@@ -225,7 +246,7 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderClientSide')
             ->once()
-            ->with($position, [], [])
+            ->with($position, Matchers::equalTo(ClientSideMode::managed()), [], [])
             ->andThrow(new Exception('Test exception'));
 
         Assert::exception(

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\AmpClient\Tests\Renderer\Phtml;
 
 use Closure;
+use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
 use SixtyEightPublishers\AmpClient\Renderer\Phtml\PhtmlRendererBridge;
 use SixtyEightPublishers\AmpClient\Renderer\Templates;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
@@ -99,11 +100,12 @@ final class PhtmlRendererBridgeTest extends TestCase
         RequestPosition $position,
         array $elementAttributes,
         array $options,
+        ClientSideMode $mode,
         string $expectationFile
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $elementAttributes, $options));
+        AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $mode, $elementAttributes, $options));
     }
 
     public function notFoundTemplateDataProvider(): array

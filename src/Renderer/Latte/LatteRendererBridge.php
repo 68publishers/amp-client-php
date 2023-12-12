@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\AmpClient\Renderer\Latte;
 
 use Latte\Engine;
+use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\ClientSideTemplate;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\MultipleTemplate;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\NotFoundTemplate;
@@ -83,11 +84,11 @@ final class LatteRendererBridge implements RendererBridgeInterface
         );
     }
 
-    public function renderClientSide(RequestPosition $position, array $elementAttributes = [], array $options = []): string
+    public function renderClientSide(RequestPosition $position, ClientSideMode $mode, array $elementAttributes = [], array $options = []): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::ClientSide),
-            new ClientSideTemplate($position, $elementAttributes, $options),
+            new ClientSideTemplate($position, $mode, $elementAttributes, $options),
         );
     }
 
