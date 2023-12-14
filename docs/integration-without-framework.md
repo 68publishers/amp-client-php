@@ -241,6 +241,8 @@ if ($position::ModeEmbed === $position->getMode()) {
 }
 ```
 
+⚠️ Only image banners on `single` and `random` positions are now fully compatible with `embed` mode. Rendering other types via `embed` mode is not recommended.
+
 ### Lazy loading of image banners
 
 The default client templates support [native lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading#images_and_iframes) of images.
