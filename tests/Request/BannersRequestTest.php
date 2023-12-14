@@ -40,6 +40,26 @@ final class BannersRequestTest extends TestCase
         Assert::same(['a' => $positionA, 'b' => $positionB, 'c' => $positionC], $request3->getPositions());
         Assert::same(['a' => $positionA, 'b' => $positionB, 'c' => $positionC, 'd' => $positionD], $request4->getPositions());
 
+        Assert::same($positionA, $request->getPosition('a'));
+        Assert::same($positionB, $request->getPosition('b'));
+        Assert::null($request->getPosition('c'));
+        Assert::null($request->getPosition('d'));
+
+        Assert::same($positionA, $request2->getPosition('a'));
+        Assert::same($positionB, $request2->getPosition('b'));
+        Assert::same($positionC, $request2->getPosition('c'));
+        Assert::null($request2->getPosition('d'));
+
+        Assert::same($positionA, $request3->getPosition('a'));
+        Assert::same($positionB, $request3->getPosition('b'));
+        Assert::same($positionC, $request3->getPosition('c'));
+        Assert::null($request3->getPosition('d'));
+
+        Assert::same($positionA, $request4->getPosition('a'));
+        Assert::same($positionB, $request4->getPosition('b'));
+        Assert::same($positionC, $request4->getPosition('c'));
+        Assert::same($positionD, $request4->getPosition('d'));
+
         Assert::null($request->getLocale());
         Assert::null($request2->getLocale());
         Assert::same('cs', $request3->getLocale());

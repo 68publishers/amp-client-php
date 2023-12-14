@@ -22,6 +22,7 @@ use SixtyEightPublishers\AmpClient\Bridge\Latte\Event\ConfigureClientEventHandle
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RendererProvider;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\ClientSideRenderingMode;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\DirectRenderingMode;
+use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\EmbedRenderingMode;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\QueuedRenderingInPresenterContextMode;
 use SixtyEightPublishers\AmpClient\Bridge\Latte\RenderingMode\QueuedRenderingMode;
 use SixtyEightPublishers\AmpClient\Bridge\Nette\Application\AttachPresenterHandlersOnApplicationHandler;
@@ -38,6 +39,7 @@ final class AmpClientLatteExtension extends CompilerExtension
         QueuedRenderingMode::Name => QueuedRenderingMode::class,
         QueuedRenderingInPresenterContextMode::Name => QueuedRenderingInPresenterContextMode::class,
         ClientSideRenderingMode::Name => ClientSideRenderingMode::class,
+        EmbedRenderingMode::Name => EmbedRenderingMode::class,
     ];
 
     private bool $debugMode;

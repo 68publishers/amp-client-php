@@ -3,5 +3,5 @@
 {var $helpers = SixtyEightPublishers\AmpClient\Renderer\Latte\Helpers::class}
 
 <div data-amp-banner="{$position->getCode()}"
-     n:attr="array_merge($helpers::createResourceAttributes($position), $helpers::createOptionAttributes($options), $elementAttributes)">
+     n:attr="array_merge(['data-amp-mode' => $mode->isEmbed() ? $mode->getValue() : null], $helpers::createResourceAttributes($position), $helpers::createOptionAttributes($options), $elementAttributes)">
 </div>

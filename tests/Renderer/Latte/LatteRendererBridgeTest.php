@@ -6,6 +6,7 @@ namespace SixtyEightPublishers\AmpClient\Tests\Renderer\Latte;
 
 use Closure;
 use Latte\Engine;
+use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\LatteRendererBridge;
 use SixtyEightPublishers\AmpClient\Renderer\Templates;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
@@ -100,11 +101,12 @@ final class LatteRendererBridgeTest extends TestCase
         RequestPosition $position,
         array $elementAttributes,
         array $options,
+        ClientSideMode $mode,
         string $expectationFile
     ): void {
         $renderer = $this->createRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $elementAttributes, $options));
+        AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $mode, $elementAttributes, $options));
     }
 
     public function notFoundTemplateDataProvider(): array

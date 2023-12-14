@@ -146,6 +146,7 @@ The following rendering modes are available:
 
 - **direct** ([DirectRenderingMode](../src/Bridge/Latte/RenderingMode/DirectRenderingMode.php)) - The default mode, API is requested separately for each banner.
 - **client_side** ([ClientSideRenderingMode](../src/Bridge/Latte/RenderingMode/ClientSideRenderingMode.php)) - Renders only a wrapper element and leaves loading banners on the JavaScript client. Banners are loaded by calling the `attachBanners()` function.
+- **embed** ([EmbedRenderingMode](../src/Bridge/Latte/RenderingMode/EmbedRenderingMode.php)) - Same behavior as `client_side`, but passes the information to the JavaScript client that the banner should be rendered as `embed`.
 - **queued_in_presenter_context** ([QueuedRenderingInPresenterContextMode](../src/Bridge/Latte/RenderingMode/QueuedRenderingInPresenterContextMode.php)) - Renders only HTML comments as placeholders and stores requested positions in a queue. It will request, render and place all banners to them positions at once before the presenter returns a response.
 - **queued** ([QueuedRenderingMode](../src/Bridge/Latte/RenderingMode/QueuedRenderingMode.php)) - Same behavior as `queued_in_presenter_context`, but it doesn't take into account whether the website template is currently being rendered through the Nette application. It is more suited for an integration without a framework.
 

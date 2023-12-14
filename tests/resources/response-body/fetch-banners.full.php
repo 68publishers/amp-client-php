@@ -15,8 +15,9 @@ return new BannersResponse([
         'homepage.top',
         'Homepage top',
         3,
-        'multiple',
-        'min',
+        Position::DisplayTypeMultiple,
+        Position::BreakpointTypeMin,
+        Position::ModeManaged,
         [
             new Banner(
                 'd7275445-c287-47d2-b71a-3baff5b4d23c',
@@ -77,8 +78,9 @@ return new BannersResponse([
         'homepage.middle',
         'Homepage - middle',
         5,
-        'random',
-        'min',
+        Position::DisplayTypeRandom,
+        Position::BreakpointTypeMin,
+        Position::ModeManaged,
         [],
     ),
     'homepage.missing' => new Position(
@@ -87,7 +89,8 @@ return new BannersResponse([
         null,
         0,
         null,
-        'min',
+        Position::BreakpointTypeMin,
+        Position::ModeManaged,
         [],
     ),
     'homepage.bottom' => new Position(
@@ -95,8 +98,9 @@ return new BannersResponse([
         'homepage.bottom',
         'Homepage - bottom',
         5,
-        'single',
-        'min',
+        Position::DisplayTypeSingle,
+        Position::BreakpointTypeMin,
+        Position::ModeManaged,
         [
             new Banner(
                 '54c72f46-2b6c-4d80-a75e-28fed4d79f5c',

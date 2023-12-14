@@ -8,6 +8,7 @@ use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -130,6 +131,7 @@ HTML;
             5,
             Position::DisplayTypeSingle,
             $breakpointType,
+            ResponsePosition::ModeManaged,
             [$banner],
         );
 

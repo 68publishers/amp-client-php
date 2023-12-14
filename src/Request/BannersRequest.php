@@ -55,6 +55,11 @@ final class BannersRequest
         return $this->positions;
     }
 
+    public function getPosition(string $name): ?Position
+    {
+        return $this->positions[$name] ?? null;
+    }
+
     public function getLocale(): ?string
     {
         return $this->locale;

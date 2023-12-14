@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\AmpClient\Renderer\Phtml;
 
+use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
 use SixtyEightPublishers\AmpClient\Renderer\OutputBuffer;
 use SixtyEightPublishers\AmpClient\Renderer\RendererBridgeInterface;
 use SixtyEightPublishers\AmpClient\Renderer\Templates;
@@ -86,11 +87,11 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderClientSide(RequestPosition $position, array $elementAttributes = [], array $options = []): string
+    public function renderClientSide(RequestPosition $position, ClientSideMode $mode, array $elementAttributes = [], array $options = []): string
     {
         $filename = $this->templates->getTemplateFile(Templates::ClientSide);
 
-        return OutputBuffer::capture(function () use ($filename, $position, $elementAttributes, $options) {
+        return OutputBuffer::capture(function () use ($filename, $position, $elementAttributes, $options, $mode) {
             require $filename;
         });
     }
