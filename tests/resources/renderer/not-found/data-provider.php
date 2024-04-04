@@ -2,10 +2,21 @@
 
 declare(strict_types=1);
 
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Dimensions;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 
-$position = new Position(null, 'homepage.top', null, 0, null, Position::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
+$position = new Position(
+    null,
+    'homepage.top',
+    null,
+    0,
+    null,
+    Position::BreakpointTypeMin,
+    ResponsePosition::ModeManaged,
+    new Dimensions(800, 300),
+    [],
+);
 
 return [
     'Not found' => [

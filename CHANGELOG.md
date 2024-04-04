@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Added integration of the new AMP API field `mode`.
+- Added integration of the new AMP API fields `mode` and `dimensions`.
 - Added possibility to render embed banners.
 - Added new rendering mode `embed` (`EmbedRenderingMode`) for the Latte bridge.
 
