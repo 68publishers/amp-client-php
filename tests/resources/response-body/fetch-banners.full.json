@@ -8,6 +8,10 @@
       "display_type": "multiple",
       "breakpoint_type": "min",
       "mode": "managed",
+      "dimensions": {
+        "width": 1320,
+        "height": 400
+      },
       "banners": [
         {
           "id": "d7275445-c287-47d2-b71a-3baff5b4d23c",
@@ -72,6 +76,10 @@
       "display_type": "random",
       "breakpoint_type": "min",
       "mode": "managed",
+      "dimensions": {
+        "width": 800,
+        "height": 300
+      },
       "banners": []
     },
     "homepage.missing": {
@@ -81,6 +89,10 @@
       "display_type": null,
       "breakpoint_type": "min",
       "mode": "managed",
+      "dimensions": {
+        "width": null,
+        "height": null
+      },
       "banners": []
     },
     "homepage.bottom": {
@@ -90,6 +102,10 @@
       "display_type": "single",
       "breakpoint_type": "min",
       "mode": "managed",
+      "dimensions": {
+        "width": 800,
+        "height": 300
+      },
       "banners": [
         {
           "id": "54c72f46-2b6c-4d80-a75e-28fed4d79f5c",

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use SixtyEightPublishers\AmpClient\Response\BannersResponse;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Dimensions;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
@@ -18,6 +19,10 @@ return new BannersResponse([
         Position::DisplayTypeMultiple,
         Position::BreakpointTypeMin,
         Position::ModeManaged,
+        new Dimensions(
+            1320,
+            400,
+        ),
         [
             new Banner(
                 'd7275445-c287-47d2-b71a-3baff5b4d23c',
@@ -81,6 +86,10 @@ return new BannersResponse([
         Position::DisplayTypeRandom,
         Position::BreakpointTypeMin,
         Position::ModeManaged,
+        new Dimensions(
+            800,
+            300,
+        ),
         [],
     ),
     'homepage.missing' => new Position(
@@ -91,6 +100,10 @@ return new BannersResponse([
         null,
         Position::BreakpointTypeMin,
         Position::ModeManaged,
+        new Dimensions(
+            null,
+            null,
+        ),
         [],
     ),
     'homepage.bottom' => new Position(
@@ -101,6 +114,10 @@ return new BannersResponse([
         Position::DisplayTypeSingle,
         Position::BreakpointTypeMin,
         Position::ModeManaged,
+        new Dimensions(
+            800,
+            300,
+        ),
         [
             new Banner(
                 '54c72f46-2b6c-4d80-a75e-28fed4d79f5c',

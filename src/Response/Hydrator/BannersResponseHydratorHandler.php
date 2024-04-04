@@ -7,6 +7,7 @@ namespace SixtyEightPublishers\AmpClient\Response\Hydrator;
 use SixtyEightPublishers\AmpClient\Response\BannersResponse;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\ContentInterface;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Dimensions;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
@@ -46,6 +47,11 @@ use function array_map;
  *     contents: array<int, HtmlContentData|ImageContentData>,
  * }
  *
+ * @phpstan-type DimensionsData = array{
+ *     width: int|null,
+ *     height: int|null,
+ * }
+ *
  * @phpstan-type PositionData = array{
  *     position_id?: string|null,
  *     position_name?: string|null,
@@ -53,6 +59,7 @@ use function array_map;
  *     display_type: string|null,
  *     breakpoint_type: string,
  *     mode?: string,
+ *     dimensions?: DimensionsData,
  *     banners: array<int, BannerData>,
  * }
  *
@@ -85,6 +92,7 @@ final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInt
                 $positionData['display_type'] ?? null,
                 $positionData['breakpoint_type'],
                 $positionData['mode'] ?? Position::ModeManaged,
+                $this->hydrateDimensions($positionData['dimensions'] ?? null),
                 $this->hydrateBanners($positionData['banners']),
             );
         }
@@ -160,5 +168,20 @@ final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInt
         }
 
         return $contents;
+    }
+
+    /**
+     * @param DimensionsData|null $dimensions
+     */
+    private function hydrateDimensions(?array $dimensions): Dimensions
+    {
+        if (null === $dimensions) {
+            return new Dimensions(null, null);
+        }
+
+        return new Dimensions(
+            $dimensions['width'] ?? null,
+            $dimensions['height'] ?? null,
+        );
     }
 }

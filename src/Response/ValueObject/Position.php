@@ -30,6 +30,8 @@ final class Position
 
     private string $mode;
 
+    private Dimensions $dimensions;
+
     /** @var array<int, Banner> */
     private array $banners;
 
@@ -44,6 +46,7 @@ final class Position
         ?string $displayType,
         string $breakpointType,
         string $mode,
+        Dimensions $dimensions,
         array $banners
     ) {
         $this->id = $id;
@@ -53,6 +56,7 @@ final class Position
         $this->displayType = $displayType;
         $this->breakpointType = $breakpointType;
         $this->mode = $mode;
+        $this->dimensions = $dimensions;
         $this->banners = $banners;
     }
 
@@ -89,6 +93,11 @@ final class Position
     public function getMode(): string
     {
         return $this->mode;
+    }
+
+    public function getDimensions(): Dimensions
+    {
+        return $this->dimensions;
     }
 
     /**

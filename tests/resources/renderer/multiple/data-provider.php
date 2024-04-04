@@ -3,13 +3,36 @@
 declare(strict_types=1);
 
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Dimensions;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Source;
 
-$position = new Position('1234', 'homepage.top', 'Homepage top', 0, Position::DisplayTypeMultiple, Position::BreakpointTypeMin, ResponsePosition::ModeManaged, []);
+$position = new Position(
+    '1234',
+    'homepage.top',
+    'Homepage top',
+    0,
+    Position::DisplayTypeMultiple,
+    Position::BreakpointTypeMin,
+    ResponsePosition::ModeManaged,
+    new Dimensions(800, 300),
+    [],
+);
+
+$positionWithoutDimensions = new Position(
+    '1234',
+    'homepage.top',
+    'Homepage top',
+    0,
+    Position::DisplayTypeMultiple,
+    Position::BreakpointTypeMin,
+    ResponsePosition::ModeManaged,
+    new Dimensions(null, null),
+    [],
+);
 
 $fullFeaturedBanners = [
     new Banner('1234', 'Main', 0, null, null, null, [
@@ -126,5 +149,12 @@ return [
             'loading-offset' => 1,
         ],
         __DIR__ . '/multipleBannersFullFeatured.withLazyLoadingFromOffset1.html',
+    ],
+    'Multiple banners - full featured without dimensions' => [
+        $positionWithoutDimensions,
+        $fullFeaturedBanners,
+        [],
+        [],
+        __DIR__ . '/multipleBannersFullFeatured.withoutDimensions.html',
     ],
 ];
