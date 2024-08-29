@@ -39,7 +39,8 @@ final class Position
     private array $banners;
 
     /**
-     * @param array<int, Banner> $banners
+     * @param array<string, string> $options
+     * @param array<int, Banner>    $banners
      */
     public function __construct(
         ?string $id,

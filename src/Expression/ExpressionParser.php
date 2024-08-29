@@ -33,14 +33,10 @@ final class ExpressionParser implements ExpressionParserInterface
                 continue;
             }
 
-            $value = $matches['VALUE'] ?? null;
-
-            if (null === $value) {
-                continue;
-            }
+            $value = $matches['VALUE'];
 
             switch (true) {
-                case '' !== ($matches['INTERVAL_FROM'] ?? '') && '' !== ($matches['INTERVAL_TO'] ?? ''):
+                case '' !== $matches['INTERVAL_FROM'] && '' !== $matches['INTERVAL_TO']:
                     $rules[] = ExpressionRule::range(
                         (int) $matches['INTERVAL_FROM'],
                         (int) $matches['INTERVAL_TO'],
@@ -48,35 +44,35 @@ final class ExpressionParser implements ExpressionParserInterface
                     );
 
                     break;
-                case '' !== ($matches['EQ'] ?? ''):
+                case '' !== $matches['EQ']:
                     $rules[] = ExpressionRule::eq(
                         (int) $matches['EQ'],
                         $value,
                     );
 
                     break;
-                case '' !== ($matches['LT'] ?? ''):
+                case '' !== $matches['LT']:
                     $rules[] = ExpressionRule::lt(
                         (int) $matches['LT'],
                         $value,
                     );
 
                     break;
-                case '' !== ($matches['LTE'] ?? ''):
+                case '' !== $matches['LTE']:
                     $rules[] = ExpressionRule::lte(
                         (int) $matches['LTE'],
                         $value,
                     );
 
                     break;
-                case '' !== ($matches['GT'] ?? ''):
+                case '' !== $matches['GT']:
                     $rules[] = ExpressionRule::gt(
                         (int) $matches['GT'],
                         $value,
                     );
 
                     break;
-                case '' !== ($matches['GTE'] ?? ''):
+                case '' !== $matches['GTE']:
                     $rules[] = ExpressionRule::gte(
                         (int) $matches['GTE'],
                         $value,
