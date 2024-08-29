@@ -27,9 +27,9 @@ final class CacheControlHeader
                 foreach ($matches as $match) {
                     $val = '';
                     if (count($match) == 3) {
-                        $val = $match[2];
+                        $val = $match[2]; # @phpstan-ignore-line
                     } elseif (count($match) > 3) {
-                        $val = $match[3];
+                        $val = $match[3]; # @phpstan-ignore-line
                     }
 
                     $this->values[$match[1]] = $val;

@@ -59,6 +59,7 @@ use function array_map;
  *     display_type: string|null,
  *     breakpoint_type: string,
  *     mode?: string,
+ *     options?: array<string, string>,
  *     dimensions?: DimensionsData,
  *     banners: array<int, BannerData>,
  * }

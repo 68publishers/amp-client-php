@@ -31,6 +31,11 @@ final class Options
         return array_key_exists($name, $this->options);
     }
 
+    /**
+     * @param mixed $defaultValue
+     *
+     * @return mixed
+     */
     public function get(string $name, $defaultValue = null)
     {
         return array_key_exists($name, $this->options) ? $this->options[$name] : $defaultValue;
