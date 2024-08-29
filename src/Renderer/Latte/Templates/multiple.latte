@@ -13,13 +13,7 @@
                  data-amp-banner-fingerprint="{SixtyEightPublishers\AmpClient\Renderer\Fingerprint::create($position, $banner)}"
                  data-amp-banner-id="{$banner->getId()}">
 
-                {var $optionsCopy = $options}
-
-                {if isset($optionsCopy['loading']) && $index < ((int) ($optionsCopy['loading-offset'] ?? 0))}
-                    {do $optionsCopy['loading'] = null}
-                {/if}
-
-                {include 'contents.fragment.latte', position: $position, banner: $banner, options: $optionsCopy}
+                {include 'contents.fragment.latte', position: $position, banner: $banner, options: $options, index: $index}
             </div>
         </div>
     </div>

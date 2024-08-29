@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\AmpClient\Renderer\Phtml;
 
 use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
+use SixtyEightPublishers\AmpClient\Renderer\Options;
 use SixtyEightPublishers\AmpClient\Renderer\OutputBuffer;
 use SixtyEightPublishers\AmpClient\Renderer\RendererBridgeInterface;
 use SixtyEightPublishers\AmpClient\Renderer\Templates;
@@ -39,7 +40,7 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderNotFound(ResponsePosition $position, array $elementAttributes = [], array $options = []): string
+    public function renderNotFound(ResponsePosition $position, array $elementAttributes, Options $options): string
     {
         $filename = $this->templates->getTemplateFile(Templates::NotFound);
 
@@ -51,7 +52,7 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes = [], array $options = []): string
+    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes, Options $options): string
     {
         $filename = $this->templates->getTemplateFile(Templates::Single);
 
@@ -63,7 +64,7 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes = [], array $options = []): string
+    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes, Options $options): string
     {
         $filename = $this->templates->getTemplateFile(Templates::Random);
 
@@ -75,7 +76,7 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes = [], array $options = []): string
+    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes, Options $options): string
     {
         $filename = $this->templates->getTemplateFile(Templates::Multiple);
 
@@ -87,7 +88,7 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
     /**
      * @throws Throwable
      */
-    public function renderClientSide(RequestPosition $position, ClientSideMode $mode, array $elementAttributes = [], array $options = []): string
+    public function renderClientSide(RequestPosition $position, ClientSideMode $mode, array $elementAttributes, Options $options): string
     {
         $filename = $this->templates->getTemplateFile(Templates::ClientSide);
 

@@ -1,6 +1,7 @@
 {varType SixtyEightPublishers\AmpClient\Response\ValueObject\Position $position}
 {varType SixtyEightPublishers\AmpClient\Response\ValueObject\Banner|null $banner}
-{varType array $options}
+{varType SixtyEightPublishers\AmpClient\Renderer\Options $options}
+{varType int $index}
 
 {foreach $banner->getContents() as $content}
     {if $content instanceof SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent}
@@ -24,7 +25,8 @@
                         width => null !== $position->getDimensions()->getWidth() ? $position->getDimensions()->getWidth() : null,
                         height => null !== $position->getDimensions()->getHeight() ? $position->getDimensions()->getHeight() : null,
                         title => '' !== $content->getTitle() ? $content->getTitle() : null,
-                        loading => $options['loading'] ?? null
+                        loading => $options->evaluate('loading', $index),
+                        fetchpriority => $options->evaluate('fetchpriority', $index),
                     ">
            </picture>
         </a>

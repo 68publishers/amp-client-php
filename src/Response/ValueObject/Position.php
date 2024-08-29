@@ -30,6 +30,9 @@ final class Position
 
     private string $mode;
 
+    /** @var array<string, string> */
+    private array $options;
+
     private Dimensions $dimensions;
 
     /** @var array<int, Banner> */
@@ -46,6 +49,7 @@ final class Position
         ?string $displayType,
         string $breakpointType,
         string $mode,
+        array $options,
         Dimensions $dimensions,
         array $banners
     ) {
@@ -56,6 +60,7 @@ final class Position
         $this->displayType = $displayType;
         $this->breakpointType = $breakpointType;
         $this->mode = $mode;
+        $this->options = $options;
         $this->dimensions = $dimensions;
         $this->banners = $banners;
     }
@@ -93,6 +98,14 @@ final class Position
     public function getMode(): string
     {
         return $this->mode;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 
     public function getDimensions(): Dimensions

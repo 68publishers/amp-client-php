@@ -11,6 +11,7 @@ use SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\MultipleTemplate;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\NotFoundTemplate;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\RandomTemplate;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\SingleTemplate;
+use SixtyEightPublishers\AmpClient\Renderer\Options;
 use SixtyEightPublishers\AmpClient\Renderer\RendererBridgeInterface;
 use SixtyEightPublishers\AmpClient\Renderer\Templates;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
@@ -52,7 +53,7 @@ final class LatteRendererBridge implements RendererBridgeInterface
         return $renderer;
     }
 
-    public function renderNotFound(ResponsePosition $position, array $elementAttributes = [], array $options = []): string
+    public function renderNotFound(ResponsePosition $position, array $elementAttributes, Options $options): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::NotFound),
@@ -60,7 +61,7 @@ final class LatteRendererBridge implements RendererBridgeInterface
         );
     }
 
-    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes = [], array $options = []): string
+    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes, Options $options): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::Single),
@@ -68,7 +69,7 @@ final class LatteRendererBridge implements RendererBridgeInterface
         );
     }
 
-    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes = [], array $options = []): string
+    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes, Options $options): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::Random),
@@ -76,7 +77,7 @@ final class LatteRendererBridge implements RendererBridgeInterface
         );
     }
 
-    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes = [], array $options = []): string
+    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes, Options $options): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::Multiple),
@@ -84,7 +85,7 @@ final class LatteRendererBridge implements RendererBridgeInterface
         );
     }
 
-    public function renderClientSide(RequestPosition $position, ClientSideMode $mode, array $elementAttributes = [], array $options = []): string
+    public function renderClientSide(RequestPosition $position, ClientSideMode $mode, array $elementAttributes, Options $options): string
     {
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::ClientSide),

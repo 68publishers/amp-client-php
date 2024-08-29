@@ -19,6 +19,7 @@ return new BannersResponse([
         Position::DisplayTypeMultiple,
         Position::BreakpointTypeMin,
         Position::ModeManaged,
+        [],
         new Dimensions(
             1320,
             400,
@@ -86,6 +87,7 @@ return new BannersResponse([
         Position::DisplayTypeRandom,
         Position::BreakpointTypeMin,
         Position::ModeManaged,
+        [],
         new Dimensions(
             800,
             300,
@@ -100,6 +102,7 @@ return new BannersResponse([
         null,
         Position::BreakpointTypeMin,
         Position::ModeManaged,
+        [],
         new Dimensions(
             null,
             null,
@@ -114,6 +117,7 @@ return new BannersResponse([
         Position::DisplayTypeSingle,
         Position::BreakpointTypeMin,
         Position::ModeManaged,
+        [],
         new Dimensions(
             800,
             300,

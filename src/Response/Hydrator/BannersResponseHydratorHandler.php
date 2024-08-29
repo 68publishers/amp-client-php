@@ -92,6 +92,7 @@ final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInt
                 $positionData['display_type'] ?? null,
                 $positionData['breakpoint_type'],
                 $positionData['mode'] ?? Position::ModeManaged,
+                $positionData['options'] ?? [],
                 $this->hydrateDimensions($positionData['dimensions'] ?? null),
                 $this->hydrateBanners($positionData['banners']),
             );

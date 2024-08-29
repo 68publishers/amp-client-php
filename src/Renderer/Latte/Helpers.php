@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\AmpClient\Renderer\Latte;
 
+use SixtyEightPublishers\AmpClient\Renderer\Options;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 
 final class Helpers
@@ -25,15 +26,13 @@ final class Helpers
     }
 
     /**
-     * @param array<string, scalar> $options
-     *
      * @return array<string, scalar>
      */
-    public static function createOptionAttributes(array $options): array
+    public static function createOptionAttributes(Options $options): array
     {
         $attributes = [];
 
-        foreach ($options as $name => $value) {
+        foreach ($options->toArray() as $name => $value) {
             $attributes['data-amp-option-' . $name] = $value;
         }
 

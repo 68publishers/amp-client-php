@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added support for new banner option `fetchpriority`.
+- Added support for banner options defined in the AMP administration.
+
+### Changed
+- The option `loading` is now processed as an expression. The option `loading-offset` is ignored.
+- Updated docs.
+
 ## [1.2.0] - 2024-04-04
 ### Added
 - Added integration of the new AMP API fields `mode` and `dimensions`.

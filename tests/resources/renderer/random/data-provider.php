@@ -18,6 +18,7 @@ $position = new Position(
     Position::DisplayTypeRandom,
     Position::BreakpointTypeMin,
     ResponsePosition::ModeManaged,
+    [],
     new Dimensions(800, 300),
     [],
 );
@@ -30,6 +31,7 @@ $positionWithoutDimensions = new Position(
     Position::DisplayTypeRandom,
     Position::BreakpointTypeMin,
     ResponsePosition::ModeManaged,
+    [],
     new Dimensions(null, null),
     [],
 );

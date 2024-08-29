@@ -25,6 +25,7 @@ final class BannersResolverTest extends TestCase
             Position::DisplayTypeSingle,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -47,6 +48,7 @@ final class BannersResolverTest extends TestCase
             Position::DisplayTypeSingle,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
+            [],
             new Dimensions(null, null),
             [$banner1, $banner2, $banner3, $banner4],
         );
@@ -65,6 +67,7 @@ final class BannersResolverTest extends TestCase
             Position::DisplayTypeMultiple,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -87,6 +90,7 @@ final class BannersResolverTest extends TestCase
             Position::DisplayTypeMultiple,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
+            [],
             new Dimensions(null, null),
             [$banner1, $banner2, $banner3, $banner4],
         );
@@ -110,6 +114,7 @@ final class BannersResolverTest extends TestCase
             Position::DisplayTypeRandom,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -132,6 +137,7 @@ final class BannersResolverTest extends TestCase
             Position::DisplayTypeRandom,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
+            [],
             new Dimensions(null, null),
             [$banner1, $banner2, $banner3, $banner4],
         );

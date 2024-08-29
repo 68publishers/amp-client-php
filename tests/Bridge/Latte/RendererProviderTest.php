@@ -46,6 +46,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -91,6 +92,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -136,6 +138,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -181,6 +184,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -226,6 +230,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -287,6 +292,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             $positionMode,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -333,6 +339,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -453,6 +460,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -492,6 +500,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -529,6 +538,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -616,6 +626,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -627,6 +638,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -728,6 +740,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -739,6 +752,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -830,6 +844,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeEmbed,
+            [],
             new Dimensions(null, null),
             [],
         );

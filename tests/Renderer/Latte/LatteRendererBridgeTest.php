@@ -6,8 +6,10 @@ namespace SixtyEightPublishers\AmpClient\Tests\Renderer\Latte;
 
 use Closure;
 use Latte\Engine;
+use SixtyEightPublishers\AmpClient\Expression\ExpressionParser;
 use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\LatteRendererBridge;
+use SixtyEightPublishers\AmpClient\Renderer\Options;
 use SixtyEightPublishers\AmpClient\Renderer\Templates;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
@@ -46,7 +48,7 @@ final class LatteRendererBridgeTest extends TestCase
     ): void {
         $renderer = $this->createRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderNotFound($position, $elementAttributes, $options));
+        AssertHtml::assert($expectationFile, $renderer->renderNotFound($position, $elementAttributes, $this->createOptions($options)));
     }
 
     /**
@@ -61,7 +63,7 @@ final class LatteRendererBridgeTest extends TestCase
     ): void {
         $renderer = $this->createRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderSingle($position, $banner, $elementAttributes, $options));
+        AssertHtml::assert($expectationFile, $renderer->renderSingle($position, $banner, $elementAttributes, $this->createOptions($options)));
     }
 
     /**
@@ -76,7 +78,7 @@ final class LatteRendererBridgeTest extends TestCase
     ): void {
         $renderer = $this->createRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderRandom($position, $banner, $elementAttributes, $options));
+        AssertHtml::assert($expectationFile, $renderer->renderRandom($position, $banner, $elementAttributes, $this->createOptions($options)));
     }
 
     /**
@@ -91,7 +93,7 @@ final class LatteRendererBridgeTest extends TestCase
     ): void {
         $renderer = $this->createRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderMultiple($position, $banners, $elementAttributes, $options));
+        AssertHtml::assert($expectationFile, $renderer->renderMultiple($position, $banners, $elementAttributes, $this->createOptions($options)));
     }
 
     /**
@@ -106,7 +108,7 @@ final class LatteRendererBridgeTest extends TestCase
     ): void {
         $renderer = $this->createRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $mode, $elementAttributes, $options));
+        AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $mode, $elementAttributes, $this->createOptions($options)));
     }
 
     public function notFoundTemplateDataProvider(): array
@@ -137,6 +139,11 @@ final class LatteRendererBridgeTest extends TestCase
     private function createRendererBridge(): LatteRendererBridge
     {
         return LatteRendererBridge::fromEngine(new Engine());
+    }
+
+    private function createOptions(array $options): Options
+    {
+        return new Options($options, new ExpressionParser());
     }
 }
 
