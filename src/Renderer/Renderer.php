@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\AmpClient\Renderer;
 
 use SixtyEightPublishers\AmpClient\Exception\RendererException;
+use SixtyEightPublishers\AmpClient\Expression\ExpressionParser;
+use SixtyEightPublishers\AmpClient\Expression\ExpressionParserInterface;
 use SixtyEightPublishers\AmpClient\Renderer\Phtml\PhtmlRendererBridge;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
@@ -17,12 +19,16 @@ final class Renderer implements RendererInterface
 
     private RendererBridgeInterface $rendererBridge;
 
+    private ExpressionParserInterface $expressionParser;
+
     public function __construct(
         BannersResolverInterface $bannersResolver,
-        RendererBridgeInterface $rendererBridge
+        RendererBridgeInterface $rendererBridge,
+        ExpressionParserInterface $expressionParser
     ) {
         $this->bannersResolver = $bannersResolver;
         $this->rendererBridge = $rendererBridge;
+        $this->expressionParser = $expressionParser;
     }
 
     public static function create(?RendererBridgeInterface $rendererBridge = null): self
@@ -30,12 +36,16 @@ final class Renderer implements RendererInterface
         return new self(
             new BannersResolver(),
             $rendererBridge ?? new PhtmlRendererBridge(),
+            new ExpressionParser(),
         );
     }
 
     public function render(ResponsePosition $position, array $elementAttributes = [], array $options = []): string
     {
         try {
+            $options = new Options($options, $this->expressionParser);
+            $options->override($position->getOptions());
+
             switch ($position->getDisplayType()) {
                 case null:
                     return $this->rendererBridge->renderNotFound(
@@ -92,7 +102,7 @@ final class Renderer implements RendererInterface
                 $position,
                 $mode,
                 $elementAttributes,
-                $options,
+                new Options($options, $this->expressionParser),
             );
         } catch (Throwable $e) {
             if ($e instanceof RendererException) {

@@ -23,6 +23,8 @@ use SixtyEightPublishers\AmpClient\Bridge\Nette\DI\Config\HttpConfig;
 use SixtyEightPublishers\AmpClient\Bridge\Nette\DI\Config\RendererConfig;
 use SixtyEightPublishers\AmpClient\Bridge\Nette\NetteCacheStorage;
 use SixtyEightPublishers\AmpClient\ClientConfig;
+use SixtyEightPublishers\AmpClient\Expression\ExpressionParser;
+use SixtyEightPublishers\AmpClient\Expression\ExpressionParserInterface;
 use SixtyEightPublishers\AmpClient\Http\Cache\CacheStorageInterface;
 use SixtyEightPublishers\AmpClient\Http\Cache\NoCacheStorage;
 use SixtyEightPublishers\AmpClient\Http\HttpClientFactory;
@@ -152,6 +154,10 @@ final class AmpClientExtension extends CompilerExtension
                 'httpClientFactory' => new Reference($this->prefix('httpClientFactory')),
                 'cacheStorage' => new Reference($this->prefix('cacheStorage')),
             ]);
+
+        $builder->addDefinition($this->prefix('expressionParser'))
+            ->setType(ExpressionParserInterface::class)
+            ->setFactory(ExpressionParser::class);
 
         $builder->addDefinition($this->prefix('renderer.rendererBridge'))
             ->setAutowired(false)

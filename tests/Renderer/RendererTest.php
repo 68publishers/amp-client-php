@@ -9,9 +9,12 @@ use Exception;
 use Hamcrest\Matchers;
 use Mockery;
 use SixtyEightPublishers\AmpClient\Exception\RendererException;
+use SixtyEightPublishers\AmpClient\Expression\ExpressionParser;
+use SixtyEightPublishers\AmpClient\Expression\ExpressionParserInterface;
 use SixtyEightPublishers\AmpClient\Renderer\BannersResolver;
 use SixtyEightPublishers\AmpClient\Renderer\BannersResolverInterface;
 use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
+use SixtyEightPublishers\AmpClient\Renderer\Options;
 use SixtyEightPublishers\AmpClient\Renderer\Phtml\PhtmlRendererBridge;
 use SixtyEightPublishers\AmpClient\Renderer\Renderer;
 use SixtyEightPublishers\AmpClient\Renderer\RendererBridgeInterface;
@@ -32,22 +35,25 @@ final class RendererTest extends TestCase
     {
         $renderer = Renderer::create();
 
-        [$bannersResolver, $rendererBridge] = call_user_func(Closure::bind(static function () use ($renderer): array {
+        [$bannersResolver, $rendererBridge, $expressionParser] = call_user_func(Closure::bind(static function () use ($renderer): array {
             return [
                 $renderer->bannersResolver,
                 $renderer->rendererBridge,
+                $renderer->expressionParser,
             ];
         }, null, Renderer::class));
 
         Assert::equal(new BannersResolver(), $bannersResolver);
         Assert::equal(new PhtmlRendererBridge(), $rendererBridge);
+        Assert::equal(new ExpressionParser(), $expressionParser);
     }
 
     public function testNotFoundTemplateShouldBeRendered(): void
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
-        $renderer = new Renderer($bannersResolver, $rendererBridge);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
         $position = new ResponsePosition(
             null,
@@ -57,6 +63,7 @@ final class RendererTest extends TestCase
             null,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -64,7 +71,9 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderNotFound')
             ->once()
-            ->with($position, [], [])
+            ->with($position, [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && [] === $options->toArray();
+            }))
             ->andReturn('not found');
 
         Assert::same('not found', $renderer->render($position));
@@ -74,7 +83,8 @@ final class RendererTest extends TestCase
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
-        $renderer = new Renderer($bannersResolver, $rendererBridge);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
         $banner = new Banner('1234', 'Main', 0, null, null, null, []);
         $position = new ResponsePosition(
@@ -85,6 +95,7 @@ final class RendererTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [$banner],
         );
@@ -98,7 +109,9 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderSingle')
             ->once()
-            ->with($position, $banner, [], [])
+            ->with($position, $banner, [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && [] === $options->toArray();
+            }))
             ->andReturn('single');
 
         Assert::same('single', $renderer->render($position));
@@ -108,7 +121,8 @@ final class RendererTest extends TestCase
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
-        $renderer = new Renderer($bannersResolver, $rendererBridge);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
         $banner = new Banner('1234', 'Main', 0, null, null, null, []);
         $position = new ResponsePosition(
@@ -119,6 +133,7 @@ final class RendererTest extends TestCase
             ResponsePosition::DisplayTypeRandom,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [$banner],
         );
@@ -132,7 +147,9 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderRandom')
             ->once()
-            ->with($position, $banner, [], [])
+            ->with($position, $banner, [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && [] === $options->toArray();
+            }))
             ->andReturn('random');
 
         Assert::same('random', $renderer->render($position));
@@ -142,7 +159,8 @@ final class RendererTest extends TestCase
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
-        $renderer = new Renderer($bannersResolver, $rendererBridge);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
         $banners = [
             new Banner('1234', 'Main', 0, null, null, null, []),
@@ -156,6 +174,9 @@ final class RendererTest extends TestCase
             ResponsePosition::DisplayTypeMultiple,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [
+                'fetchpriority' => '0:high,low',
+            ],
             new Dimensions(null, null),
             $banners,
         );
@@ -169,17 +190,20 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderMultiple')
             ->once()
-            ->with($position, $banners, [], [])
+            ->with($position, $banners, [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && ['fetchpriority' => '0:high,low', 'loading' => 'lazy'] === $options->toArray();
+            }))
             ->andReturn('multiple');
 
-        Assert::same('multiple', $renderer->render($position));
+        Assert::same('multiple', $renderer->render($position, [], ['fetchpriority' => 'high', 'loading' => 'lazy']));
     }
 
     public function testClientSideTemplateShouldBeRendered(): void
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
-        $renderer = new Renderer($bannersResolver, $rendererBridge);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
         $position = new RequestPosition('homepage.top', [
             new BannerResource('role', 'vip'),
@@ -188,7 +212,9 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderClientSide')
             ->once()
-            ->with($position, Matchers::equalTo(ClientSideMode::managed()), [], [])
+            ->with($position, Matchers::equalTo(ClientSideMode::managed()), [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && [] === $options->toArray();
+            }))
             ->andReturn('client-side');
 
         Assert::same('client-side', $renderer->renderClientSide($position));
@@ -198,7 +224,8 @@ final class RendererTest extends TestCase
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
-        $renderer = new Renderer($bannersResolver, $rendererBridge);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
         $position = new RequestPosition('homepage.top', [
             new BannerResource('role', 'vip'),
@@ -207,7 +234,9 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderClientSide')
             ->once()
-            ->with($position, Matchers::equalTo(ClientSideMode::embed()), [], ['omit-default-resources' => '1'])
+            ->with($position, Matchers::equalTo(ClientSideMode::embed()), [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && ['omit-default-resources' => '1'] === $options->toArray();
+            }))
             ->andReturn('client-side');
 
         Assert::same('client-side', $renderer->renderClientSide($position, [], [], ClientSideMode::embed()));
@@ -217,7 +246,8 @@ final class RendererTest extends TestCase
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
-        $renderer = new Renderer($bannersResolver, $rendererBridge);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
         $position = new ResponsePosition(
             null,
@@ -227,6 +257,7 @@ final class RendererTest extends TestCase
             null,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -234,7 +265,9 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderNotFound')
             ->once()
-            ->with($position, [], [])
+            ->with($position, [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && [] === $options->toArray();
+            }))
             ->andThrow(new RendererException('Test exception'));
 
         Assert::exception(
@@ -248,14 +281,17 @@ final class RendererTest extends TestCase
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
-        $renderer = new Renderer($bannersResolver, $rendererBridge);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
         $position = new RequestPosition('homepage.top');
 
         $rendererBridge
             ->shouldReceive('renderClientSide')
             ->once()
-            ->with($position, Matchers::equalTo(ClientSideMode::managed()), [], [])
+            ->with($position, Matchers::equalTo(ClientSideMode::managed()), [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && [] === $options->toArray();
+            }))
             ->andThrow(new RendererException('Test exception'));
 
         Assert::exception(
@@ -269,7 +305,8 @@ final class RendererTest extends TestCase
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
-        $renderer = new Renderer($bannersResolver, $rendererBridge);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
         $position = new ResponsePosition(
             null,
@@ -279,6 +316,7 @@ final class RendererTest extends TestCase
             null,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [],
         );
@@ -286,7 +324,9 @@ final class RendererTest extends TestCase
         $rendererBridge
             ->shouldReceive('renderNotFound')
             ->once()
-            ->with($position, [], [])
+            ->with($position, [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && [] === $options->toArray();
+            }))
             ->andThrow(new Exception('Test exception'));
 
         Assert::exception(
@@ -300,14 +340,17 @@ final class RendererTest extends TestCase
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
-        $renderer = new Renderer($bannersResolver, $rendererBridge);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
         $position = new RequestPosition('homepage.top');
 
         $rendererBridge
             ->shouldReceive('renderClientSide')
             ->once()
-            ->with($position, Matchers::equalTo(ClientSideMode::managed()), [], [])
+            ->with($position, Matchers::equalTo(ClientSideMode::managed()), [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && [] === $options->toArray();
+            }))
             ->andThrow(new Exception('Test exception'));
 
         Assert::exception(

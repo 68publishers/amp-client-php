@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\AmpClient\Tests\Renderer\Phtml;
 
 use Closure;
+use SixtyEightPublishers\AmpClient\Expression\ExpressionParser;
 use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
+use SixtyEightPublishers\AmpClient\Renderer\Options;
 use SixtyEightPublishers\AmpClient\Renderer\Phtml\PhtmlRendererBridge;
 use SixtyEightPublishers\AmpClient\Renderer\Templates;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
@@ -45,7 +47,7 @@ final class PhtmlRendererBridgeTest extends TestCase
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderNotFound($position, $elementAttributes, $options));
+        AssertHtml::assert($expectationFile, $renderer->renderNotFound($position, $elementAttributes, $this->createOptions($options)));
     }
 
     /**
@@ -60,7 +62,7 @@ final class PhtmlRendererBridgeTest extends TestCase
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderSingle($position, $banner, $elementAttributes, $options));
+        AssertHtml::assert($expectationFile, $renderer->renderSingle($position, $banner, $elementAttributes, $this->createOptions($options)));
     }
 
     /**
@@ -75,7 +77,7 @@ final class PhtmlRendererBridgeTest extends TestCase
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderRandom($position, $banner, $elementAttributes, $options));
+        AssertHtml::assert($expectationFile, $renderer->renderRandom($position, $banner, $elementAttributes, $this->createOptions($options)));
     }
 
     /**
@@ -90,7 +92,7 @@ final class PhtmlRendererBridgeTest extends TestCase
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderMultiple($position, $banners, $elementAttributes, $options));
+        AssertHtml::assert($expectationFile, $renderer->renderMultiple($position, $banners, $elementAttributes, $this->createOptions($options)));
     }
 
     /**
@@ -105,7 +107,7 @@ final class PhtmlRendererBridgeTest extends TestCase
     ): void {
         $renderer = new PhtmlRendererBridge();
 
-        AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $mode, $elementAttributes, $options));
+        AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $mode, $elementAttributes, $this->createOptions($options)));
     }
 
     public function notFoundTemplateDataProvider(): array
@@ -131,6 +133,11 @@ final class PhtmlRendererBridgeTest extends TestCase
     public function clientSideTemplateDataProvider(): array
     {
         return require __DIR__ . '/../../resources/renderer/client-side/data-provider.php';
+    }
+
+    private function createOptions(array $options): Options
+    {
+        return new Options($options, new ExpressionParser());
     }
 }
 

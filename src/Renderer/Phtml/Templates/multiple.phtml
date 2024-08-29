@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\AmpClient\Renderer\Phtml;
 
+use SixtyEightPublishers\AmpClient\Renderer\Options;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Renderer\Fingerprint;
@@ -12,22 +13,19 @@ use SixtyEightPublishers\AmpClient\Renderer\AmpBannerExternalAttribute;
 /** @var Position $position */
 /** @var array<int, Banner> $banners */
 /** @var array<string, scalar|null> $elementAttributes */
-/** @var array<string, scalar> $options */
+/** @var Options $options */
 ?>
 <div data-amp-banner="<?= Helpers::escapeHtmlAttr($position->getCode()) ?>"
      data-amp-banner-external="<?= Helpers::escapeHtmlAttr(AmpBannerExternalAttribute::rendered($position)) ?>"
-    <?= Helpers::printAttributes(array_merge(Helpers::prefixKeys($options, 'data-amp-option-'), $elementAttributes)) ?>>
+    <?= Helpers::printAttributes(array_merge(Helpers::prefixKeys($options->toArray(), 'data-amp-option-'), $elementAttributes)) ?>>
     <?php $banners = array_filter($banners, static fn(Banner $banner): bool => 0 < count($banner->getContents())) ?>
     <?php if (0 < count($banners)): ?>
         <div class="amp-banner amp-banner--multiple">
             <div class="amp-banner__list">
-                <?php $originalOptions = $options; ?>
-
                 <?php foreach ($banners as $index => $banner) : ?>
                     <div class="amp-banner__item"
                          data-amp-banner-fingerprint="<?= Helpers::escapeHtmlAttr(Fingerprint::create($position, $banner)) ?>"
                          data-amp-banner-id="<?= Helpers::escapeHtmlAttr($banner->getId()) ?>">
-                        <?php $options = $originalOptions; if (isset($options['loading']) && $index < ((int) ($options['loading-offset'] ?? 0))) { $options['loading'] = null; } ?>
                         <?php include __DIR__ . '/contents.fragment.phtml' ?>
                     </div>
                 <?php endforeach ?>

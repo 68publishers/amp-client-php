@@ -14,32 +14,27 @@ interface RendererBridgeInterface
 
     /**
      * @param array<string, scalar|null> $elementAttributes
-     * @param array<string, scalar>      $options
      */
-    public function renderNotFound(ResponsePosition $position, array $elementAttributes = [], array $options = []): string;
+    public function renderNotFound(ResponsePosition $position, array $elementAttributes, Options $options): string;
 
     /**
      * @param array<string, scalar|null> $elementAttributes
-     * @param array<string, scalar>      $options
      */
-    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes = [], array $options = []): string;
+    public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes, Options $options): string;
 
     /**
      * @param array<string, scalar|null> $elementAttributes
-     * @param array<string, scalar>      $options
      */
-    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes = [], array $options = []): string;
+    public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes, Options $options): string;
 
     /**
      * @param array<int, Banner>         $banners
      * @param array<string, scalar|null> $elementAttributes
-     * @param array<string, scalar>      $options
      */
-    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes = [], array $options = []): string;
+    public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes, Options $options): string;
 
     /**
      * @param array<string, scalar|null> $elementAttributes
-     * @param array<string, scalar>      $options
      */
-    public function renderClientSide(RequestPosition $position, ClientSideMode $mode, array $elementAttributes = [], array $options = []): string;
+    public function renderClientSide(RequestPosition $position, ClientSideMode $mode, array $elementAttributes, Options $options): string;
 }

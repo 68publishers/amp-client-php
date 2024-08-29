@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\AmpClient\Renderer\Phtml;
 
+use SixtyEightPublishers\AmpClient\Renderer\Options;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
@@ -12,7 +13,7 @@ use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
 
 /** @var Position $position */
 /** @var ?Banner $banner */
-/** @var array<string, scalar> $options */
+/** @var Options $options */
 ?>
 <?php foreach ($banner->getContents() as $content) : ?>
     <?php if ($content instanceof ImageContent) : ?>
@@ -33,7 +34,8 @@ use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
                      <?php if (null !== $position->getDimensions()->getWidth()) : ?>width="<?= Helpers::escapeHtmlAttr($position->getDimensions()->getWidth()) ?>"<?php endif ?>
                      <?php if (null !== $position->getDimensions()->getHeight()) : ?>height="<?= Helpers::escapeHtmlAttr($position->getDimensions()->getHeight()) ?>"<?php endif ?>
                      <?php if ('' !== $content->getTitle()) : ?>title="<?= Helpers::escapeHtmlAttr($content->getTitle()) ?>"<?php endif ?>
-                     <?php if (isset($options['loading'])) : ?>loading="<?= Helpers::escapeHtmlAttr($options['loading']) ?>"<?php endif ?>>
+                     <?php if (null !== ($loading = $options->evaluate('loading', $index ?? 0))) : ?>loading="<?= Helpers::escapeHtmlAttr($loading) ?>"<?php endif ?>
+                     <?php if (null !== ($fetchPriority = $options->evaluate('fetchpriority', $index ?? 0))) : ?>fetchpriority="<?= Helpers::escapeHtmlAttr($fetchPriority) ?>"<?php endif ?>>
             </picture>
         </a>
     <?php elseif ($content instanceof HtmlContent) : ?>

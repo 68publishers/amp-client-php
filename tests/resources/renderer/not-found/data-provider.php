@@ -14,6 +14,7 @@ $position = new Position(
     null,
     Position::BreakpointTypeMin,
     ResponsePosition::ModeManaged,
+    [],
     new Dimensions(800, 300),
     [],
 );

@@ -133,6 +133,7 @@ HTML;
             Position::DisplayTypeSingle,
             $breakpointType,
             ResponsePosition::ModeManaged,
+            [],
             new Dimensions(null, null),
             [$banner],
         );

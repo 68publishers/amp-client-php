@@ -261,23 +261,52 @@ echo $renderer->renderClientSide(new Position('homepage.top'), [], [
 ```
 
 A special case is a position of type `multiple`, where it may be desirable to lazily load all banners except the first.
-This can be achieved by adding the option `loading-offset`, whose value specifies from which banner the attribute `loading` should be rendered.
+his can be achieved with the following expression:
 
 ```php
 # server-side rendering:
 echo $renderer->render($response->getPosition('homepage.top'), [], [
-    'loading' => 'lazy',
-    'loading-offset' => 1,
+    'loading' => '>=1:lazy',
 ]);
 
 # client-side rendering:
 echo $renderer->renderClientSide(new Position('homepage.top'), [], [
-    'loading' => 'lazy',
-    'loading-offset' => 1,
+    'loading' => '>=1:lazy',
 ]);
 ```
 
 If you prefer a different implementation of lazy loading, it is possible to use own templates instead of the default ones and integrate a different solution in these templates.
+
+#### Fetch priority of image banners
+
+The [fetchpriority](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority) attribute can be set for image and embed banners using the `fetchpriority` option.
+
+```php
+# server-side rendering:
+echo $renderer->render($response->getPosition('homepage.top'), [], [
+    'fetchpriority' => 'high',
+]);
+
+# client-side rendering:
+echo $renderer->renderClientSide(new Position('homepage.top'), [], [
+    'fetchpriority' => 'high',
+]);
+```
+
+In the case of a `multiple` position, it may be required that the first banner have a fetch priority of `high` and the others `low`.
+This can be achieved with the following expression:
+
+```php
+# server-side rendering:
+echo $renderer->render($response->getPosition('homepage.top'), [], [
+    'fetchpriority' => '0:high,low',
+]);
+
+# client-side rendering:
+echo $renderer->renderClientSide(new Position('homepage.top'), [], [
+    'fetchpriority' => '0:high,low',
+]);
+```
 
 ### Templates overwriting
 

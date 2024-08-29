@@ -18,6 +18,7 @@ $position = new Position(
     Position::DisplayTypeMultiple,
     Position::BreakpointTypeMin,
     ResponsePosition::ModeManaged,
+    [],
     new Dimensions(800, 300),
     [],
 );
@@ -30,6 +31,7 @@ $positionWithoutDimensions = new Position(
     Position::DisplayTypeMultiple,
     Position::BreakpointTypeMin,
     ResponsePosition::ModeManaged,
+    [],
     new Dimensions(null, null),
     [],
 );
@@ -145,8 +147,7 @@ return [
         $fullFeaturedBanners,
         [],
         [
-            'loading' => 'lazy',
-            'loading-offset' => 1,
+            'loading' => '>=1:lazy',
         ],
         __DIR__ . '/multipleBannersFullFeatured.withLazyLoadingFromOffset1.html',
     ],

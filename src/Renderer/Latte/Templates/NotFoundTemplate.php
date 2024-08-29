@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\AmpClient\Renderer\Latte\Templates;
 
+use SixtyEightPublishers\AmpClient\Renderer\Options;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 
 final class NotFoundTemplate
@@ -13,17 +14,15 @@ final class NotFoundTemplate
     /** @var array<string, scalar|null> */
     public array $elementAttributes;
 
-    /** @var array<string, scalar> */
-    public array $options;
+    public Options $options;
 
     /**
      * @param array<string, scalar|null> $elementAttributes
-     * @param array<string, scalar>      $options
      */
     public function __construct(
         Position $position,
         array $elementAttributes,
-        array $options
+        Options $options
     ) {
         $this->position = $position;
         $this->elementAttributes = $elementAttributes;
