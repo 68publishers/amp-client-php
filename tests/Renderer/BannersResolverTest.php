@@ -6,7 +6,6 @@ namespace SixtyEightPublishers\AmpClient\Tests\Renderer;
 
 use SixtyEightPublishers\AmpClient\Renderer\BannersResolver;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
-use SixtyEightPublishers\AmpClient\Response\ValueObject\Dimensions;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use Tester\Assert;
 use Tester\TestCase;
@@ -26,7 +25,6 @@ final class BannersResolverTest extends TestCase
             Position::BreakpointTypeMin,
             Position::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
         $resolver = new BannersResolver();
@@ -49,7 +47,6 @@ final class BannersResolverTest extends TestCase
             Position::BreakpointTypeMin,
             Position::ModeManaged,
             [],
-            new Dimensions(null, null),
             [$banner1, $banner2, $banner3, $banner4],
         );
         $resolver = new BannersResolver();
@@ -68,7 +65,6 @@ final class BannersResolverTest extends TestCase
             Position::BreakpointTypeMin,
             Position::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
         $resolver = new BannersResolver();
@@ -91,7 +87,6 @@ final class BannersResolverTest extends TestCase
             Position::BreakpointTypeMin,
             Position::ModeManaged,
             [],
-            new Dimensions(null, null),
             [$banner1, $banner2, $banner3, $banner4],
         );
         $resolver = new BannersResolver();
@@ -115,7 +110,6 @@ final class BannersResolverTest extends TestCase
             Position::BreakpointTypeMin,
             Position::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
         $resolver = new BannersResolver();
@@ -138,7 +132,6 @@ final class BannersResolverTest extends TestCase
             Position::BreakpointTypeMin,
             Position::ModeManaged,
             [],
-            new Dimensions(null, null),
             [$banner1, $banner2, $banner3, $banner4],
         );
         $resolver = new BannersResolver();

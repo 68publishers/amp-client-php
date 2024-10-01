@@ -6,7 +6,6 @@ namespace SixtyEightPublishers\AmpClient\Tests\Renderer\BreakpointStyle;
 
 use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
-use SixtyEightPublishers\AmpClient\Response\ValueObject\Dimensions;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
@@ -134,7 +133,6 @@ HTML;
             $breakpointType,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [$banner],
         );
 

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use SixtyEightPublishers\AmpClient\Response\ValueObject\Dimensions;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 
@@ -15,7 +14,6 @@ $position = new Position(
     Position::BreakpointTypeMin,
     ResponsePosition::ModeManaged,
     [],
-    new Dimensions(800, 300),
     [],
 );
 

@@ -31,8 +31,8 @@ use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
                      src="<?= Helpers::escapeHtmlAttr($content->getSrc()) ?>"
                      sizes="<?= Helpers::escapeHtmlAttr($content->getSizes()) ?>"
                      alt="<?= Helpers::escapeHtmlAttr($content->getAlt()) ?>"
-                     <?php if (null !== $position->getDimensions()->getWidth()) : ?>width="<?= Helpers::escapeHtmlAttr($position->getDimensions()->getWidth()) ?>"<?php endif ?>
-                     <?php if (null !== $position->getDimensions()->getHeight()) : ?>height="<?= Helpers::escapeHtmlAttr($position->getDimensions()->getHeight()) ?>"<?php endif ?>
+                     <?php if (null !== $content->getDimensions()->getWidth()) : ?>width="<?= Helpers::escapeHtmlAttr($content->getDimensions()->getWidth()) ?>"<?php endif ?>
+                     <?php if (null !== $content->getDimensions()->getHeight()) : ?>height="<?= Helpers::escapeHtmlAttr($content->getDimensions()->getHeight()) ?>"<?php endif ?>
                      <?php if ('' !== $content->getTitle()) : ?>title="<?= Helpers::escapeHtmlAttr($content->getTitle()) ?>"<?php endif ?>
                      <?php if (null !== ($loading = $options->evaluate('loading', $index ?? 0))) : ?>loading="<?= Helpers::escapeHtmlAttr($loading) ?>"<?php endif ?>
                      <?php if (null !== ($fetchPriority = $options->evaluate('fetchpriority', $index ?? 0))) : ?>fetchpriority="<?= Helpers::escapeHtmlAttr($fetchPriority) ?>"<?php endif ?>>

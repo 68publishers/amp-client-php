@@ -20,7 +20,6 @@ use SixtyEightPublishers\AmpClient\Request\BannersRequest;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\BannerResource;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\BannersResponse;
-use SixtyEightPublishers\AmpClient\Response\ValueObject\Dimensions;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 use SixtyEightPublishers\AmpClient\Tests\Bridge\Latte\Event\ConfigureClientEventHandlerFixture;
 use SixtyEightPublishers\AmpClient\Tests\Exception\AmpExceptionFixture;
@@ -47,7 +46,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
         $response = new BannersResponse([
@@ -93,7 +91,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
         $response = new BannersResponse([
@@ -139,7 +136,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
         $response = new BannersResponse([
@@ -185,7 +181,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
         $response = new BannersResponse([
@@ -231,7 +226,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
         $response = new BannersResponse([
@@ -293,7 +287,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             $positionMode,
             [],
-            new Dimensions(null, null),
             [],
         );
         $response = new BannersResponse([
@@ -340,7 +333,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
 
@@ -461,7 +453,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
 
@@ -501,7 +492,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
 
@@ -539,7 +529,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
 
@@ -627,7 +616,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
         $responsePosition2 = new ResponsePosition(
@@ -639,7 +627,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
         $response = new BannersResponse([
@@ -741,7 +728,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
         $responsePosition2 = new ResponsePosition(
@@ -753,7 +739,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
         $response = new BannersResponse([
@@ -845,7 +830,6 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeEmbed,
             [],
-            new Dimensions(null, null),
             [],
         );
         $response = new BannersResponse([

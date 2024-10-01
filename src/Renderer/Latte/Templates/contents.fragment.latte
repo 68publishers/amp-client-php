@@ -22,8 +22,8 @@
                     sizes="{$content->getSizes()}"
                     alt="{$content->getAlt()}"
                     n:attr="
-                        width => null !== $position->getDimensions()->getWidth() ? $position->getDimensions()->getWidth() : null,
-                        height => null !== $position->getDimensions()->getHeight() ? $position->getDimensions()->getHeight() : null,
+                        width => null !== $content->getDimensions()->getWidth() ? $content->getDimensions()->getWidth() : null,
+                        height => null !== $content->getDimensions()->getHeight() ? $content->getDimensions()->getHeight() : null,
                         title => '' !== $content->getTitle() ? $content->getTitle() : null,
                         loading => $options->evaluate('loading', $index),
                         fetchpriority => $options->evaluate('fetchpriority', $index),

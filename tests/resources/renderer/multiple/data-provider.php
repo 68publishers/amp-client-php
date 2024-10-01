@@ -19,73 +19,64 @@ $position = new Position(
     Position::BreakpointTypeMin,
     ResponsePosition::ModeManaged,
     [],
-    new Dimensions(800, 300),
     [],
 );
 
-$positionWithoutDimensions = new Position(
-    '1234',
-    'homepage.top',
-    'Homepage top',
-    0,
-    Position::DisplayTypeMultiple,
-    Position::BreakpointTypeMin,
-    ResponsePosition::ModeManaged,
-    [],
-    new Dimensions(null, null),
-    [],
-);
-
-$fullFeaturedBanners = [
-    new Banner('1234', 'Main', 0, null, null, null, [
-        new HtmlContent(
-            null,
-            '<p>Small content</p>',
-        ),
-        new ImageContent(
-            600,
-            'https://www.example.com/main1',
-            '_blank',
-            'Main 1',
-            'Main 1',
-            'https://img.example.com/1000/main1.png',
-            'https://img.example.com/800/main1.png 800w, https://img.example.com/1000/main1.png 1000w',
-            '(min-width: 1000px) 1000px, 100vw',
-            [
-                new Source('image/avif', 'https://img.example.com/800/main1.avif 800w, https://img.example.com/1000/main1.avif 1000w'),
-                new Source('image/webp', 'https://img.example.com/800/main1.webp 800w, https://img.example.com/1000/main1.webp 1000w'),
-            ],
-        ),
-        new ImageContent(
-            400,
-            'https://www.example.com/main2',
-            '_blank',
-            'Main 2',
-            'Main 2',
-            'https://img.example.com/600/main2.png',
-            'https://img.example.com/600/main2.png 600w',
-            '100vw',
-            [
-                new Source('image/avif', 'https://img.example.com/600/main2.avif 600w'),
-                new Source('image/webp', 'https://img.example.com/600/main2.webp 600w'),
-            ],
-        ),
-    ]),
-    new Banner('1235', 'Secondary', 0, null, null, null, [
-        new ImageContent(
-            null,
-            'https://www.example.com/secondary1',
-            null,
-            'Secondary 1',
-            'Secondary 1',
-            'https://img.example.com/1000/secondary1.png',
-            'https://img.example.com/800/secondary1.png 800w, https://img.example.com/1000/secondary1.png 1000w',
-            '(min-width: 1000px) 1000px, 100vw',
-            [],
-        ),
-    ]),
-    new Banner('1236', 'No contents', 0, null, null, null, []),
-];
+$createFullFeaturedBanners = function (bool $withDimensions): array {
+    return [
+        new Banner('1234', 'Main', 0, null, null, null, [
+            new HtmlContent(
+                null,
+                '<p>Small content</p>',
+            ),
+            new ImageContent(
+                600,
+                'https://www.example.com/main1',
+                '_blank',
+                'Main 1',
+                'Main 1',
+                'https://img.example.com/1000/main1.png',
+                'https://img.example.com/800/main1.png 800w, https://img.example.com/1000/main1.png 1000w',
+                '(min-width: 1000px) 1000px, 100vw',
+                [
+                    new Source('image/avif', 'https://img.example.com/800/main1.avif 800w, https://img.example.com/1000/main1.avif 1000w'),
+                    new Source('image/webp', 'https://img.example.com/800/main1.webp 800w, https://img.example.com/1000/main1.webp 1000w'),
+                ],
+                $withDimensions ? new Dimensions(1000, 300) : new Dimensions(null, null),
+            ),
+            new ImageContent(
+                400,
+                'https://www.example.com/main2',
+                '_blank',
+                'Main 2',
+                'Main 2',
+                'https://img.example.com/600/main2.png',
+                'https://img.example.com/600/main2.png 600w',
+                '100vw',
+                [
+                    new Source('image/avif', 'https://img.example.com/600/main2.avif 600w'),
+                    new Source('image/webp', 'https://img.example.com/600/main2.webp 600w'),
+                ],
+                $withDimensions ? new Dimensions(600, 300) : new Dimensions(null, null),
+            ),
+        ]),
+        new Banner('1235', 'Secondary', 0, null, null, null, [
+            new ImageContent(
+                null,
+                'https://www.example.com/secondary1',
+                null,
+                'Secondary 1',
+                'Secondary 1',
+                'https://img.example.com/1000/secondary1.png',
+                'https://img.example.com/800/secondary1.png 800w, https://img.example.com/1000/secondary1.png 1000w',
+                '(min-width: 1000px) 1000px, 100vw',
+                [],
+                $withDimensions ? new Dimensions(1000, 300) : new Dimensions(null, null),
+            ),
+        ]),
+        new Banner('1236', 'No contents', 0, null, null, null, []),
+    ];
+};
 
 return [
     'No banner' => [
@@ -128,14 +119,14 @@ return [
     ],
     'Multiple banners - full featured' => [
         $position,
-        $fullFeaturedBanners,
+        $createFullFeaturedBanners(true),
         [],
         [],
         __DIR__ . '/multipleBannersFullFeatured.html',
     ],
     'Multiple banners - full featured with lazy loading (all)' => [
         $position,
-        $fullFeaturedBanners,
+        $createFullFeaturedBanners(true),
         [],
         [
             'loading' => 'lazy',
@@ -144,7 +135,7 @@ return [
     ],
     'Multiple banners - full featured with lazy loading (offset 1)' => [
         $position,
-        $fullFeaturedBanners,
+        $createFullFeaturedBanners(true),
         [],
         [
             'loading' => '>=1:lazy',
@@ -152,8 +143,8 @@ return [
         __DIR__ . '/multipleBannersFullFeatured.withLazyLoadingFromOffset1.html',
     ],
     'Multiple banners - full featured without dimensions' => [
-        $positionWithoutDimensions,
-        $fullFeaturedBanners,
+        $position,
+        $createFullFeaturedBanners(false),
         [],
         [],
         __DIR__ . '/multipleBannersFullFeatured.withoutDimensions.html',
