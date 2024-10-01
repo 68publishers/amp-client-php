@@ -19,20 +19,6 @@ $position = new Position(
     Position::BreakpointTypeMin,
     ResponsePosition::ModeManaged,
     [],
-    new Dimensions(800, 300),
-    [],
-);
-
-$positionWithoutDimensions = new Position(
-    '1234',
-    'homepage.top',
-    'Homepage top',
-    0,
-    Position::DisplayTypeSingle,
-    Position::BreakpointTypeMin,
-    ResponsePosition::ModeManaged,
-    [],
-    new Dimensions(null, null),
     [],
 );
 
@@ -76,6 +62,7 @@ return [
                 'https://img.example.com/500/main1.png 500w, https://img.example.com/1000/main1.png 1000w',
                 '(min-width: 1000px) calc(1000px - 2 * 16px), (min-width: 600px) calc(100vw - 2 * 16px), 100vw',
                 [],
+                new Dimensions(1000, 300),
             ),
         ]),
         [],
@@ -83,7 +70,7 @@ return [
         __DIR__ . '/bannerWithDefaultImageContentOnly.withoutOptionalValues.html',
     ],
     'Banner with default content only: image without dimensions' => [
-        $positionWithoutDimensions,
+        $position,
         new Banner('1234', 'Main', 0, null, null, null, [
             new ImageContent(
                 null,
@@ -95,6 +82,7 @@ return [
                 'https://img.example.com/500/main1.png 500w, https://img.example.com/1000/main1.png 1000w',
                 '(min-width: 1000px) calc(1000px - 2 * 16px), (min-width: 600px) calc(100vw - 2 * 16px), 100vw',
                 [],
+                new Dimensions(null, null),
             ),
         ]),
         [],
@@ -117,6 +105,7 @@ return [
                     new Source('image/avif', 'https://img.example.com/500/main1.avif 500w, https://img.example.com/1000/main1.avif 1000w'),
                     new Source('image/webp', 'https://img.example.com/500/main1.webp 500w, https://img.example.com/1000/main1.webp 1000w'),
                 ],
+                new Dimensions(1000, 300),
             ),
         ]),
         [],
@@ -139,6 +128,7 @@ return [
                     new Source('image/avif', 'https://img.example.com/500/main1.avif 500w, https://img.example.com/1000/main1.avif 1000w'),
                     new Source('image/webp', 'https://img.example.com/500/main1.webp 500w, https://img.example.com/1000/main1.webp 1000w'),
                 ],
+                new Dimensions(1000, 300),
             ),
         ]),
         [],
@@ -160,6 +150,7 @@ return [
                 'https://img.example.com/500/main1.png 500w, https://img.example.com/1000/main1.png 1000w',
                 '(min-width: 1000px) calc(1000px - 2 * 16px), (min-width: 600px) calc(100vw - 2 * 16px), 100vw',
                 [],
+                new Dimensions(1000, 300),
             ),
         ]),
         [],
@@ -210,6 +201,7 @@ return [
                     new Source('image/avif', 'https://img.example.com/800/main1.avif 800w, https://img.example.com/1000/main1.avif 1000w'),
                     new Source('image/webp', 'https://img.example.com/800/main1.webp 800w, https://img.example.com/1000/main1.webp 1000w'),
                 ],
+                new Dimensions(1000, 300),
             ),
             new ImageContent(
                 400,
@@ -224,6 +216,7 @@ return [
                     new Source('image/avif', 'https://img.example.com/600/main2.avif 600w'),
                     new Source('image/webp', 'https://img.example.com/600/main2.webp 600w'),
                 ],
+                new Dimensions(600, 300),
             ),
         ]),
         [],
