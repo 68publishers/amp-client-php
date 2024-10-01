@@ -21,7 +21,6 @@ use SixtyEightPublishers\AmpClient\Renderer\RendererBridgeInterface;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\BannerResource;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
-use SixtyEightPublishers\AmpClient\Response\ValueObject\Dimensions;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 use Tester\Assert;
 use Tester\TestCase;
@@ -64,7 +63,6 @@ final class RendererTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
 
@@ -96,7 +94,6 @@ final class RendererTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [$banner],
         );
 
@@ -134,7 +131,6 @@ final class RendererTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [$banner],
         );
 
@@ -177,7 +173,6 @@ final class RendererTest extends TestCase
             [
                 'fetchpriority' => '0:high,low',
             ],
-            new Dimensions(null, null),
             $banners,
         );
 
@@ -258,7 +253,6 @@ final class RendererTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
 
@@ -317,7 +311,6 @@ final class RendererTest extends TestCase
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             [],
-            new Dimensions(null, null),
             [],
         );
 

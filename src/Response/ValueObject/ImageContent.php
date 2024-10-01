@@ -25,6 +25,8 @@ final class ImageContent implements ContentInterface
     /** @var array<int, Source> */
     private array $sources;
 
+    private Dimensions $dimensions;
+
     /**
      * @param array<int, Source> $sources
      */
@@ -37,7 +39,8 @@ final class ImageContent implements ContentInterface
         string $src,
         string $srcset,
         string $sizes,
-        array $sources
+        array $sources,
+        Dimensions $dimensions
     ) {
         $this->breakpoint = $breakpoint;
         $this->href = $href;
@@ -48,6 +51,7 @@ final class ImageContent implements ContentInterface
         $this->srcset = $srcset;
         $this->sizes = $sizes;
         $this->sources = $sources;
+        $this->dimensions = $dimensions;
     }
 
     public function getBreakpoint(): ?int
@@ -96,5 +100,10 @@ final class ImageContent implements ContentInterface
     public function getSources(): array
     {
         return $this->sources;
+    }
+
+    public function getDimensions(): Dimensions
+    {
+        return $this->dimensions;
     }
 }

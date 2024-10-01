@@ -35,6 +35,7 @@ use function array_map;
  *          srcset: string,
  *      }>,
  *      sizes: string,
+ *      dimensions?: DimensionsData,
  *  }
  *
  * @phpstan-type BannerData = array{
@@ -60,7 +61,6 @@ use function array_map;
  *     breakpoint_type: string,
  *     mode?: string,
  *     options?: array<string, string>,
- *     dimensions?: DimensionsData,
  *     banners: array<int, BannerData>,
  * }
  *
@@ -94,7 +94,6 @@ final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInt
                 $positionData['breakpoint_type'],
                 $positionData['mode'] ?? Position::ModeManaged,
                 $positionData['options'] ?? [],
-                $this->hydrateDimensions($positionData['dimensions'] ?? null),
                 $this->hydrateBanners($positionData['banners']),
             );
         }
@@ -155,6 +154,7 @@ final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInt
                             ),
                             $contentData['sources'],
                         ),
+                        $this->hydrateDimensions($contentData['dimensions'] ?? null),
                     );
 
                     break;

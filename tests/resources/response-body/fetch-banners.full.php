@@ -20,10 +20,6 @@ return new BannersResponse([
         Position::BreakpointTypeMin,
         Position::ModeManaged,
         [],
-        new Dimensions(
-            1320,
-            400,
-        ),
         [
             new Banner(
                 'd7275445-c287-47d2-b71a-3baff5b4d23c',
@@ -48,6 +44,10 @@ return new BannersResponse([
                                 'https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=320/cee005030cd85b434a3b361d284011d8.webp 320w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=520/cee005030cd85b434a3b361d284011d8.webp 520w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=720/cee005030cd85b434a3b361d284011d8.webp 720w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=920/cee005030cd85b434a3b361d284011d8.webp 920w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=1120/cee005030cd85b434a3b361d284011d8.webp 1120w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=1320/cee005030cd85b434a3b361d284011d8.webp 1320w',
                             ),
                         ],
+                        new Dimensions(
+                            1320,
+                            400,
+                        ),
                     ),
                 ],
             ),
@@ -74,6 +74,10 @@ return new BannersResponse([
                                 'https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=320/d551946507aad54e40de5ba48fd8ed38.webp 320w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=520/d551946507aad54e40de5ba48fd8ed38.webp 520w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=720/d551946507aad54e40de5ba48fd8ed38.webp 720w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=920/d551946507aad54e40de5ba48fd8ed38.webp 920w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=1120/d551946507aad54e40de5ba48fd8ed38.webp 1120w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=1320/d551946507aad54e40de5ba48fd8ed38.webp 1320w',
                             ),
                         ],
+                        new Dimensions(
+                            1320,
+                            400,
+                        ),
                     ),
                 ],
             ),
@@ -88,10 +92,6 @@ return new BannersResponse([
         Position::BreakpointTypeMin,
         Position::ModeManaged,
         [],
-        new Dimensions(
-            800,
-            300,
-        ),
         [],
     ),
     'homepage.missing' => new Position(
@@ -103,10 +103,6 @@ return new BannersResponse([
         Position::BreakpointTypeMin,
         Position::ModeManaged,
         [],
-        new Dimensions(
-            null,
-            null,
-        ),
         [],
     ),
     'homepage.bottom' => new Position(
@@ -118,10 +114,6 @@ return new BannersResponse([
         Position::BreakpointTypeMin,
         Position::ModeManaged,
         [],
-        new Dimensions(
-            800,
-            300,
-        ),
         [
             new Banner(
                 '54c72f46-2b6c-4d80-a75e-28fed4d79f5c',
@@ -141,6 +133,10 @@ return new BannersResponse([
                         'https://amp.example.com/data/images/54c72f46-2b6c-4d80-a75e-28fed4d79f5c/w=320/462316f2-30f2-4eb5-ad0d-dbc06ef0e06b.jpg 320w, https://amp.example.com/data/images/54c72f46-2b6c-4d80-a75e-28fed4d79f5c/w=520/462316f2-30f2-4eb5-ad0d-dbc06ef0e06b.jpg 520w',
                         '100vw',
                         [],
+                        new Dimensions(
+                            800,
+                            300,
+                        ),
                     ),
                     new HtmlContent(
                         500,
