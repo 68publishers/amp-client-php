@@ -13,6 +13,7 @@ $position = new Position(
     null,
     Position::BreakpointTypeMin,
     ResponsePosition::ModeManaged,
+    null,
     [],
     [],
 );

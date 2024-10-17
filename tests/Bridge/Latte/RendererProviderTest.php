@@ -45,6 +45,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -90,6 +91,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -135,6 +137,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -180,6 +183,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -225,6 +229,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -286,6 +291,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             $positionMode,
+            null,
             [],
             [],
         );
@@ -332,6 +338,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -452,6 +459,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -491,6 +499,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -528,6 +537,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -615,6 +625,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -626,6 +637,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -727,6 +739,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -738,6 +751,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -829,6 +843,7 @@ final class RendererProviderTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeEmbed,
+            null,
             [],
             [],
         );

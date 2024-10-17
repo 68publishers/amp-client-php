@@ -24,6 +24,7 @@ final class BannersResolverTest extends TestCase
             Position::DisplayTypeSingle,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
+            null,
             [],
             [],
         );
@@ -34,10 +35,10 @@ final class BannersResolverTest extends TestCase
 
     public function testFirstBannerWithHighestScoreShouldBeReturnedWhenResolvingSinglePosition(): void
     {
-        $banner1 = new Banner('1', '1', 0, null, null, null, []);
-        $banner2 = new Banner('2', '2', 2, null, null, null, []);
-        $banner3 = new Banner('3', '3', 1, null, null, null, []);
-        $banner4 = new Banner('4', '4', 2, null, null, null, []);
+        $banner1 = new Banner('1', '1', 0, null, null, null, null, []);
+        $banner2 = new Banner('2', '2', 2, null, null, null, null, []);
+        $banner3 = new Banner('3', '3', 1, null, null, null, null, []);
+        $banner4 = new Banner('4', '4', 2, null, null, null, null, []);
         $position = new Position(
             '1234',
             'homepage.top',
@@ -46,6 +47,7 @@ final class BannersResolverTest extends TestCase
             Position::DisplayTypeSingle,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
+            null,
             [],
             [$banner1, $banner2, $banner3, $banner4],
         );
@@ -64,6 +66,7 @@ final class BannersResolverTest extends TestCase
             Position::DisplayTypeMultiple,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
+            null,
             [],
             [],
         );
@@ -74,10 +77,10 @@ final class BannersResolverTest extends TestCase
 
     public function testSortedBannersShouldBeReturnedWhenResolvingMultiplePosition(): void
     {
-        $banner1 = new Banner('1', '1', 0, null, null, null, []);
-        $banner2 = new Banner('2', '2', 2, null, null, null, []);
-        $banner3 = new Banner('3', '3', 1, null, null, null, []);
-        $banner4 = new Banner('4', '4', 2, null, null, null, []);
+        $banner1 = new Banner('1', '1', 0, null, null, null, null, []);
+        $banner2 = new Banner('2', '2', 2, null, null, null, null, []);
+        $banner3 = new Banner('3', '3', 1, null, null, null, null, []);
+        $banner4 = new Banner('4', '4', 2, null, null, null, null, []);
         $position = new Position(
             '1234',
             'homepage.top',
@@ -86,6 +89,7 @@ final class BannersResolverTest extends TestCase
             Position::DisplayTypeMultiple,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
+            null,
             [],
             [$banner1, $banner2, $banner3, $banner4],
         );
@@ -109,6 +113,7 @@ final class BannersResolverTest extends TestCase
             Position::DisplayTypeRandom,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
+            null,
             [],
             [],
         );
@@ -119,10 +124,10 @@ final class BannersResolverTest extends TestCase
 
     public function testRandomBannerShouldBeReturnedWhenResolvingRandomPosition(): void
     {
-        $banner1 = new Banner('1', '1', 1, null, null, null, []);
-        $banner2 = new Banner('2', '2', 3, null, null, null, []);
-        $banner3 = new Banner('3', '3', 2, null, null, null, []);
-        $banner4 = new Banner('4', '4', 3, null, null, null, []);
+        $banner1 = new Banner('1', '1', 1, null, null, null, null, []);
+        $banner2 = new Banner('2', '2', 3, null, null, null, null, []);
+        $banner3 = new Banner('3', '3', 2, null, null, null, null, []);
+        $banner4 = new Banner('4', '4', 3, null, null, null, null, []);
         $position = new Position(
             '1234',
             'homepage.top',
@@ -131,6 +136,7 @@ final class BannersResolverTest extends TestCase
             Position::DisplayTypeRandom,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
+            null,
             [],
             [$banner1, $banner2, $banner3, $banner4],
         );

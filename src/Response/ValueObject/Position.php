@@ -30,6 +30,8 @@ final class Position
 
     private string $mode;
 
+    private ?int $closeExpiration;
+
     /** @var array<string, string> */
     private array $options;
 
@@ -48,6 +50,7 @@ final class Position
         ?string $displayType,
         string $breakpointType,
         string $mode,
+        ?int $closeExpiration,
         array $options,
         array $banners
     ) {
@@ -58,6 +61,7 @@ final class Position
         $this->displayType = $displayType;
         $this->breakpointType = $breakpointType;
         $this->mode = $mode;
+        $this->closeExpiration = $closeExpiration;
         $this->options = $options;
         $this->banners = $banners;
     }
@@ -95,6 +99,11 @@ final class Position
     public function getMode(): string
     {
         return $this->mode;
+    }
+
+    public function getCloseExpiration(): ?int
+    {
+        return $this->closeExpiration;
     }
 
     /**
