@@ -19,7 +19,10 @@ return new BannersResponse([
         Position::DisplayTypeMultiple,
         Position::BreakpointTypeMin,
         Position::ModeManaged,
-        [],
+        null,
+        [
+            'loading' => '>=1:lazy',
+        ],
         [
             new Banner(
                 'd7275445-c287-47d2-b71a-3baff5b4d23c',
@@ -28,6 +31,7 @@ return new BannersResponse([
                 null,
                 null,
                 null,
+                86400,
                 [
                     new ImageContent(
                         null,
@@ -58,6 +62,7 @@ return new BannersResponse([
                 'a6c98208-b707-46c2-80c3-8f3753a522b8',
                 'test-campaign',
                 'Test campaign',
+                86400,
                 [
                     new ImageContent(
                         null,
@@ -91,6 +96,7 @@ return new BannersResponse([
         Position::DisplayTypeRandom,
         Position::BreakpointTypeMin,
         Position::ModeManaged,
+        3600,
         [],
         [],
     ),
@@ -102,6 +108,7 @@ return new BannersResponse([
         null,
         Position::BreakpointTypeMin,
         Position::ModeManaged,
+        null,
         [],
         [],
     ),
@@ -113,6 +120,7 @@ return new BannersResponse([
         Position::DisplayTypeSingle,
         Position::BreakpointTypeMin,
         Position::ModeManaged,
+        3600,
         [],
         [
             new Banner(
@@ -122,6 +130,7 @@ return new BannersResponse([
                 'a6c98208-b707-46c2-80c3-8f3753a522b8',
                 'test-campaign',
                 'Test campaign',
+                86400,
                 [
                     new ImageContent(
                         null,

@@ -18,6 +18,7 @@ $position = new Position(
     Position::DisplayTypeRandom,
     Position::BreakpointTypeMin,
     ResponsePosition::ModeManaged,
+    null,
     [],
     [],
 );
@@ -44,14 +45,14 @@ return [
     ],
     'Banner without contents' => [
         $position,
-        new Banner('1234', 'Main', 0, null, null, null, []),
+        new Banner('1234', 'Main', 0, null, null, null, null, []),
         [],
         [],
         __DIR__ . '/bannerWithoutContent.html',
     ],
     'Banner with default content only: image without optional values' => [
         $position,
-        new Banner('1234', 'Main', 0, null, null, null, [
+        new Banner('1234', 'Main', 0, null, null, null, null, [
             new ImageContent(
                 null,
                 'https://www.example.com/main1',
@@ -71,7 +72,7 @@ return [
     ],
     'Banner with default content only: image without dimensions' => [
         $position,
-        new Banner('1234', 'Main', 0, null, null, null, [
+        new Banner('1234', 'Main', 0, null, null, null, null, [
             new ImageContent(
                 null,
                 'https://www.example.com/main1',
@@ -91,7 +92,7 @@ return [
     ],
     'Banner with default content only: image with optional value' => [
         $position,
-        new Banner('1234', 'Main', 0, null, null, null, [
+        new Banner('1234', 'Main', 0, null, null, null, null, [
             new ImageContent(
                 null,
                 'https://www.example.com/main1',
@@ -114,7 +115,7 @@ return [
     ],
     'Banner with default content only: image with lazy loading' => [
         $position,
-        new Banner('1234', 'Main', 0, null, null, null, [
+        new Banner('1234', 'Main', 0, null, null, null, null, [
             new ImageContent(
                 null,
                 'https://www.example.com/main1',
@@ -139,7 +140,7 @@ return [
     ],
     'Banner with breakpoint content only: image' => [
         $position,
-        new Banner('1234', 'Main', 0, null, null, null, [
+        new Banner('1234', 'Main', 0, null, null, null, null, [
             new ImageContent(
                 500,
                 'https://www.example.com/main1',
@@ -159,7 +160,7 @@ return [
     ],
     'Banner with default content only: html' => [
         $position,
-        new Banner('1234', 'Main', 0, null, null, null, [
+        new Banner('1234', 'Main', 0, null, null, null, null, [
             new HtmlContent(
                 null,
                 '<p>My <span style="color:red;">Awesome</span> content!</p>',
@@ -171,7 +172,7 @@ return [
     ],
     'Banner with breakpoint content only: html' => [
         $position,
-        new Banner('1234', 'Main', 0, null, null, null, [
+        new Banner('1234', 'Main', 0, null, null, null, null, [
             new HtmlContent(
                 500,
                 '<p>My <span style="color:red;">Awesome</span> content!</p>',
@@ -183,7 +184,7 @@ return [
     ],
     'Banner with multiple contents' => [
         $position,
-        new Banner('1234', 'Main', 0, null, null, null, [
+        new Banner('1234', 'Main', 0, null, null, null, null, [
             new HtmlContent(
                 null,
                 '<p>Small content</p>',

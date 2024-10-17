@@ -8,6 +8,10 @@
       "display_type": "multiple",
       "breakpoint_type": "min",
       "mode": "managed",
+      "close_expiration": null,
+      "options": {
+        "loading": ">=1:lazy"
+      },
       "banners": [
         {
           "id": "d7275445-c287-47d2-b71a-3baff5b4d23c",
@@ -16,6 +20,7 @@
           "campaign_id": null,
           "campaign_code": null,
           "campaign_name": null,
+          "close_expiration": 86400,
           "contents": [
             {
               "breakpoint": null,
@@ -47,6 +52,7 @@
           "campaign_id": "a6c98208-b707-46c2-80c3-8f3753a522b8",
           "campaign_code": "test-campaign",
           "campaign_name": "Test campaign",
+          "close_expiration": 86400,
           "contents": [
             {
               "breakpoint": null,
@@ -80,6 +86,8 @@
       "display_type": "random",
       "breakpoint_type": "min",
       "mode": "managed",
+      "close_expiration": 3600,
+      "options": {},
       "banners": []
     },
     "homepage.missing": {
@@ -89,6 +97,8 @@
       "display_type": null,
       "breakpoint_type": "min",
       "mode": "managed",
+      "close_expiration": null,
+      "options": {},
       "banners": []
     },
     "homepage.bottom": {
@@ -98,6 +108,8 @@
       "display_type": "single",
       "breakpoint_type": "min",
       "mode": "managed",
+      "close_expiration": 3600,
+      "options": {},
       "banners": [
         {
           "id": "54c72f46-2b6c-4d80-a75e-28fed4d79f5c",
@@ -106,6 +118,7 @@
           "campaign_id": "a6c98208-b707-46c2-80c3-8f3753a522b8",
           "campaign_code": "test-campaign",
           "campaign_name": "Test campaign",
+          "close_expiration": 86400,
           "contents": [
             {
               "breakpoint": null,

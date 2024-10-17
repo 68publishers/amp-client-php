@@ -62,6 +62,7 @@ final class RendererTest extends TestCase
             null,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -84,7 +85,7 @@ final class RendererTest extends TestCase
         $expressionParser = Mockery::mock(ExpressionParserInterface::class);
         $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
-        $banner = new Banner('1234', 'Main', 0, null, null, null, []);
+        $banner = new Banner('1234', 'Main', 0, null, null, null, null, []);
         $position = new ResponsePosition(
             '1234',
             'homepage.top',
@@ -93,6 +94,7 @@ final class RendererTest extends TestCase
             ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [$banner],
         );
@@ -121,7 +123,7 @@ final class RendererTest extends TestCase
         $expressionParser = Mockery::mock(ExpressionParserInterface::class);
         $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
-        $banner = new Banner('1234', 'Main', 0, null, null, null, []);
+        $banner = new Banner('1234', 'Main', 0, null, null, null, null, []);
         $position = new ResponsePosition(
             '1234',
             'homepage.top',
@@ -130,6 +132,7 @@ final class RendererTest extends TestCase
             ResponsePosition::DisplayTypeRandom,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [$banner],
         );
@@ -159,8 +162,8 @@ final class RendererTest extends TestCase
         $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
 
         $banners = [
-            new Banner('1234', 'Main', 0, null, null, null, []),
-            new Banner('1235', 'Secondary', 0, null, null, null, []),
+            new Banner('1234', 'Main', 0, null, null, null, null, []),
+            new Banner('1235', 'Secondary', 0, null, null, null, null, []),
         ];
         $position = new ResponsePosition(
             '1234',
@@ -170,6 +173,7 @@ final class RendererTest extends TestCase
             ResponsePosition::DisplayTypeMultiple,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [
                 'fetchpriority' => '0:high,low',
             ],
@@ -252,6 +256,7 @@ final class RendererTest extends TestCase
             null,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );
@@ -310,6 +315,7 @@ final class RendererTest extends TestCase
             null,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [],
         );

@@ -45,6 +45,7 @@ use function array_map;
  *     campaign_id: string|null,
  *     campaign_code: string|null,
  *     campaign_name: string|null,
+ *     close_expiration: int|null,
  *     contents: array<int, HtmlContentData|ImageContentData>,
  * }
  *
@@ -60,6 +61,7 @@ use function array_map;
  *     display_type: string|null,
  *     breakpoint_type: string,
  *     mode?: string,
+ *     close_expiration?: int|null,
  *     options?: array<string, string>,
  *     banners: array<int, BannerData>,
  * }
@@ -93,6 +95,7 @@ final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInt
                 $positionData['display_type'] ?? null,
                 $positionData['breakpoint_type'],
                 $positionData['mode'] ?? Position::ModeManaged,
+                $positionData['close_expiration'] ?? null,
                 $positionData['options'] ?? [],
                 $this->hydrateBanners($positionData['banners']),
             );
@@ -118,6 +121,7 @@ final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInt
                 $bannerData['campaign_id'],
                 $bannerData['campaign_code'],
                 $bannerData['campaign_name'],
+                $bannerData['close_expiration'] ?? null,
                 $this->hydrateContents($bannerData['contents']),
             );
         }
