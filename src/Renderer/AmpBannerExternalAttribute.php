@@ -43,6 +43,7 @@ final class AmpBannerExternalAttribute
                 'rotationSeconds' => $this->position->getRotationSeconds(),
                 'displayType' => $this->position->getDisplayType(),
                 'breakpointType' => $this->position->getBreakpointType(),
+                'closeExpiration' => $this->position->getCloseExpiration(),
             ],
             'state' => [
                 'value' => $this->state,

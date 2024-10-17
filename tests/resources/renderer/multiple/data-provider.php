@@ -18,13 +18,14 @@ $position = new Position(
     Position::DisplayTypeMultiple,
     Position::BreakpointTypeMin,
     ResponsePosition::ModeManaged,
+    null,
     [],
     [],
 );
 
 $createFullFeaturedBanners = function (bool $withDimensions): array {
     return [
-        new Banner('1234', 'Main', 0, null, null, null, [
+        new Banner('1234', 'Main', 0, null, null, null, null, [
             new HtmlContent(
                 null,
                 '<p>Small content</p>',
@@ -60,7 +61,7 @@ $createFullFeaturedBanners = function (bool $withDimensions): array {
                 $withDimensions ? new Dimensions(600, 300) : new Dimensions(null, null),
             ),
         ]),
-        new Banner('1235', 'Secondary', 0, null, null, null, [
+        new Banner('1235', 'Secondary', 0, null, null, null, null, [
             new ImageContent(
                 null,
                 'https://www.example.com/secondary1',
@@ -74,7 +75,7 @@ $createFullFeaturedBanners = function (bool $withDimensions): array {
                 $withDimensions ? new Dimensions(1000, 300) : new Dimensions(null, null),
             ),
         ]),
-        new Banner('1236', 'No contents', 0, null, null, null, []),
+        new Banner('1236', 'No contents', 0, null, null, null, null, []),
     ];
 };
 
@@ -101,7 +102,7 @@ return [
     'Single banner without contents' => [
         $position,
         [
-            new Banner('1234', 'Main', 0, null, null, null, []),
+            new Banner('1234', 'Main', 0, null, null, null, null, []),
         ],
         [],
         [],
@@ -110,8 +111,8 @@ return [
     'Multiple banners without contents' => [
         $position,
         [
-            new Banner('1234', 'Main 1', 0, null, null, null, []),
-            new Banner('1235', 'Main 2', 0, null, null, null, []),
+            new Banner('1234', 'Main 1', 0, null, null, null, null, []),
+            new Banner('1235', 'Main 2', 0, null, null, null, null, []),
         ],
         [],
         [],

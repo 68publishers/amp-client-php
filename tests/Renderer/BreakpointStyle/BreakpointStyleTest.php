@@ -121,6 +121,7 @@ HTML;
             null,
             null,
             null,
+            null,
             $contents,
         );
 
@@ -132,6 +133,7 @@ HTML;
             Position::DisplayTypeSingle,
             $breakpointType,
             ResponsePosition::ModeManaged,
+            null,
             [],
             [$banner],
         );

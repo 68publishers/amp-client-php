@@ -19,6 +19,8 @@ final class Banner
 
     private ?string $campaignName;
 
+    private ?int $closeExpiration;
+
     /** @var array<int, ContentInterface> */
     private array $contents;
 
@@ -33,6 +35,7 @@ final class Banner
         ?string $campaignId,
         ?string $campaignCode,
         ?string $campaignName,
+        ?int $closeExpiration,
         array $contents
     ) {
         $this->id = $id;
@@ -41,6 +44,7 @@ final class Banner
         $this->campaignId = $campaignId;
         $this->campaignCode = $campaignCode;
         $this->campaignName = $campaignName;
+        $this->closeExpiration = $closeExpiration;
         $this->contents = $contents;
     }
 
@@ -75,6 +79,11 @@ final class Banner
     public function getCampaignName(): ?string
     {
         return $this->campaignName;
+    }
+
+    public function getCloseExpiration(): ?int
+    {
+        return $this->closeExpiration;
     }
 
     /**
