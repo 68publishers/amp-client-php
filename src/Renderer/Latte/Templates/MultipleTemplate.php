@@ -15,14 +15,14 @@ final class MultipleTemplate
     /** @var array<int, Banner> */
     public array $banners;
 
-    /** @var array<string, scalar|null> */
+    /** @var array<string, mixed> */
     public array $elementAttributes;
 
     public Options $options;
 
     /**
-     * @param array<int, Banner>         $banners
-     * @param array<string, scalar|null> $elementAttributes
+     * @param array<int, Banner>   $banners
+     * @param array<string, mixed> $elementAttributes
      */
     public function __construct(
         Position $position,

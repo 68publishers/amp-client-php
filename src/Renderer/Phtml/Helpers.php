@@ -38,7 +38,7 @@ final class Helpers
     }
 
     /**
-     * @param array<string, scalar|null> $attributes
+     * @param array<string, mixed> $attributes
      */
     public static function printAttributes(array $attributes): string
     {

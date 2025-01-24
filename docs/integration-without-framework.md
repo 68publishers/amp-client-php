@@ -170,6 +170,21 @@ The second argument can be used to pass an array of attributes to be contained i
 echo $renderer->render($response->getPosition('homepage.top'), ['class' => 'my-awesome-class']);
 ```
 
+Attributes can also be rendered conditionally, the client currently supports the following conditions:
+
+- `exists@<attribute>` - The attribute will only be created if a banner exists and has some content.
+- `exists(<breakpoint>)@<attribute>` - The attribute will only be created if a banner contains content for the specified breakpoint.
+
+```php
+echo $renderer->render($response->getPosition('homepage.top'), [
+    'class' => 'my-awesome-class'
+    'exists@class' => 'banner-exists',
+    'exists(default)@class' => 'banner-default',
+    'exists(600)@class' => 'banner-600',
+]);
+```
+The `class` attribute is the only one that will be merged in the result. The other attributes are not merged and are overwritten.
+
 The third argument can be used to provide custom options.
 These options are available in the banner templates and will also be available to the JavaScript client, so they can be accessed in event handlers.
 

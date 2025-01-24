@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.1] - 2024-10-11
 ### Added
 - Added PHP 8.3 between tested versions.
+- Added conditional HTML banner attributes using `exists@<attribute>` and `exists(<breakpoint>)@<attribute>` entries.
 
 ### Changed
 - Moved `dimensions` field from the Position class to the `ImageContent` class according to changes in AMP v2.16.0 API changes.
