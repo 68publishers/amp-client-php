@@ -14,6 +14,8 @@ use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
 /** @var Position $position */
 /** @var ?Banner $banner */
 /** @var Options $options */
+
+$style = new BreakpointStyle($position, $banner);
 ?>
 <?php foreach ($banner->getContents() as $content) : ?>
     <?php if ($content instanceof ImageContent) : ?>
@@ -22,6 +24,10 @@ use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
            href="<?= Helpers::escapeHtmlAttr($content->getHref()) ?>"
            <?php if (NULL !== $content->getTarget()) : ?>target="<?= Helpers::escapeHtmlAttr($content->getTarget()) ?>"<?php endif ?>>
             <picture>
+                <?php if (null !== ($mediaForInvisibleContent = $style->getMediaForInvisibleContent($content->getBreakpoint()))) : ?>
+                    <source srcset="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                            media="<?= Helpers::escapeHtmlAttr($mediaForInvisibleContent) ?>">
+                <?php endif ?>
                 <?php foreach ($content->getSources() as $source) : ?>
                     <source type="<?= Helpers::escapeHtmlAttr($source->getType()) ?>"
                             srcset="<?= Helpers::escapeHtmlAttr($source->getSrcset()) ?>"
@@ -45,4 +51,4 @@ use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
         </div>
     <?php endif ?>
 <?php endforeach ?>
-<?= new BreakpointStyle($position, $banner) ?>
+<?= $style ?>

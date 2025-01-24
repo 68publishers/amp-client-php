@@ -22,6 +22,8 @@ final class BreakpointStyleTest extends TestCase
 
         Assert::same('', $style->getCss());
         Assert::same('', (string) $style);
+
+        Assert::null($style->getMediaForInvisibleContent(null));
     }
 
     public function testStylesShouldBeEmptyInMaxModeWhenNoContentsDefined(): void
@@ -30,6 +32,8 @@ final class BreakpointStyleTest extends TestCase
 
         Assert::same('', $style->getCss());
         Assert::same('', (string) $style);
+
+        Assert::null($style->getMediaForInvisibleContent(null));
     }
 
     public function testStylesShouldBeEmptyInMinModeWhenOnlyDefaultContentDefined(): void
@@ -40,6 +44,8 @@ final class BreakpointStyleTest extends TestCase
 
         Assert::same('', $style->getCss());
         Assert::same('', (string) $style);
+
+        Assert::null($style->getMediaForInvisibleContent(null));
     }
 
     public function testStylesShouldBeEmptyInMaxModeWhenOnlyDefaultContentDefined(): void
@@ -50,6 +56,8 @@ final class BreakpointStyleTest extends TestCase
 
         Assert::same('', $style->getCss());
         Assert::same('', (string) $style);
+
+        Assert::null($style->getMediaForInvisibleContent(null));
     }
 
     public function testStylesOutputInMinModeWhenOnlyContentWithNumericBreakpointDefined(): void
@@ -64,6 +72,8 @@ HTML;
 
         Assert::same($expected, $style->getCss());
         Assert::same($expected, (string) $style);
+
+        Assert::same('(max-width: 499px)', $style->getMediaForInvisibleContent(500));
     }
 
     public function testStylesOutputInMaxModeWhenOnlyContentWithNumericBreakpointDefined(): void
@@ -78,6 +88,80 @@ HTML;
 
         Assert::same($expected, $style->getCss());
         Assert::same($expected, (string) $style);
+
+        Assert::same('(min-width: 501px)', $style->getMediaForInvisibleContent(500));
+    }
+
+    public function testStylesOutputInMinModeWhenMultipleContentsWithNumericBreakpointDefined(): void
+    {
+        $style = $this->createBreakpointStyle(Position::BreakpointTypeMin, [
+            new HtmlContent(500, ''),
+            new HtmlContent(900, ''),
+        ]);
+
+        $expected = <<<HTML
+<style>[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:none}@media(min-width: 500px){[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:block}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:none}}@media(min-width: 900px){[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:block}}</style>
+HTML;
+
+        Assert::same($expected, $style->getCss());
+        Assert::same($expected, (string) $style);
+
+        Assert::same('(max-width: 499px), (min-width: 900px)', $style->getMediaForInvisibleContent(500));
+        Assert::same('(max-width: 899px)', $style->getMediaForInvisibleContent(900));
+    }
+
+    public function testStylesOutputInMaxModeWhenMultipleContentsWithNumericBreakpointDefined(): void
+    {
+        $style = $this->createBreakpointStyle(Position::BreakpointTypeMax, [
+            new HtmlContent(500, ''),
+            new HtmlContent(900, ''),
+        ]);
+
+        $expected = <<<HTML
+<style>[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:none}@media(max-width: 900px){[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:block}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:none}}@media(max-width: 500px){[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="500"]{display:block}}</style>
+HTML;
+
+        Assert::same($expected, $style->getCss());
+        Assert::same($expected, (string) $style);
+
+        Assert::same('(min-width: 501px)', $style->getMediaForInvisibleContent(500));
+        Assert::same('(min-width: 901px), (max-width: 500px)', $style->getMediaForInvisibleContent(900));
+    }
+
+    public function testStylesOutputInMinModeWhenSingleContentWithNumericBreakpointAndDefaultDefined(): void
+    {
+        $style = $this->createBreakpointStyle(Position::BreakpointTypeMin, [
+            new HtmlContent(null, ''),
+            new HtmlContent(900, ''),
+        ]);
+
+        $expected = <<<HTML
+<style>[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:none}@media(min-width: 900px){[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="default"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:block}}</style>
+HTML;
+
+        Assert::same($expected, $style->getCss());
+        Assert::same($expected, (string) $style);
+
+        Assert::same('(min-width: 900px)', $style->getMediaForInvisibleContent(null));
+        Assert::same('(max-width: 899px)', $style->getMediaForInvisibleContent(900));
+    }
+
+    public function testStylesOutputInMaxModeWhenSingleContentWithNumericBreakpointAndDefaultDefined(): void
+    {
+        $style = $this->createBreakpointStyle(Position::BreakpointTypeMax, [
+            new HtmlContent(null, ''),
+            new HtmlContent(900, ''),
+        ]);
+
+        $expected = <<<HTML
+<style>[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:none}@media(max-width: 900px){[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="default"]{display:none}[data-amp-banner="homepage.top"] [data-amp-banner-id="12344"] [data-amp-content-breakpoint="900"]{display:block}}</style>
+HTML;
+
+        Assert::same($expected, $style->getCss());
+        Assert::same($expected, (string) $style);
+
+        Assert::same('(max-width: 900px)', $style->getMediaForInvisibleContent(null));
+        Assert::same('(min-width: 901px)', $style->getMediaForInvisibleContent(900));
     }
 
     public function testStylesOutputInMinModeWhenMultipleContentsDefined(): void
@@ -94,6 +178,10 @@ HTML;
 
         Assert::same($expected, $style->getCss());
         Assert::same($expected, (string) $style);
+
+        Assert::same('(min-width: 500px)', $style->getMediaForInvisibleContent(null));
+        Assert::same('(max-width: 499px), (min-width: 900px)', $style->getMediaForInvisibleContent(500));
+        Assert::same('(max-width: 899px)', $style->getMediaForInvisibleContent(900));
     }
 
     public function testStylesOutputInMaxModeWhenMultipleContentsDefined(): void
@@ -110,6 +198,10 @@ HTML;
 
         Assert::same($expected, $style->getCss());
         Assert::same($expected, (string) $style);
+
+        Assert::same('(max-width: 900px)', $style->getMediaForInvisibleContent(null));
+        Assert::same('(min-width: 501px)', $style->getMediaForInvisibleContent(500));
+        Assert::same('(min-width: 901px), (max-width: 500px)', $style->getMediaForInvisibleContent(900));
     }
 
     private function createBreakpointStyle(string $breakpointType, array $contents): BreakpointStyle

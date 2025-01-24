@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added integration of the new fields `close_expiration` into Position and Banner entities and also into the `data-amp-banner-external` and `data-amp-banner-fingerprint` attributes.
 
+### Fixed
+- Fixed an issue with the browser downloading images for all breakpoints when it wasn't needed.
+
 ## [1.3.1] - 2024-10-11
 ### Added
 - Added PHP 8.3 between tested versions.
