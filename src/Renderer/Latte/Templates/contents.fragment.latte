@@ -3,6 +3,8 @@
 {varType SixtyEightPublishers\AmpClient\Renderer\Options $options}
 {varType int $index}
 
+{var $style = new SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle($position, $banner)}
+
 {foreach $banner->getContents() as $content}
     {if $content instanceof SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent}
         {varType SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent $content}
@@ -12,6 +14,12 @@
            href="{$content->getHref()}"
            n:attr="target => $content->getTarget()">
            <picture>
+               {var ?string $mediaForInvisibleContent = $style->getMediaForInvisibleContent($content->getBreakpoint())}
+
+               <source n:if="null !== $mediaForInvisibleContent"
+                       srcset="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                       media="{$mediaForInvisibleContent}">
+
                <source n:foreach="$content->getSources() as $source"
                        type="{$source->getType()}"
                        srcset="{$source->getSrcset()}"
@@ -40,4 +48,4 @@
     {/if}
 {/foreach}
 
-{= new SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle($position, $banner)|noescape}
+{$style|noescape}
