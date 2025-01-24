@@ -11,16 +11,16 @@ use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosi
 interface RendererInterface
 {
     /**
-     * @param array<string, scalar|null> $elementAttributes
-     * @param array<string, scalar>      $options
+     * @param array<string, mixed>  $elementAttributes
+     * @param array<string, scalar> $options
      *
      * @throws RendererException
      */
     public function render(ResponsePosition $position, array $elementAttributes = [], array $options = []): string;
 
     /**
-     * @param array<string, scalar|null> $elementAttributes
-     * @param array<string, scalar>      $options
+     * @param array<string, mixed>  $elementAttributes
+     * @param array<string, scalar> $options
      *
      * @throws RendererException
      */

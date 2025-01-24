@@ -11,13 +11,13 @@ final class NotFoundTemplate
 {
     public Position $position;
 
-    /** @var array<string, scalar|null> */
+    /** @var array<string, mixed> */
     public array $elementAttributes;
 
     public Options $options;
 
     /**
-     * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, mixed> $elementAttributes
      */
     public function __construct(
         Position $position,

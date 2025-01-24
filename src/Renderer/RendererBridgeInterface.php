@@ -13,28 +13,28 @@ interface RendererBridgeInterface
     public function overrideTemplates(Templates $templates): self;
 
     /**
-     * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, mixed> $elementAttributes
      */
     public function renderNotFound(ResponsePosition $position, array $elementAttributes, Options $options): string;
 
     /**
-     * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, mixed> $elementAttributes
      */
     public function renderSingle(ResponsePosition $position, ?Banner $banner, array $elementAttributes, Options $options): string;
 
     /**
-     * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, mixed> $elementAttributes
      */
     public function renderRandom(ResponsePosition $position, ?Banner $banner, array $elementAttributes, Options $options): string;
 
     /**
-     * @param array<int, Banner>         $banners
-     * @param array<string, scalar|null> $elementAttributes
+     * @param array<int, Banner>   $banners
+     * @param array<string, mixed> $elementAttributes
      */
     public function renderMultiple(ResponsePosition $position, array $banners, array $elementAttributes, Options $options): string;
 
     /**
-     * @param array<string, scalar|null> $elementAttributes
+     * @param array<string, mixed> $elementAttributes
      */
     public function renderClientSide(RequestPosition $position, ClientSideMode $mode, array $elementAttributes, Options $options): string;
 }
