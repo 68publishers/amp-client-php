@@ -37,4 +37,9 @@ interface RendererBridgeInterface
      * @param array<string, mixed> $elementAttributes
      */
     public function renderClientSide(RequestPosition $position, ClientSideMode $mode, array $elementAttributes, Options $options): string;
+
+    /**
+     * @param array<string, mixed> $elementAttributes
+     */
+    public function renderClosed(ResponsePosition $position, array $elementAttributes, Options $options): string;
 }

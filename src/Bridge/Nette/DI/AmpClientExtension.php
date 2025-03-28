@@ -19,10 +19,15 @@ use SixtyEightPublishers\AmpClient\AmpClient;
 use SixtyEightPublishers\AmpClient\AmpClientInterface;
 use SixtyEightPublishers\AmpClient\Bridge\Nette\DI\Config\AmpClientConfig;
 use SixtyEightPublishers\AmpClient\Bridge\Nette\DI\Config\CacheConfig;
+use SixtyEightPublishers\AmpClient\Bridge\Nette\DI\Config\ClosingConfig;
 use SixtyEightPublishers\AmpClient\Bridge\Nette\DI\Config\HttpConfig;
 use SixtyEightPublishers\AmpClient\Bridge\Nette\DI\Config\RendererConfig;
+use SixtyEightPublishers\AmpClient\Bridge\Nette\Http\NetteCookieClosedEntriesStore;
 use SixtyEightPublishers\AmpClient\Bridge\Nette\NetteCacheStorage;
 use SixtyEightPublishers\AmpClient\ClientConfig;
+use SixtyEightPublishers\AmpClient\Closing\ClosedEntriesStoreInterface;
+use SixtyEightPublishers\AmpClient\Closing\ClosingManager;
+use SixtyEightPublishers\AmpClient\Closing\ClosingManagerInterface;
 use SixtyEightPublishers\AmpClient\Expression\ExpressionParser;
 use SixtyEightPublishers\AmpClient\Expression\ExpressionParserInterface;
 use SixtyEightPublishers\AmpClient\Http\Cache\CacheStorageInterface;
@@ -102,8 +107,14 @@ final class AmpClientExtension extends CompilerExtension
                     'multiple' => Expect::string(),
                     'not_found' => Expect::string(),
                     'client_side' => Expect::string(),
+                    'closed' => Expect::string(),
                 ])->castTo('array'),
             ])->castTo(RendererConfig::class),
+            'closing' => Expect::structure([
+                'cookieName' => Expect::string()
+                    ->dynamic()
+                    ->default('amp-c'),
+            ])->castTo(ClosingConfig::class),
         ])->castTo(AmpClientConfig::class);
     }
 
@@ -167,13 +178,29 @@ final class AmpClientExtension extends CompilerExtension
         $builder->addDefinition($this->prefix('renderer.bannersResolver'))
             ->setAutowired(false)
             ->setType(BannersResolverInterface::class)
-            ->setFactory(BannersResolver::class);
+            ->setFactory(BannersResolver::class, [
+                'closingManager' => new Reference($this->prefix('closing.manager')),
+            ]);
 
         $builder->addDefinition($this->prefix('renderer'))
             ->setType(RendererInterface::class)
             ->setFactory(Renderer::class, [
                 'bannersResolver' => new Reference($this->prefix('renderer.bannersResolver')),
                 'rendererBridge' => new Reference($this->prefix('renderer.rendererBridge')),
+            ]);
+
+        $builder->addDefinition($this->prefix('closing.manager'))
+            ->setAutowired(false)
+            ->setType(ClosingManagerInterface::class)
+            ->setFactory(ClosingManager::class, [
+                'store' => new Reference($this->prefix('closing.store')),
+            ]);
+
+        $builder->addDefinition($this->prefix('closing.store'))
+            ->setAutowired(false)
+            ->setType(ClosedEntriesStoreInterface::class)
+            ->setFactory(NetteCookieClosedEntriesStore::class, [
+                'cookieName' => $config->closing->cookieName,
             ]);
     }
 
@@ -285,6 +312,7 @@ final class AmpClientExtension extends CompilerExtension
             Templates::Multiple => $config->templates['multiple'] ?? null,
             Templates::NotFound => $config->templates['not_found'] ?? null,
             Templates::ClientSide => $config->templates['client_side'] ?? null,
+            Templates::Closed => $config->templates['closed'] ?? null,
         ]);
 
         if (0 < count($templatesOverride)) {

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\AmpClient\Renderer;
 
+use SixtyEightPublishers\AmpClient\Closing\ClosingManagerInterface;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use function array_filter;
 use function array_map;
 use function array_search;
+use function array_values;
 use function count;
 use function max;
 use function mt_getrandmax;
@@ -16,9 +19,26 @@ use function usort;
 
 class BannersResolver implements BannersResolverInterface
 {
+    private ClosingManagerInterface $closingManager;
+
+    public function __construct(
+        ClosingManagerInterface $closingManager
+    ) {
+        $this->closingManager = $closingManager;
+    }
+
     public function resolveSingle(Position $position): ?Banner
     {
-        $banners = $position->getBanners();
+        if ($this->closingManager->isPositionClosed($position->getCode())) {
+            return null;
+        }
+
+        $banners = array_values(
+            array_filter(
+                $position->getBanners(),
+                fn (Banner $banner): bool => !$this->closingManager->isBannerClosed($position->getCode(), $banner->getId()),
+            ),
+        );
 
         if (0 >= count($banners)) {
             return null;
@@ -35,7 +55,16 @@ class BannersResolver implements BannersResolverInterface
 
     public function resolveRandom(Position $position): ?Banner
     {
-        $banners = $position->getBanners();
+        if ($this->closingManager->isPositionClosed($position->getCode())) {
+            return null;
+        }
+
+        $banners = array_values(
+            array_filter(
+                $position->getBanners(),
+                fn (Banner $banner): bool => !$this->closingManager->isBannerClosed($position->getCode(), $banner->getId()),
+            ),
+        );
 
         if (0 >= count($banners)) {
             return null;
@@ -67,7 +96,16 @@ class BannersResolver implements BannersResolverInterface
 
     public function resolveMultiple(Position $position): array
     {
-        $banners = $position->getBanners();
+        if ($this->closingManager->isPositionClosed($position->getCode())) {
+            return [];
+        }
+
+        $banners = array_values(
+            array_filter(
+                $position->getBanners(),
+                fn (Banner $banner): bool => !$this->closingManager->isBannerClosed($position->getCode(), $banner->getId()),
+            ),
+        );
 
         if (0 >= count($banners)) {
             return [];
