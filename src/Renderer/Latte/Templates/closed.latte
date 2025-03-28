@@ -1,0 +1,8 @@
+{templateType SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\ClosedTemplate}
+
+{var $helpers = SixtyEightPublishers\AmpClient\Renderer\Latte\Helpers::class}
+
+<div data-amp-banner="{$position->getCode()}"
+     data-amp-banner-external="{=SixtyEightPublishers\AmpClient\Renderer\AmpBannerExternalAttribute::closed($position)}"
+     n:attr="array_merge($helpers::createOptionAttributes($options), $elementAttributes)">
+</div>

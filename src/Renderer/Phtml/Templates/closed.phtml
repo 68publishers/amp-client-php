@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SixtyEightPublishers\AmpClient\Renderer\Phtml;
+
+use SixtyEightPublishers\AmpClient\Renderer\Options;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Renderer\AmpBannerExternalAttribute;
+
+/** @var Position $position */
+/** @var array<string, mixed> $elementAttributes */
+/** @var Options $options */
+?>
+<div data-amp-banner="<?= Helpers::escapeHtmlAttr($position->getCode()) ?>"
+     data-amp-banner-external="<?= Helpers::escapeHtmlAttr(AmpBannerExternalAttribute::closed($position)) ?>"
+    <?= Helpers::printAttributes(array_merge(Helpers::prefixKeys($options->toArray(), 'data-amp-option-'), $elementAttributes)) ?>>
+</div>
