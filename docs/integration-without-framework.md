@@ -351,6 +351,7 @@ new Templates([
     Templates::Random => '/random.phtml', # for positions with the display type "random"
     Templates::NotFound => '/notFound.phtml',  # for positions that were not found
     Templates::ClientSide => '/clientSide.phtml', # for positions that should be rendered by JS client
+    Templates::Closed => '/closed.phtml', # for positions that were resolved as closed
 ])
 ```
 

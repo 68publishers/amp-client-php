@@ -7,6 +7,9 @@ namespace SixtyEightPublishers\AmpClient\Renderer;
 use JsonException;
 use SixtyEightPublishers\AmpClient\Exception\RendererException;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use function base64_encode;
+use function json_encode;
+use function rawurlencode;
 
 final class AmpBannerExternalAttribute
 {
@@ -31,6 +34,11 @@ final class AmpBannerExternalAttribute
     public static function notFound(Position $position): self
     {
         return new self($position, 'NOT_FOUND', 'Banner not found in fetched response on the server.');
+    }
+
+    public static function closed(Position $position): self
+    {
+        return new self($position, 'CLOSED', 'Banner has an empty data.');
     }
 
     public function __toString(): string

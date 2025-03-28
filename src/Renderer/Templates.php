@@ -13,6 +13,7 @@ final class Templates
     public const Random = 'random';
     public const Multiple = 'multiple';
     public const NotFound = 'notFound';
+    public const Closed = 'closed';
     public const ClientSide = 'clientSide';
 
     /**
@@ -21,6 +22,7 @@ final class Templates
      *      random?: string,
      *      multiple?: string,
      *      notFound?: string,
+     *      closed?: string,
      *      clientSide?: string,
      *  }
      */
@@ -32,6 +34,7 @@ final class Templates
      *      random?: string,
      *      multiple?: string,
      *      notFound?: string,
+     *      closed?: string,
      *      clientSide?: string,
      *  } $filesMap
      */

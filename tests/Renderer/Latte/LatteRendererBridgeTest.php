@@ -111,6 +111,20 @@ final class LatteRendererBridgeTest extends TestCase
         AssertHtml::assert($expectationFile, $renderer->renderClientSide($position, $mode, $elementAttributes, $this->createOptions($options)));
     }
 
+    /**
+     * @dataProvider closedTemplateDataProvider
+     */
+    public function testClosedTemplateRendering(
+        ResponsePosition $position,
+        array $elementAttributes,
+        array $options,
+        string $expectationFile
+    ): void {
+        $renderer = $this->createRendererBridge();
+
+        AssertHtml::assert($expectationFile, $renderer->renderClosed($position, $elementAttributes, $this->createOptions($options)));
+    }
+
     public function notFoundTemplateDataProvider(): array
     {
         return require __DIR__ . '/../../resources/renderer/not-found/data-provider.php';
@@ -134,6 +148,11 @@ final class LatteRendererBridgeTest extends TestCase
     public function clientSideTemplateDataProvider(): array
     {
         return require __DIR__ . '/../../resources/renderer/client-side/data-provider.php';
+    }
+
+    public function closedTemplateDataProvider(): array
+    {
+        return require __DIR__ . '/../../resources/renderer/closed/data-provider.php';
     }
 
     private function createRendererBridge(): LatteRendererBridge

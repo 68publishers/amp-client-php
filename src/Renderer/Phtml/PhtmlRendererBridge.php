@@ -26,6 +26,7 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
             Templates::Multiple => __DIR__ . '/Templates/multiple.phtml',
             Templates::NotFound => __DIR__ . '/Templates/notFound.phtml',
             Templates::ClientSide => __DIR__ . '/Templates/clientSide.phtml',
+            Templates::Closed => __DIR__ . '/Templates/closed.phtml',
         ]);
     }
 
@@ -93,6 +94,18 @@ final class PhtmlRendererBridge implements RendererBridgeInterface
         $filename = $this->templates->getTemplateFile(Templates::ClientSide);
 
         return OutputBuffer::capture(function () use ($filename, $position, $elementAttributes, $options, $mode) {
+            require $filename;
+        });
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function renderClosed(ResponsePosition $position, array $elementAttributes, Options $options): string
+    {
+        $filename = $this->templates->getTemplateFile(Templates::Closed);
+
+        return OutputBuffer::capture(function () use ($filename, $position, $elementAttributes, $options) {
             require $filename;
         });
     }

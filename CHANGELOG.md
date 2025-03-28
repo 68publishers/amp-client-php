@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Added integration of the new fields `close_expiration` into Position and Banner entities and also into the `data-amp-banner-external` and `data-amp-banner-fingerprint` attributes.
+- Added services of type `ClosingManagerInterface` and `ClosedEntriesStoreInterface` that are used by banner resolver to check if the passed position and its banners are closed.
+- Added new optional configuration option `closing.cookieName`.
+- Added new Latte/phtml templates with the code `closed`.
+
+### Changed
+- Updated docs.
 
 ### Fixed
 - Fixed an issue with the browser downloading images for all breakpoints when it wasn't needed.

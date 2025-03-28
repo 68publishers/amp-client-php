@@ -32,7 +32,7 @@ final class AmpClientLatteExtensionTest extends TestCase
     public function testExceptionShouldBeThrownWhenAmpClientExtensionIsMissing(): void
     {
         Assert::exception(
-            static fn () => ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withMissingAmpClientExtension.neon', ['latte']),
+            static fn () => ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withMissingAmpClientExtension.neon', ['latte', 'http']),
             RuntimeException::class,
             'Compiler extension %A%\\AmpClientExtension is required for %A%\\AmpClientLatteExtension.',
         );
@@ -41,7 +41,7 @@ final class AmpClientLatteExtensionTest extends TestCase
     public function testExceptionShouldBeThrownWhenLatteExtensionIsMissing(): void
     {
         Assert::exception(
-            static fn () => ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.minimal.neon'),
+            static fn () => ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.minimal.neon', ['http']),
             RuntimeException::class,
             'Compiler extension %A%\\LatteExtension is required for %A%\\AmpClientLatteExtension.',
         );
@@ -49,7 +49,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithMinimalConfiguration(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.minimal.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.minimal.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -73,7 +73,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithDebugMode(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withDebugMode.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withDebugMode.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -84,7 +84,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithDirectRenderingModeAsString(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withDirectRenderingModeAsString.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withDirectRenderingModeAsString.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -95,7 +95,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithDirectRenderingModeAsClassname(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withDirectRenderingModeAsClassname.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withDirectRenderingModeAsClassname.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -106,7 +106,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithDirectRenderingModeAsStatement(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withDirectRenderingModeAsStatement.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withDirectRenderingModeAsStatement.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -117,7 +117,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithQueuedRenderingModeAsString(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withQueuedRenderingModeAsString.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withQueuedRenderingModeAsString.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -128,7 +128,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithQueuedRenderingModeAsClassname(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withQueuedRenderingModeAsClassname.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withQueuedRenderingModeAsClassname.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -139,7 +139,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithQueuedRenderingModeAsStatement(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withQueuedRenderingModeAsStatement.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withQueuedRenderingModeAsStatement.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -150,7 +150,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithQueuedRenderingInPresenterModeModeAsString(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withQueuedRenderingInPresenterContextModeAsString.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withQueuedRenderingInPresenterContextModeAsString.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -161,7 +161,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithQueuedRenderingInPresenterModeModeAsClassname(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withQueuedRenderingInPresenterContextModeAsClassname.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withQueuedRenderingInPresenterContextModeAsClassname.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -172,7 +172,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithQueuedRenderingInPresenterModeModeAsStatement(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withQueuedRenderingInPresenterContextModeAsStatement.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withQueuedRenderingInPresenterContextModeAsStatement.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -183,7 +183,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithClientSideRenderingModeAsString(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withClientSideRenderingModeAsString.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withClientSideRenderingModeAsString.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -194,7 +194,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithClientSideRenderingModeAsClassname(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withClientSideRenderingModeAsClassname.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withClientSideRenderingModeAsClassname.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -205,7 +205,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithClientSideRenderingModeAsStatement(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withClientSideRenderingModeAsStatement.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withClientSideRenderingModeAsStatement.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -216,7 +216,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithEmbedRenderingModeAsString(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withEmbedRenderingModeAsString.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withEmbedRenderingModeAsString.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -227,7 +227,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithEmbedRenderingModeAsClassname(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withEmbedRenderingModeAsClassname.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withEmbedRenderingModeAsClassname.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -238,7 +238,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithEmbedRenderingModeAsStatement(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withEmbedRenderingModeAsStatement.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withEmbedRenderingModeAsStatement.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -249,7 +249,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithAlternativeRenderingModes(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withAlternativeRenderingModes.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withAlternativeRenderingModes.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,
@@ -266,7 +266,7 @@ final class AmpClientLatteExtensionTest extends TestCase
 
     public function testContainerWithConfigureClientEventHandler(): void
     {
-        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withConfigureClientEventHandler.neon', ['latte']);
+        $container = ContainerFactory::create(__DIR__ . '/Config/AmpClientLatteExtension/config.withConfigureClientEventHandler.neon', ['latte', 'http']);
 
         $this->assertLatteExtension(
             $container,

@@ -12,3 +12,4 @@ amp_client:
             multiple: %resources%/renderer/multiple/templates/multiple1.phtml
             not_found: %resources%/renderer/not-found/templates/not-found1.phtml
             client_side: %resources%/renderer/client-side/templates/client-side1.phtml
+            closed: %resources%/renderer/closed/templates/closed1.phtml

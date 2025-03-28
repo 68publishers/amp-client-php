@@ -8,6 +8,8 @@ use Closure;
 use Exception;
 use Hamcrest\Matchers;
 use Mockery;
+use SixtyEightPublishers\AmpClient\Closing\ClosingManager;
+use SixtyEightPublishers\AmpClient\Closing\NullClosedEntriesStore;
 use SixtyEightPublishers\AmpClient\Exception\RendererException;
 use SixtyEightPublishers\AmpClient\Expression\ExpressionParser;
 use SixtyEightPublishers\AmpClient\Expression\ExpressionParserInterface;
@@ -43,12 +45,12 @@ final class RendererTest extends TestCase
             ];
         }, null, Renderer::class));
 
-        Assert::equal(new BannersResolver(), $bannersResolver);
+        Assert::equal(new BannersResolver(new ClosingManager(new NullClosedEntriesStore())), $bannersResolver);
         Assert::equal(new PhtmlRendererBridge(), $rendererBridge);
         Assert::equal(new ExpressionParser(), $expressionParser);
     }
 
-    public function testNotFoundTemplateShouldBeRendered(): void
+    public function testNotFoundTemplateShouldBeRenderedWhenPositionHasNoDisplayType(): void
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
         $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
@@ -61,6 +63,37 @@ final class RendererTest extends TestCase
             null,
             0,
             null,
+            ResponsePosition::BreakpointTypeMin,
+            ResponsePosition::ModeManaged,
+            null,
+            [],
+            [],
+        );
+
+        $rendererBridge
+            ->shouldReceive('renderNotFound')
+            ->once()
+            ->with($position, [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && [] === $options->toArray();
+            }))
+            ->andReturn('not found');
+
+        Assert::same('not found', $renderer->render($position));
+    }
+
+    public function testNotFoundTemplateShouldBeRenderedWhenPositionHasNoBanners(): void
+    {
+        $bannersResolver = Mockery::mock(BannersResolverInterface::class);
+        $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
+
+        $position = new ResponsePosition(
+            null,
+            'homepage.top',
+            null,
+            0,
+            ResponsePosition::DisplayTypeSingle,
             ResponsePosition::BreakpointTypeMin,
             ResponsePosition::ModeManaged,
             null,
@@ -117,6 +150,44 @@ final class RendererTest extends TestCase
         Assert::same('single', $renderer->render($position));
     }
 
+    public function testClosedTemplateShouldBeRenderedOnSinglePositionWhenResolverReturnsNoBanner(): void
+    {
+        $bannersResolver = Mockery::mock(BannersResolverInterface::class);
+        $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
+
+        $banner = new Banner('1234', 'Main', 0, null, null, null, null, []);
+        $position = new ResponsePosition(
+            '1234',
+            'homepage.top',
+            'Homepage top',
+            0,
+            ResponsePosition::DisplayTypeSingle,
+            ResponsePosition::BreakpointTypeMin,
+            ResponsePosition::ModeManaged,
+            null,
+            [],
+            [$banner],
+        );
+
+        $bannersResolver
+            ->shouldReceive('resolveSingle')
+            ->once()
+            ->with($position)
+            ->andReturn(null);
+
+        $rendererBridge
+            ->shouldReceive('renderClosed')
+            ->once()
+            ->with($position, [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && [] === $options->toArray();
+            }))
+            ->andReturn('closed');
+
+        Assert::same('closed', $renderer->render($position));
+    }
+
     public function testRandomTemplateShouldBeRendered(): void
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
@@ -153,6 +224,44 @@ final class RendererTest extends TestCase
             ->andReturn('random');
 
         Assert::same('random', $renderer->render($position));
+    }
+
+    public function testClosedTemplateShouldBeRenderedOnRandomPositionWhenResolverReturnsNoBanners(): void
+    {
+        $bannersResolver = Mockery::mock(BannersResolverInterface::class);
+        $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
+
+        $banner = new Banner('1234', 'Main', 0, null, null, null, null, []);
+        $position = new ResponsePosition(
+            '1234',
+            'homepage.top',
+            'Homepage top',
+            0,
+            ResponsePosition::DisplayTypeRandom,
+            ResponsePosition::BreakpointTypeMin,
+            ResponsePosition::ModeManaged,
+            null,
+            [],
+            [$banner],
+        );
+
+        $bannersResolver
+            ->shouldReceive('resolveRandom')
+            ->once()
+            ->with($position)
+            ->andReturn(null);
+
+        $rendererBridge
+            ->shouldReceive('renderClosed')
+            ->once()
+            ->with($position, [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && [] === $options->toArray();
+            }))
+            ->andReturn('closed');
+
+        Assert::same('closed', $renderer->render($position));
     }
 
     public function testMultipleTemplateShouldBeRendered(): void
@@ -196,6 +305,49 @@ final class RendererTest extends TestCase
             ->andReturn('multiple');
 
         Assert::same('multiple', $renderer->render($position, [], ['fetchpriority' => 'high', 'loading' => 'lazy']));
+    }
+
+    public function testClosedTemplateShouldBeRenderedOnMultiplePositionWhenResolverReturnsNoBanners(): void
+    {
+        $bannersResolver = Mockery::mock(BannersResolverInterface::class);
+        $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
+        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
+        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
+
+        $banners = [
+            new Banner('1234', 'Main', 0, null, null, null, null, []),
+            new Banner('1235', 'Secondary', 0, null, null, null, null, []),
+        ];
+        $position = new ResponsePosition(
+            '1234',
+            'homepage.top',
+            'Homepage top',
+            0,
+            ResponsePosition::DisplayTypeMultiple,
+            ResponsePosition::BreakpointTypeMin,
+            ResponsePosition::ModeManaged,
+            null,
+            [
+                'fetchpriority' => '0:high,low',
+            ],
+            $banners,
+        );
+
+        $bannersResolver
+            ->shouldReceive('resolveMultiple')
+            ->once()
+            ->with($position)
+            ->andReturn([]);
+
+        $rendererBridge
+            ->shouldReceive('renderClosed')
+            ->once()
+            ->with($position, [], Mockery::on(function ($options): bool {
+                return $options instanceof Options && ['fetchpriority' => '0:high,low', 'loading' => 'lazy'] === $options->toArray();
+            }))
+            ->andReturn('closed');
+
+        Assert::same('closed', $renderer->render($position, [], ['fetchpriority' => 'high', 'loading' => 'lazy']));
     }
 
     public function testClientSideTemplateShouldBeRendered(): void
@@ -484,64 +636,6 @@ final class RendererTest extends TestCase
         ]));
     }
 
-    public function testSingleTemplateShouldNotBeRenderedWithConditionalAttributesWhenBannerNotFound(): void
-    {
-        $bannersResolver = Mockery::mock(BannersResolverInterface::class);
-        $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
-        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
-        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
-
-        $position = new ResponsePosition(
-            '1234',
-            'homepage.top',
-            'Homepage top',
-            0,
-            ResponsePosition::DisplayTypeSingle,
-            ResponsePosition::BreakpointTypeMin,
-            ResponsePosition::ModeManaged,
-            null,
-            [],
-            [],
-        );
-
-        $bannersResolver
-            ->shouldReceive('resolveSingle')
-            ->once()
-            ->with($position)
-            ->andReturn(null);
-
-        $rendererBridge
-            ->shouldReceive('renderSingle')
-            ->once()
-            ->with(
-                $position,
-                null,
-                Mockery::on(function ($attributes): bool {
-                    return [
-                            'class' => 'base-class',
-                            'data-base' => true,
-                        ] === $attributes;
-                }),
-                Mockery::on(function ($options): bool {
-                    return $options instanceof Options && [] === $options->toArray();
-                }),
-            )
-            ->andReturn('single');
-
-        Assert::same('single', $renderer->render($position, [
-            'class' => 'base-class',
-            'exists@class' => 'exists',
-            'exists(default)@class' => 'exists-default',
-            'exists(500)@class' => 'exists-500',
-            'exists(900)@class' => 'exists-900',
-            'data-base' => true,
-            'exists@data-exists' => true,
-            'exists(default)@data-exists-default' => true,
-            'exists(500)@data-exists-500' => true,
-            'exists(900)@data-exists-900' => true,
-        ]));
-    }
-
     public function testMultipleTemplateShouldBeRenderedWithConditionalAttributesWhenContentFound(): void
     {
         $bannersResolver = Mockery::mock(BannersResolverInterface::class);
@@ -647,64 +741,6 @@ final class RendererTest extends TestCase
             ->with(
                 $position,
                 [$banner1, $banner2],
-                Mockery::on(function ($attributes): bool {
-                    return [
-                            'class' => 'base-class',
-                            'data-base' => true,
-                        ] === $attributes;
-                }),
-                Mockery::on(function ($options): bool {
-                    return $options instanceof Options && [] === $options->toArray();
-                }),
-            )
-            ->andReturn('multiple');
-
-        Assert::same('multiple', $renderer->render($position, [
-            'class' => 'base-class',
-            'exists@class' => 'exists',
-            'exists(default)@class' => 'exists-default',
-            'exists(500)@class' => 'exists-500',
-            'exists(900)@class' => 'exists-900',
-            'data-base' => true,
-            'exists@data-exists' => true,
-            'exists(default)@data-exists-default' => true,
-            'exists(500)@data-exists-500' => true,
-            'exists(900)@data-exists-900' => true,
-        ]));
-    }
-
-    public function testMultipleTemplateShouldNotBeRenderedWithConditionalAttributesWhenBannerNotFound(): void
-    {
-        $bannersResolver = Mockery::mock(BannersResolverInterface::class);
-        $rendererBridge = Mockery::mock(RendererBridgeInterface::class);
-        $expressionParser = Mockery::mock(ExpressionParserInterface::class);
-        $renderer = new Renderer($bannersResolver, $rendererBridge, $expressionParser);
-
-        $position = new ResponsePosition(
-            '1234',
-            'homepage.top',
-            'Homepage top',
-            0,
-            ResponsePosition::DisplayTypeMultiple,
-            ResponsePosition::BreakpointTypeMin,
-            ResponsePosition::ModeManaged,
-            null,
-            [],
-            [],
-        );
-
-        $bannersResolver
-            ->shouldReceive('resolveMultiple')
-            ->once()
-            ->with($position)
-            ->andReturn([]);
-
-        $rendererBridge
-            ->shouldReceive('renderMultiple')
-            ->once()
-            ->with(
-                $position,
-                [],
                 Mockery::on(function ($attributes): bool {
                     return [
                             'class' => 'base-class',
