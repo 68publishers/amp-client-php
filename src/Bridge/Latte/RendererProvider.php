@@ -21,6 +21,7 @@ use SixtyEightPublishers\AmpClient\Request\ValueObject\BannerResource;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\BannersResponse;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Settings;
 use function array_filter;
 use function array_keys;
 use function array_values;
@@ -117,7 +118,7 @@ final class RendererProvider
             );
         }
 
-        return $this->renderPosition($responsePosition, $options);
+        return $this->renderPosition($responsePosition, $response->getSettings(), $options);
     }
 
     public function setDebugMode(bool $debugMode): self
@@ -234,7 +235,7 @@ final class RendererProvider
                         );
                     }
 
-                    return $this->renderPosition($responsePosition, $options);
+                    return $this->renderPosition($responsePosition, $response->getSettings(), $options);
                 },
                 $this->queue,
             ),
@@ -302,13 +303,13 @@ final class RendererProvider
      *
      * @throws RendererException
      */
-    private function renderPosition(ResponsePosition $position, array $options): string
+    private function renderPosition(ResponsePosition $position, Settings $settings, array $options): string
     {
         try {
             $elementAttributes = (array) ($options[self::OptionAttributes] ?? []);
             $bannerOptions = (array) ($options[self::OptionOptions] ?? []);
 
-            return $this->renderer->render($position, $elementAttributes, $bannerOptions);
+            return $this->renderer->render($position, $settings, $elementAttributes, $bannerOptions);
         } catch (RendererException $e) {
             if ($this->debugMode) {
                 throw $e;

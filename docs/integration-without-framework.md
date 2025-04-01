@@ -145,6 +145,7 @@ $request = new BannersRequest([
 
 $response = $client->fetchBanners($request); # SixtyEightPublishers\AmpClient\Response\BannersResponse
 
+$settings = $response->getSettings();
 $homepageTop = $response->getPosition('homepage.top');
 $homepagePromo = $response->getPosition('homepage.promo');
 ```
@@ -161,13 +162,13 @@ use SixtyEightPublishers\AmpClient\Response\BannersResponse;
 
 $renderer = Renderer::create();
 
-echo $renderer->render($response->getPosition('homepage.top'));
+echo $renderer->render($response->getPosition('homepage.top'), $response->getSettings());
 ```
 
-The second argument can be used to pass an array of attributes to be contained in the banner's HTML wrapper element.
+The third argument can be used to pass an array of attributes to be contained in the banner's HTML wrapper element.
 
 ```php
-echo $renderer->render($response->getPosition('homepage.top'), ['class' => 'my-awesome-class']);
+echo $renderer->render($response->getPosition('homepage.top'), $response->getSettings(), ['class' => 'my-awesome-class']);
 ```
 
 Attributes can also be rendered conditionally, the client currently supports the following conditions:
@@ -176,7 +177,7 @@ Attributes can also be rendered conditionally, the client currently supports the
 - `exists(<breakpoint>)@<attribute>` - The attribute will only be created if a banner contains content for the specified breakpoint.
 
 ```php
-echo $renderer->render($response->getPosition('homepage.top'), [
+echo $renderer->render($response->getPosition('homepage.top'), $response->getSettings(), [
     'class' => 'my-awesome-class'
     'exists@class' => 'banner-exists',
     'exists(default)@class' => 'banner-default',
@@ -185,11 +186,11 @@ echo $renderer->render($response->getPosition('homepage.top'), [
 ```
 The `class` attribute is the only one that will be merged in the result. The other attributes are not merged and are overwritten.
 
-The third argument can be used to provide custom options.
+The fourth argument can be used to provide custom options.
 These options are available in the banner templates and will also be available to the JavaScript client, so they can be accessed in event handlers.
 
 ```php
-echo $renderer->render($response->getPosition('homepage.top'), [], ['customOption' => 'customValue']);
+echo $renderer->render($response->getPosition('homepage.top'), $response->getSettings(), [], ['customOption' => 'customValue']);
 ```
 
 ### Rendering banners on the client side
@@ -252,7 +253,7 @@ if ($position::ModeEmbed === $position->getMode()) {
         mode: ClientSideMode::embed(),
     );
 } else {
-    echo $renderer->render($position);
+    echo $renderer->render($position, $response->getSettings());
 }
 ```
 
@@ -265,7 +266,7 @@ To activate lazy loading the option `'loading' => 'lazy'` must be passed to the 
 
 ```php
 # server-side rendering:
-echo $renderer->render($response->getPosition('homepage.top'), [], [
+echo $renderer->render($response->getPosition('homepage.top'), $response->getSettings(), [], [
     'loading' => 'lazy',
 ]);
 
@@ -280,7 +281,7 @@ his can be achieved with the following expression:
 
 ```php
 # server-side rendering:
-echo $renderer->render($response->getPosition('homepage.top'), [], [
+echo $renderer->render($response->getPosition('homepage.top'), $response->getSettings(), [], [
     'loading' => '>=1:lazy',
 ]);
 
@@ -298,7 +299,7 @@ The [fetchpriority](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageEl
 
 ```php
 # server-side rendering:
-echo $renderer->render($response->getPosition('homepage.top'), [], [
+echo $renderer->render($response->getPosition('homepage.top'), $response->getSettings(), [], [
     'fetchpriority' => 'high',
 ]);
 
@@ -313,7 +314,7 @@ This can be achieved with the following expression:
 
 ```php
 # server-side rendering:
-echo $renderer->render($response->getPosition('homepage.top'), [], [
+echo $renderer->render($response->getPosition('homepage.top'), $response->getSettings(), [], [
     'fetchpriority' => '0:high,low',
 ]);
 
@@ -384,7 +385,7 @@ $renderer = Renderer::create(
     ),
 );
 
-echo $renderer->render($response->getPosition('homepage.top'));
+echo $renderer->render($response->getPosition('homepage.top'), $response->getSettings());
 ```
 
 The default `.latte` templates are located [here](../src/Renderer/Latte/Templates) and can be overridden in the same way as the default `.phtml` templates.
@@ -405,7 +406,7 @@ use Latte\Engine;
 /** @var RendererInterface $renderer */
 
 $engine = new Engine();
-$provider = (new RendererProvider($client,$renderer))
+$provider = (new RendererProvider($client, $renderer))
     ->setDebugMode(true); # exceptions from Client and Renderer are suppressed in non-debug mode
 
 AmpClientLatteExtension::register($engine, $provider);

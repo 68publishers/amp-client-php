@@ -27,16 +27,16 @@ class BannersResolver implements BannersResolverInterface
         $this->closingManager = $closingManager;
     }
 
-    public function resolveSingle(Position $position): ?Banner
+    public function resolveSingle(Position $position, int $closeRevision = 0): ?Banner
     {
-        if ($this->closingManager->isPositionClosed($position->getCode())) {
+        if ($this->closingManager->isPositionClosed($position->getCode(), $closeRevision)) {
             return null;
         }
 
         $banners = array_values(
             array_filter(
                 $position->getBanners(),
-                fn (Banner $banner): bool => !$this->closingManager->isBannerClosed($position->getCode(), $banner->getId()),
+                fn (Banner $banner): bool => !$this->closingManager->isBannerClosed($position->getCode(), $banner->getId(), $closeRevision),
             ),
         );
 
@@ -53,16 +53,16 @@ class BannersResolver implements BannersResolverInterface
         return $banners[$firstHighestScoreKey] ?? null;
     }
 
-    public function resolveRandom(Position $position): ?Banner
+    public function resolveRandom(Position $position, int $closeRevision = 0): ?Banner
     {
-        if ($this->closingManager->isPositionClosed($position->getCode())) {
+        if ($this->closingManager->isPositionClosed($position->getCode(), $closeRevision)) {
             return null;
         }
 
         $banners = array_values(
             array_filter(
                 $position->getBanners(),
-                fn (Banner $banner): bool => !$this->closingManager->isBannerClosed($position->getCode(), $banner->getId()),
+                fn (Banner $banner): bool => !$this->closingManager->isBannerClosed($position->getCode(), $banner->getId(), $closeRevision),
             ),
         );
 
@@ -94,16 +94,16 @@ class BannersResolver implements BannersResolverInterface
         return $banners[$key] ?? $banners[0];
     }
 
-    public function resolveMultiple(Position $position): array
+    public function resolveMultiple(Position $position, int $closeRevision = 0): array
     {
-        if ($this->closingManager->isPositionClosed($position->getCode())) {
+        if ($this->closingManager->isPositionClosed($position->getCode(), $closeRevision)) {
             return [];
         }
 
         $banners = array_values(
             array_filter(
                 $position->getBanners(),
-                fn (Banner $banner): bool => !$this->closingManager->isBannerClosed($position->getCode(), $banner->getId()),
+                fn (Banner $banner): bool => !$this->closingManager->isBannerClosed($position->getCode(), $banner->getId(), $closeRevision),
             ),
         );
 

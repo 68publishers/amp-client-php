@@ -29,8 +29,8 @@ final class NetteCookieClosedEntriesStoreTest extends TestCase
             ->with('amp-c')
             ->andReturn(null);
 
-        Assert::false($store->isClosed(EntryKey::position('foo')));
-        Assert::false($store->isClosed(EntryKey::position('bar')));
+        Assert::false($store->isClosed(EntryKey::position('foo'), 0));
+        Assert::false($store->isClosed(EntryKey::position('bar'), 0));
     }
 
     public function testShouldReturnFalseWhenNonStringCookieDefined(): void
@@ -43,8 +43,8 @@ final class NetteCookieClosedEntriesStoreTest extends TestCase
             ->with('amp-c')
             ->andReturn(1);
 
-        Assert::false($store->isClosed(EntryKey::position('foo')));
-        Assert::false($store->isClosed(EntryKey::position('bar')));
+        Assert::false($store->isClosed(EntryKey::position('foo'), 0));
+        Assert::false($store->isClosed(EntryKey::position('bar'), 0));
     }
 
     public function testShouldReturnFalseWhenCookieContainsInvalidJson(): void
@@ -57,8 +57,8 @@ final class NetteCookieClosedEntriesStoreTest extends TestCase
             ->with('amp-c')
             ->andReturn(urldecode('{"foo":'));
 
-        Assert::false($store->isClosed(EntryKey::position('foo')));
-        Assert::false($store->isClosed(EntryKey::position('bar')));
+        Assert::false($store->isClosed(EntryKey::position('foo'), 0));
+        Assert::false($store->isClosed(EntryKey::position('bar'), 0));
     }
 
     public function testShouldReturnFalseWhenCookieContainsValidNonObjectJson(): void
@@ -71,8 +71,8 @@ final class NetteCookieClosedEntriesStoreTest extends TestCase
             ->with('amp-c')
             ->andReturn(urldecode('"foo"'));
 
-        Assert::false($store->isClosed(EntryKey::position('foo')));
-        Assert::false($store->isClosed(EntryKey::position('bar')));
+        Assert::false($store->isClosed(EntryKey::position('foo'), 0));
+        Assert::false($store->isClosed(EntryKey::position('bar'), 0));
     }
 
     public function testShouldReturnFalseWhenKeyNotFound(): void
@@ -84,12 +84,13 @@ final class NetteCookieClosedEntriesStoreTest extends TestCase
             ->once()
             ->with('amp-c')
             ->andReturn($this->makeCookieValue([
+                'r' => 0,
                 'p:bar' => $this->makeTimestamp('+1 second'),
                 'b:bar:1' => false,
             ]));
 
-        Assert::false($store->isClosed(EntryKey::position('foo')));
-        Assert::false($store->isClosed(EntryKey::banner('foo', '1')));
+        Assert::false($store->isClosed(EntryKey::position('foo'), 0));
+        Assert::false($store->isClosed(EntryKey::banner('foo', '1'), 0));
     }
 
     public function testShouldReturnFalseWhenKeyIsExpired(): void
@@ -101,12 +102,31 @@ final class NetteCookieClosedEntriesStoreTest extends TestCase
             ->once()
             ->with('amp-c')
             ->andReturn($this->makeCookieValue([
+                'r' => 0,
                 'p:foo' => $this->makeTimestamp('-1 second'),
                 'b:foo:1' => $this->makeTimestamp('-1 second'),
             ]));
 
-        Assert::false($store->isClosed(EntryKey::position('foo')));
-        Assert::false($store->isClosed(EntryKey::banner('foo', '1')));
+        Assert::false($store->isClosed(EntryKey::position('foo'), 0));
+        Assert::false($store->isClosed(EntryKey::banner('foo', '1'), 0));
+    }
+
+    public function testShouldReturnFalseWhenRevisionNotMatching(): void
+    {
+        $request = Mockery::mock(IRequest::class);
+        $store = new NetteCookieClosedEntriesStore($request, 'amp-c');
+
+        $request->shouldReceive('getCookie')
+            ->once()
+            ->with('amp-c')
+            ->andReturn($this->makeCookieValue([
+                'r' => 1,
+                'p:foo' => $this->makeTimestamp('+1 second'),
+                'b:foo:1' => $this->makeTimestamp('+1 second'),
+            ]));
+
+        Assert::false($store->isClosed(EntryKey::position('foo'), 2));
+        Assert::false($store->isClosed(EntryKey::banner('foo', '1'), 2));
     }
 
     public function testShouldReturnTrueWhenKeyIsFalse(): void
@@ -118,15 +138,16 @@ final class NetteCookieClosedEntriesStoreTest extends TestCase
             ->once()
             ->with('amp-c')
             ->andReturn($this->makeCookieValue([
+                'r' => 0,
                 'p:foo' => false,
                 'b:foo:1' => false,
             ]));
 
-        Assert::true($store->isClosed(EntryKey::position('foo')));
-        Assert::true($store->isClosed(EntryKey::banner('foo', '1')));
+        Assert::true($store->isClosed(EntryKey::position('foo'), 0));
+        Assert::true($store->isClosed(EntryKey::banner('foo', '1'), 0));
     }
 
-    public function testShouldReturnTrueWhenKeyIsExpired(): void
+    public function testShouldReturnTrueWhenKeyIsNotExpired(): void
     {
         $request = Mockery::mock(IRequest::class);
         $store = new NetteCookieClosedEntriesStore($request, 'amp-c');
@@ -135,12 +156,13 @@ final class NetteCookieClosedEntriesStoreTest extends TestCase
             ->once()
             ->with('amp-c')
             ->andReturn($this->makeCookieValue([
+                'r' => 0,
                 'p:foo' => $this->makeTimestamp('+1 second'),
                 'b:foo:1' => $this->makeTimestamp('+1 second'),
             ]));
 
-        Assert::true($store->isClosed(EntryKey::position('foo')));
-        Assert::true($store->isClosed(EntryKey::banner('foo', '1')));
+        Assert::true($store->isClosed(EntryKey::position('foo'), 0));
+        Assert::true($store->isClosed(EntryKey::banner('foo', '1'), 0));
     }
 
     protected function tearDown(): void

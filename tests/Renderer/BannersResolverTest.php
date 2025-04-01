@@ -35,10 +35,11 @@ final class BannersResolverTest extends TestCase
                 'homepage.top',
                 false,
                 [],
+                1,
             ),
         );
 
-        Assert::null($resolver->resolveSingle($position));
+        Assert::null($resolver->resolveSingle($position, 1));
     }
 
     public function testNullShouldBeReturnedWhenResolvingClosedSinglePosition(): void
@@ -62,10 +63,11 @@ final class BannersResolverTest extends TestCase
                 'homepage.top',
                 true,
                 [],
+                1,
             ),
         );
 
-        Assert::null($resolver->resolveSingle($position));
+        Assert::null($resolver->resolveSingle($position, 1));
     }
 
     public function testFirstBannerWithHighestScoreShouldBeReturnedWhenResolvingSinglePosition(): void
@@ -96,10 +98,11 @@ final class BannersResolverTest extends TestCase
                     '3' => false,
                     '4' => false,
                 ],
+                1,
             ),
         );
 
-        Assert::same($banner2, $resolver->resolveSingle($position));
+        Assert::same($banner2, $resolver->resolveSingle($position, 1));
     }
 
     public function testFirstBannerWithHighestScoreShouldBeReturnedWhenResolvingSinglePositionWithSomeClosedBanners(): void
@@ -130,10 +133,11 @@ final class BannersResolverTest extends TestCase
                     '3' => true,
                     '4' => false,
                 ],
+                1,
             ),
         );
 
-        Assert::same($banner4, $resolver->resolveSingle($position));
+        Assert::same($banner4, $resolver->resolveSingle($position, 1));
     }
 
     public function testEmptyArrayShouldBeReturnedWhenResolvingMultiplePositionWithoutBanners(): void
@@ -155,10 +159,11 @@ final class BannersResolverTest extends TestCase
                 'homepage.top',
                 false,
                 [],
+                1,
             ),
         );
 
-        Assert::same([], $resolver->resolveMultiple($position));
+        Assert::same([], $resolver->resolveMultiple($position, 1));
     }
 
     public function testEmptyArrayShouldBeReturnedWhenResolvingClosedMultiplePosition(): void
@@ -182,10 +187,11 @@ final class BannersResolverTest extends TestCase
                 'homepage.top',
                 true,
                 [],
+                1,
             ),
         );
 
-        Assert::same([], $resolver->resolveMultiple($position));
+        Assert::same([], $resolver->resolveMultiple($position, 1));
     }
 
     public function testSortedBannersShouldBeReturnedWhenResolvingMultiplePosition(): void
@@ -216,6 +222,7 @@ final class BannersResolverTest extends TestCase
                     '3' => false,
                     '4' => false,
                 ],
+                2,
             ),
         );
 
@@ -224,7 +231,7 @@ final class BannersResolverTest extends TestCase
             $banner4,
             $banner3,
             $banner1,
-        ], $resolver->resolveMultiple($position));
+        ], $resolver->resolveMultiple($position, 2));
     }
 
     public function testSortedBannersShouldBeReturnedWhenResolvingMultiplePositionWithSomeClosedBanners(): void
@@ -255,13 +262,14 @@ final class BannersResolverTest extends TestCase
                     '3' => true,
                     '4' => false,
                 ],
+                2,
             ),
         );
 
         Assert::same([
             $banner4,
             $banner1,
-        ], $resolver->resolveMultiple($position));
+        ], $resolver->resolveMultiple($position, 2));
     }
 
     public function testNullShouldBeReturnedWhenResolvingRandomPositionWithoutBanners(): void
@@ -283,10 +291,11 @@ final class BannersResolverTest extends TestCase
                 'homepage.top',
                 false,
                 [],
+                2,
             ),
         );
 
-        Assert::null($resolver->resolveRandom($position));
+        Assert::null($resolver->resolveRandom($position, 2));
     }
 
     public function testNullShouldBeReturnedWhenResolvingClosedRandomPosition(): void
@@ -310,10 +319,11 @@ final class BannersResolverTest extends TestCase
                 'homepage.top',
                 true,
                 [],
+                2,
             ),
         );
 
-        Assert::null($resolver->resolveRandom($position));
+        Assert::null($resolver->resolveRandom($position, 2));
     }
 
     public function testRandomBannerShouldBeReturnedWhenResolvingRandomPosition(): void
@@ -344,10 +354,11 @@ final class BannersResolverTest extends TestCase
                     '3' => false,
                     '4' => false,
                 ],
+                3,
             ),
         );
 
-        Assert::type(Banner::class, $resolver->resolveRandom($position)); # @todo: Mock mt_rand() ?
+        Assert::type(Banner::class, $resolver->resolveRandom($position, 3)); # @todo: Mock mt_rand() ?
     }
 
     public function testRandomBannerShouldBeReturnedWhenResolvingRandomPositionWithSomeClosedBanners(): void
@@ -378,10 +389,11 @@ final class BannersResolverTest extends TestCase
                     '3' => false,
                     '4' => true,
                 ],
+                3,
             ),
         );
 
-        Assert::same($banner3, $resolver->resolveRandom($position));
+        Assert::same($banner3, $resolver->resolveRandom($position, 3));
     }
 
     protected function tearDown(): void
@@ -392,19 +404,19 @@ final class BannersResolverTest extends TestCase
     /**
      * @param array<string, bool> $banners
      */
-    private function createClosingManager(string $positionCode, bool $positionClosed, array $banners): ClosingManagerInterface
+    private function createClosingManager(string $positionCode, bool $positionClosed, array $banners, int $revision): ClosingManagerInterface
     {
         $mock = Mockery::mock(ClosingManagerInterface::class);
 
         $mock->shouldReceive('isPositionClosed')
             ->once()
-            ->with($positionCode)
+            ->with($positionCode, $revision)
             ->andReturn($positionClosed);
 
         foreach ($banners as $bannerId => $closed) {
             $mock->shouldReceive('isBannerClosed')
                 ->once()
-                ->with($positionCode, $bannerId)
+                ->with($positionCode, $bannerId, $revision)
                 ->andReturn($closed);
         }
 

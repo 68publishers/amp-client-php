@@ -23,10 +23,10 @@ final class ClosingManagerTest extends TestCase
 
         $store->shouldReceive('isClosed')
             ->once()
-            ->with(Matchers::equalTo(EntryKey::banner('foo', '1')))
+            ->with(Matchers::equalTo(EntryKey::banner('foo', '1')), 0)
             ->andReturn(true);
 
-        Assert::true($manager->isBannerClosed('foo', '1'));
+        Assert::true($manager->isBannerClosed('foo', '1', 0));
     }
 
     public function testStoreShouldBeCalledOnIsPositionClosed(): void
@@ -36,10 +36,10 @@ final class ClosingManagerTest extends TestCase
 
         $store->shouldReceive('isClosed')
             ->once()
-            ->with(Matchers::equalTo(EntryKey::position('foo')))
+            ->with(Matchers::equalTo(EntryKey::position('foo')), 0)
             ->andReturn(true);
 
-        Assert::true($manager->isPositionClosed('foo'));
+        Assert::true($manager->isPositionClosed('foo', 0));
     }
 
     protected function tearDown(): void

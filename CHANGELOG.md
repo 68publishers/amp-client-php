@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Updated docs.
+- Changed the default API version in the configuration to `2`.
 
 ### Fixed
 - Fixed an issue with the browser downloading images for all breakpoints when it wasn't needed.

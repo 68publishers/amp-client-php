@@ -17,8 +17,8 @@ final class NullClosedEntriesStoreTest extends TestCase
     {
         $store = new NullClosedEntriesStore();
 
-        Assert::false($store->isClosed(EntryKey::position('foo')));
-        Assert::false($store->isClosed(EntryKey::banner('foo', '1')));
+        Assert::false($store->isClosed(EntryKey::position('foo'), 0));
+        Assert::false($store->isClosed(EntryKey::banner('foo', '1'), 0));
     }
 }
 

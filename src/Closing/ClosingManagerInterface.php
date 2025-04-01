@@ -6,7 +6,7 @@ namespace SixtyEightPublishers\AmpClient\Closing;
 
 interface ClosingManagerInterface
 {
-    public function isBannerClosed(string $positionCode, string $bannerId): bool;
+    public function isBannerClosed(string $positionCode, string $bannerId, int $revision): bool;
 
-    public function isPositionClosed(string $positionCode): bool;
+    public function isPositionClosed(string $positionCode, int $revision): bool;
 }
