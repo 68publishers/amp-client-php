@@ -6,7 +6,7 @@ namespace SixtyEightPublishers\AmpClient\Closing;
 
 final class NullClosedEntriesStore implements ClosedEntriesStoreInterface
 {
-    public function isClosed(EntryKey $key): bool
+    public function isClosed(EntryKey $key, int $revision): bool
     {
         return false;
     }

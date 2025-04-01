@@ -14,22 +14,24 @@ final class ClosingManager implements ClosingManagerInterface
         $this->store = $store;
     }
 
-    public function isBannerClosed(string $positionCode, string $bannerId): bool
+    public function isBannerClosed(string $positionCode, string $bannerId, int $revision): bool
     {
         return $this->store->isClosed(
             EntryKey::banner(
                 $positionCode,
                 $bannerId,
             ),
+            $revision,
         );
     }
 
-    public function isPositionClosed(string $positionCode): bool
+    public function isPositionClosed(string $positionCode, int $revision): bool
     {
         return $this->store->isClosed(
             EntryKey::position(
                 $positionCode,
             ),
+            $revision,
         );
     }
 }

@@ -11,6 +11,7 @@ use SixtyEightPublishers\AmpClient\Response\ValueObject\Dimensions;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Settings;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Source;
 use function array_map;
 
@@ -66,9 +67,22 @@ use function array_map;
  *     banners: array<int, BannerData>,
  * }
  *
- * @phpstan-type BannersResponseBody = array{
+ * @phpstan-type SettingsData = array{
+ *     close_revision: int,
+ * }
+ *
+ * @phpstan-type BannersResponseBodyV1 = array{
  *     status: string,
+ *     settings?: SettingsData,
  *     data: array<string, PositionData>,
+ * }
+ *
+ * @phpstan-type BannersResponseBodyV2 = array{
+ *     status: string,
+ *     data: array{
+ *         settings: SettingsData,
+ *         positions: array<string, PositionData>,
+ *     },
  * }
  */
 final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInterface
@@ -79,15 +93,30 @@ final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInt
     }
 
     /**
-     * @param BannersResponseBody $responseBody
+     * @param BannersResponseBodyV1|BannersResponseBodyV2 $responseBody
      */
     public function hydrate($responseBody): BannersResponse
     {
         $data = $responseBody['data'];
-        $positions = [];
 
-        foreach ($data as $positionCode => $positionData) {
-            $positions[$positionCode] = new Position(
+        if (isset($data['positions'])) { # v2
+            /** @var array<string, PositionData> $positions */
+            $positions = $data['positions'];
+            /** @var SettingsData $settings */
+            $settings = $data['settings'];
+        } else { # v1
+            /** @var array<string, PositionData> $positions */
+            $positions = $data;
+            /** @var SettingsData $settings */
+            $settings = $responseBody['settings'] ?? [
+                'close_revision' => 0,
+            ];
+        }
+
+        $mappedPositions = [];
+
+        foreach ($positions as $positionCode => $positionData) {
+            $mappedPositions[$positionCode] = new Position(
                 $positionData['position_id'] ?? null,
                 $positionCode,
                 $positionData['position_name'] ?? null,
@@ -101,7 +130,20 @@ final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInt
             );
         }
 
-        return new BannersResponse($positions);
+        return new BannersResponse(
+            $this->hydrateSettings($settings),
+            $mappedPositions,
+        );
+    }
+
+    /**
+     * @param SettingsData $settings
+     */
+    private function hydrateSettings(array $settings): Settings
+    {
+        return new Settings(
+            $settings['close_revision'],
+        );
     }
 
     /**

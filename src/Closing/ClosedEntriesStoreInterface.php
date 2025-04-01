@@ -6,5 +6,5 @@ namespace SixtyEightPublishers\AmpClient\Closing;
 
 interface ClosedEntriesStoreInterface
 {
-    public function isClosed(EntryKey $key): bool;
+    public function isClosed(EntryKey $key, int $revision): bool;
 }

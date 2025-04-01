@@ -21,6 +21,7 @@ use SixtyEightPublishers\AmpClient\Request\ValueObject\BannerResource;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\BannersResponse;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Settings;
 use SixtyEightPublishers\AmpClient\Tests\Bridge\Latte\Event\ConfigureClientEventHandlerFixture;
 use SixtyEightPublishers\AmpClient\Tests\Exception\AmpExceptionFixture;
 use stdClass;
@@ -49,9 +50,12 @@ final class RendererProviderTest extends TestCase
             [],
             [],
         );
-        $response = new BannersResponse([
-            'homepage.top' => $responsePosition,
-        ]);
+        $response = new BannersResponse(
+            $settings = new Settings(0),
+            [
+                'homepage.top' => $responsePosition,
+            ],
+        );
 
         $client
             ->shouldReceive('fetchBanners')
@@ -71,7 +75,7 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition, [], [])
+            ->with($responsePosition, $settings, [], [])
             ->andReturn('<homepage.top>');
 
         Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top'));
@@ -95,9 +99,12 @@ final class RendererProviderTest extends TestCase
             [],
             [],
         );
-        $response = new BannersResponse([
-            'homepage.top' => $responsePosition,
-        ]);
+        $response = new BannersResponse(
+            $settings = new Settings(0),
+            [
+                'homepage.top' => $responsePosition,
+            ],
+        );
 
         $client
             ->shouldReceive('fetchBanners')
@@ -117,7 +124,7 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition, [], [])
+            ->with($responsePosition, $settings, [], [])
             ->andReturn('<homepage.top>');
 
         Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top', ['mode' => 'direct']));
@@ -141,9 +148,12 @@ final class RendererProviderTest extends TestCase
             [],
             [],
         );
-        $response = new BannersResponse([
-            'homepage.top' => $responsePosition,
-        ]);
+        $response = new BannersResponse(
+            $settings = new Settings(0),
+            [
+                'homepage.top' => $responsePosition,
+            ],
+        );
 
         $client
             ->shouldReceive('fetchBanners')
@@ -163,7 +173,7 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition, ['class' => 'my-custom-class'], [])
+            ->with($responsePosition, $settings, ['class' => 'my-custom-class'], [])
             ->andReturn('<homepage.top>');
 
         Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top', ['attributes' => ['class' => 'my-custom-class']]));
@@ -187,9 +197,12 @@ final class RendererProviderTest extends TestCase
             [],
             [],
         );
-        $response = new BannersResponse([
-            'homepage.top' => $responsePosition,
-        ]);
+        $response = new BannersResponse(
+            $settings = new Settings(0),
+            [
+                'homepage.top' => $responsePosition,
+            ],
+        );
 
         $client
             ->shouldReceive('fetchBanners')
@@ -209,7 +222,7 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition, [], ['loading' => 'lazy', 'custom' => 'value'])
+            ->with($responsePosition, $settings, [], ['loading' => 'lazy', 'custom' => 'value'])
             ->andReturn('<homepage.top>');
 
         Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top', ['options' => ['loading' => 'lazy', 'custom' => 'value']]));
@@ -233,9 +246,12 @@ final class RendererProviderTest extends TestCase
             [],
             [],
         );
-        $response = new BannersResponse([
-            'homepage.top' => $responsePosition,
-        ]);
+        $response = new BannersResponse(
+            $settings = new Settings(0),
+            [
+                'homepage.top' => $responsePosition,
+            ],
+        );
 
         $client
             ->shouldReceive('fetchBanners')
@@ -258,7 +274,7 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition, [], [])
+            ->with($responsePosition, $settings, [], [])
             ->andReturn('<homepage.top>');
 
         Assert::same(
@@ -295,9 +311,12 @@ final class RendererProviderTest extends TestCase
             [],
             [],
         );
-        $response = new BannersResponse([
-            'homepage.top' => $responsePosition,
-        ]);
+        $response = new BannersResponse(
+            new Settings(0),
+            [
+                'homepage.top' => $responsePosition,
+            ],
+        );
 
         $client
             ->shouldReceive('fetchBanners')
@@ -355,14 +374,17 @@ final class RendererProviderTest extends TestCase
             ->shouldReceive('fetchBanners')
             ->twice()
             ->with(Mockery::type(BannersRequest::class))
-            ->andReturn(new BannersResponse([
-                'homepage.top' => $responsePosition,
-            ]));
+            ->andReturn(new BannersResponse(
+                $settings = new Settings(0),
+                [
+                    'homepage.top' => $responsePosition,
+                ],
+            ));
 
         $renderer
             ->shouldReceive('render')
             ->twice()
-            ->with($responsePosition, [], [])
+            ->with($responsePosition, $settings, [], [])
             ->andReturn('<homepage.top>');
 
         Assert::same('<homepage.top>', $provider(new stdClass(), 'homepage.top'));
@@ -438,7 +460,7 @@ final class RendererProviderTest extends TestCase
             ->shouldReceive('fetchBanners')
             ->once()
             ->with(Mockery::type(BannersRequest::class))
-            ->andReturn(new BannersResponse([]));
+            ->andReturn(new BannersResponse(new Settings(0), []));
 
         Assert::same('', $provider(new stdClass(), 'homepage.top'));
     }
@@ -468,14 +490,17 @@ final class RendererProviderTest extends TestCase
             ->shouldReceive('fetchBanners')
             ->once()
             ->with(Mockery::type(BannersRequest::class))
-            ->andReturn(new BannersResponse([
-                'homepage.top' => $responsePosition,
-            ]));
+            ->andReturn(new BannersResponse(
+                $settings = new Settings(0),
+                [
+                    'homepage.top' => $responsePosition,
+                ],
+            ));
 
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition, [], [])
+            ->with($responsePosition, $settings, [], [])
             ->andThrow(new RendererException('Test renderer exception'));
 
         Assert::exception(
@@ -508,14 +533,17 @@ final class RendererProviderTest extends TestCase
             ->shouldReceive('fetchBanners')
             ->once()
             ->with(Mockery::type(BannersRequest::class))
-            ->andReturn(new BannersResponse([
-                'homepage.top' => $responsePosition,
-            ]));
+            ->andReturn(new BannersResponse(
+                $settings = new Settings(0),
+                [
+                    'homepage.top' => $responsePosition,
+                ],
+            ));
 
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition, [], [])
+            ->with($responsePosition, $settings, [], [])
             ->andThrow(new RendererException('Test renderer exception'));
 
         Assert::same('', $provider(new stdClass(), 'homepage.top'));
@@ -546,14 +574,17 @@ final class RendererProviderTest extends TestCase
             ->shouldReceive('fetchBanners')
             ->once()
             ->with(Mockery::type(BannersRequest::class))
-            ->andReturn(new BannersResponse([
-                'homepage.top' => $responsePosition,
-            ]));
+            ->andReturn(new BannersResponse(
+                $settings = new Settings(0),
+                [
+                    'homepage.top' => $responsePosition,
+                ],
+            ));
 
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition, [], [])
+            ->with($responsePosition, $settings, [], [])
             ->andThrow($exception);
 
         $logger
@@ -641,10 +672,13 @@ final class RendererProviderTest extends TestCase
             [],
             [],
         );
-        $response = new BannersResponse([
-            'homepage.top' => $responsePosition1,
-            'homepage.bottom' => $responsePosition2,
-        ]);
+        $response = new BannersResponse(
+            $settings = new Settings(0),
+            [
+                'homepage.top' => $responsePosition1,
+                'homepage.bottom' => $responsePosition2,
+            ],
+        );
 
         $client
             ->shouldReceive('fetchBanners')
@@ -665,11 +699,11 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition1, ['class' => 'my-custom-class'], [])
+            ->with($responsePosition1, $settings, ['class' => 'my-custom-class'], [])
             ->andReturn('<homepage.top>')
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition2, [], [])
+            ->with($responsePosition2, $settings, [], [])
             ->andReturn('<homepage.bottom>');
 
         Assert::same(
@@ -755,10 +789,13 @@ final class RendererProviderTest extends TestCase
             [],
             [],
         );
-        $response = new BannersResponse([
-            'homepage.top' => $responsePosition1,
-            'homepage.bottom' => $responsePosition2,
-        ]);
+        $response = new BannersResponse(
+            $settings = new Settings(0),
+            [
+                'homepage.top' => $responsePosition1,
+                'homepage.bottom' => $responsePosition2,
+            ],
+        );
 
         $client
             ->shouldReceive('fetchBanners')
@@ -779,11 +816,11 @@ final class RendererProviderTest extends TestCase
         $renderer
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition1, ['class' => 'my-custom-class'], [])
+            ->with($responsePosition1, $settings, ['class' => 'my-custom-class'], [])
             ->andReturn('<homepage.top>')
             ->shouldReceive('render')
             ->once()
-            ->with($responsePosition2, [], [])
+            ->with($responsePosition2, $settings, [], [])
             ->andReturn('<homepage.bottom>');
 
         Assert::same(
@@ -847,9 +884,12 @@ final class RendererProviderTest extends TestCase
             [],
             [],
         );
-        $response = new BannersResponse([
-            'homepage.bottom' => $responsePosition1,
-        ]);
+        $response = new BannersResponse(
+            new Settings(0),
+            [
+                'homepage.bottom' => $responsePosition1,
+            ],
+        );
 
         $client
             ->shouldReceive('fetchBanners')

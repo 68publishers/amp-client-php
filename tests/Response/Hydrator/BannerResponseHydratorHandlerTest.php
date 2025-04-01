@@ -24,10 +24,30 @@ final class BannerResponseHydratorHandlerTest extends TestCase
         Assert::false($handler->canHydrateResponse(stdClass::class));
     }
 
-    public function testResponseShouldBeHydrated(): void
+    public function testResponseShouldBeHydratedForVersion160(): void
     {
-        $response = json_decode(file_get_contents(__DIR__ . '/../../resources/response-body/fetch-banners.full.json'), true);
-        $expected = require __DIR__ . '/../../resources/response-body/fetch-banners.full.php';
+        $response = json_decode(file_get_contents(__DIR__ . '/../../resources/response-body/fetch-banners.v1.6.0.json'), true);
+        $expected = require __DIR__ . '/../../resources/response-body/fetch-banners.v1.6.0.php';
+
+        $handler = new BannersResponseHydratorHandler();
+
+        Assert::equal($expected, $handler->hydrate($response));
+    }
+
+    public function testResponseShouldBeHydratedForVersion170(): void
+    {
+        $response = json_decode(file_get_contents(__DIR__ . '/../../resources/response-body/fetch-banners.v1.7.0.json'), true);
+        $expected = require __DIR__ . '/../../resources/response-body/fetch-banners.v1.7.0.php';
+
+        $handler = new BannersResponseHydratorHandler();
+
+        Assert::equal($expected, $handler->hydrate($response));
+    }
+
+    public function testResponseShouldBeHydratedForVersion200(): void
+    {
+        $response = json_decode(file_get_contents(__DIR__ . '/../../resources/response-body/fetch-banners.v2.0.0.json'), true);
+        $expected = require __DIR__ . '/../../resources/response-body/fetch-banners.v2.0.0.php';
 
         $handler = new BannersResponseHydratorHandler();
 

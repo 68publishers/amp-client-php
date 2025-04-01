@@ -25,6 +25,7 @@ use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPositi
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Settings;
 use Tester\Assert;
 use Tester\TestCase;
 use function call_user_func;
@@ -78,7 +79,7 @@ final class RendererTest extends TestCase
             }))
             ->andReturn('not found');
 
-        Assert::same('not found', $renderer->render($position));
+        Assert::same('not found', $renderer->render($position, new Settings(1)));
     }
 
     public function testNotFoundTemplateShouldBeRenderedWhenPositionHasNoBanners(): void
@@ -109,7 +110,7 @@ final class RendererTest extends TestCase
             }))
             ->andReturn('not found');
 
-        Assert::same('not found', $renderer->render($position));
+        Assert::same('not found', $renderer->render($position, new Settings(1)));
     }
 
     public function testSingleTemplateShouldBeRendered(): void
@@ -136,7 +137,7 @@ final class RendererTest extends TestCase
         $bannersResolver
             ->shouldReceive('resolveSingle')
             ->once()
-            ->with($position)
+            ->with($position, 1)
             ->andReturn($banner);
 
         $rendererBridge
@@ -147,7 +148,7 @@ final class RendererTest extends TestCase
             }))
             ->andReturn('single');
 
-        Assert::same('single', $renderer->render($position));
+        Assert::same('single', $renderer->render($position, new Settings(1)));
     }
 
     public function testClosedTemplateShouldBeRenderedOnSinglePositionWhenResolverReturnsNoBanner(): void
@@ -174,7 +175,7 @@ final class RendererTest extends TestCase
         $bannersResolver
             ->shouldReceive('resolveSingle')
             ->once()
-            ->with($position)
+            ->with($position, 1)
             ->andReturn(null);
 
         $rendererBridge
@@ -185,7 +186,7 @@ final class RendererTest extends TestCase
             }))
             ->andReturn('closed');
 
-        Assert::same('closed', $renderer->render($position));
+        Assert::same('closed', $renderer->render($position, new Settings(1)));
     }
 
     public function testRandomTemplateShouldBeRendered(): void
@@ -212,7 +213,7 @@ final class RendererTest extends TestCase
         $bannersResolver
             ->shouldReceive('resolveRandom')
             ->once()
-            ->with($position)
+            ->with($position, 1)
             ->andReturn($banner);
 
         $rendererBridge
@@ -223,7 +224,7 @@ final class RendererTest extends TestCase
             }))
             ->andReturn('random');
 
-        Assert::same('random', $renderer->render($position));
+        Assert::same('random', $renderer->render($position, new Settings(1)));
     }
 
     public function testClosedTemplateShouldBeRenderedOnRandomPositionWhenResolverReturnsNoBanners(): void
@@ -250,7 +251,7 @@ final class RendererTest extends TestCase
         $bannersResolver
             ->shouldReceive('resolveRandom')
             ->once()
-            ->with($position)
+            ->with($position, 1)
             ->andReturn(null);
 
         $rendererBridge
@@ -261,7 +262,7 @@ final class RendererTest extends TestCase
             }))
             ->andReturn('closed');
 
-        Assert::same('closed', $renderer->render($position));
+        Assert::same('closed', $renderer->render($position, new Settings(1)));
     }
 
     public function testMultipleTemplateShouldBeRendered(): void
@@ -293,7 +294,7 @@ final class RendererTest extends TestCase
         $bannersResolver
             ->shouldReceive('resolveMultiple')
             ->once()
-            ->with($position)
+            ->with($position, 1)
             ->andReturn($banners);
 
         $rendererBridge
@@ -304,7 +305,7 @@ final class RendererTest extends TestCase
             }))
             ->andReturn('multiple');
 
-        Assert::same('multiple', $renderer->render($position, [], ['fetchpriority' => 'high', 'loading' => 'lazy']));
+        Assert::same('multiple', $renderer->render($position, new Settings(1), [], ['fetchpriority' => 'high', 'loading' => 'lazy']));
     }
 
     public function testClosedTemplateShouldBeRenderedOnMultiplePositionWhenResolverReturnsNoBanners(): void
@@ -336,7 +337,7 @@ final class RendererTest extends TestCase
         $bannersResolver
             ->shouldReceive('resolveMultiple')
             ->once()
-            ->with($position)
+            ->with($position, 1)
             ->andReturn([]);
 
         $rendererBridge
@@ -347,7 +348,7 @@ final class RendererTest extends TestCase
             }))
             ->andReturn('closed');
 
-        Assert::same('closed', $renderer->render($position, [], ['fetchpriority' => 'high', 'loading' => 'lazy']));
+        Assert::same('closed', $renderer->render($position, new Settings(1), [], ['fetchpriority' => 'high', 'loading' => 'lazy']));
     }
 
     public function testClientSideTemplateShouldBeRendered(): void
@@ -423,7 +424,7 @@ final class RendererTest extends TestCase
             ->andThrow(new RendererException('Test exception'));
 
         Assert::exception(
-            static fn () => $renderer->render($position),
+            static fn () => $renderer->render($position, new Settings(1)),
             RendererException::class,
             'Test exception',
         );
@@ -482,7 +483,7 @@ final class RendererTest extends TestCase
             ->andThrow(new Exception('Test exception'));
 
         Assert::exception(
-            static fn () => $renderer->render($position),
+            static fn () => $renderer->render($position, new Settings(1)),
             RendererException::class,
             'Renderer bridge of type %A% thrown an exception while rendering a position homepage.top: Test exception',
         );
@@ -539,7 +540,7 @@ final class RendererTest extends TestCase
         $bannersResolver
             ->shouldReceive('resolveSingle')
             ->once()
-            ->with($position)
+            ->with($position, 1)
             ->andReturn($banner);
 
         $rendererBridge
@@ -563,7 +564,7 @@ final class RendererTest extends TestCase
             )
             ->andReturn('single');
 
-        Assert::same('single', $renderer->render($position, [
+        Assert::same('single', $renderer->render($position, new Settings(1), [
             'class' => 'base-class',
             'exists@class' => 'exists',
             'exists(default)@class' => 'exists-default',
@@ -601,7 +602,7 @@ final class RendererTest extends TestCase
         $bannersResolver
             ->shouldReceive('resolveSingle')
             ->once()
-            ->with($position)
+            ->with($position, 1)
             ->andReturn($banner);
 
         $rendererBridge
@@ -622,7 +623,7 @@ final class RendererTest extends TestCase
             )
             ->andReturn('single');
 
-        Assert::same('single', $renderer->render($position, [
+        Assert::same('single', $renderer->render($position, new Settings(1), [
             'class' => 'base-class',
             'exists@class' => 'exists',
             'exists(default)@class' => 'exists-default',
@@ -667,7 +668,7 @@ final class RendererTest extends TestCase
         $bannersResolver
             ->shouldReceive('resolveMultiple')
             ->once()
-            ->with($position)
+            ->with($position, 1)
             ->andReturn([$banner1, $banner2]);
 
         $rendererBridge
@@ -692,7 +693,7 @@ final class RendererTest extends TestCase
             )
             ->andReturn('multiple');
 
-        Assert::same('multiple', $renderer->render($position, [
+        Assert::same('multiple', $renderer->render($position, new Settings(1), [
             'class' => 'base-class',
             'exists@class' => 'exists',
             'exists(default)@class' => 'exists-default',
@@ -732,7 +733,7 @@ final class RendererTest extends TestCase
         $bannersResolver
             ->shouldReceive('resolveMultiple')
             ->once()
-            ->with($position)
+            ->with($position, 1)
             ->andReturn([$banner1, $banner2]);
 
         $rendererBridge
@@ -753,7 +754,7 @@ final class RendererTest extends TestCase
             )
             ->andReturn('multiple');
 
-        Assert::same('multiple', $renderer->render($position, [
+        Assert::same('multiple', $renderer->render($position, new Settings(1), [
             'class' => 'base-class',
             'exists@class' => 'exists',
             'exists(default)@class' => 'exists-default',

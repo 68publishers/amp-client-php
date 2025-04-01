@@ -33,12 +33,16 @@ final class NetteCookieClosedEntriesStore implements ClosedEntriesStoreInterface
         $this->cookieName = $cookieName;
     }
 
-    public function isClosed(EntryKey $key): bool
+    public function isClosed(EntryKey $key, int $revision): bool
     {
         $closedEntries = $this->parseClosedEntries();
         $keyValue = $key->getValue();
 
         if (!isset($closedEntries[$keyValue])) {
+            return false;
+        }
+
+        if (($closedEntries['r'] ?? 0) !== $revision) {
             return false;
         }
 

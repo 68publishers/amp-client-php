@@ -103,8 +103,8 @@ final class MyPresenter extends Presenter {
 
         $response = $this->client->fetchBanners($request);
 
-        bdump($this->renderer->render($response->getPosition('homepage.top')));
-        bdump($this->renderer->render($response->getPosition('homepage.promo')));
+        bdump($this->renderer->render($response->getPosition('homepage.top'), $response->getSettings()));
+        bdump($this->renderer->render($response->getPosition('homepage.promo'), $response->getSettings()));
     }
 }
 ```

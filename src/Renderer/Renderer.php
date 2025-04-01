@@ -15,6 +15,7 @@ use SixtyEightPublishers\AmpClient\Renderer\Phtml\PhtmlRendererBridge;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Settings;
 use Throwable;
 use function explode;
 use function get_class;
@@ -53,7 +54,7 @@ final class Renderer implements RendererInterface
         );
     }
 
-    public function render(ResponsePosition $position, array $elementAttributes = [], array $options = []): string
+    public function render(ResponsePosition $position, Settings $settings, array $elementAttributes = [], array $options = []): string
     {
         try {
             $options = new Options($options, $this->expressionParser);
@@ -70,7 +71,7 @@ final class Renderer implements RendererInterface
 
             switch ($position->getDisplayType()) {
                 case ResponsePosition::DisplayTypeMultiple:
-                    $banners = $this->bannersResolver->resolveMultiple($position);
+                    $banners = $this->bannersResolver->resolveMultiple($position, $settings->getCloseRevision());
 
                     return [] !== $banners
                         ? $this->rendererBridge->renderMultiple(
@@ -85,7 +86,7 @@ final class Renderer implements RendererInterface
                             $options,
                         );
                 case ResponsePosition::DisplayTypeRandom:
-                    $banner = $this->bannersResolver->resolveRandom($position);
+                    $banner = $this->bannersResolver->resolveRandom($position, $settings->getCloseRevision());
 
                     return null !== $banner
                         ? $this->rendererBridge->renderRandom(
@@ -101,7 +102,7 @@ final class Renderer implements RendererInterface
                         );
                 case ResponsePosition::DisplayTypeSingle:
                 default:
-                    $banner = $this->bannersResolver->resolveSingle($position);
+                    $banner = $this->bannersResolver->resolveSingle($position, $settings->getCloseRevision());
 
                     return null !== $banner
                         ? $this->rendererBridge->renderSingle(

@@ -1,0 +1,154 @@
+{
+  "status": "success",
+  "data": {
+    "settings": {
+      "close_revision": 4
+    },
+    "positions": {
+      "homepage.top": {
+        "position_id": "0360fbe9-e742-4dee-8f3d-b63c8b601d66",
+        "position_name": "Homepage top",
+        "rotation_seconds": 3,
+        "display_type": "multiple",
+        "breakpoint_type": "min",
+        "mode": "managed",
+        "close_expiration": null,
+        "options": {
+          "loading": ">=1:lazy"
+        },
+        "banners": [
+          {
+            "id": "d7275445-c287-47d2-b71a-3baff5b4d23c",
+            "name": "Homepage top - first",
+            "score": 2,
+            "campaign_id": null,
+            "campaign_code": null,
+            "campaign_name": null,
+            "close_expiration": 86400,
+            "contents": [
+              {
+                "breakpoint": null,
+                "type": "img",
+                "href": "https://www.example.com/top-first",
+                "target": "_blank",
+                "alt": "Homepage top - first",
+                "title": "Homepage top - first",
+                "src": "https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=1320/cee005030cd85b434a3b361d284011d8.jpg",
+                "srcset": "https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=320/cee005030cd85b434a3b361d284011d8.jpg 320w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=520/cee005030cd85b434a3b361d284011d8.jpg 520w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=720/cee005030cd85b434a3b361d284011d8.jpg 720w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=920/cee005030cd85b434a3b361d284011d8.jpg 920w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=1120/cee005030cd85b434a3b361d284011d8.jpg 1120w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=1320/cee005030cd85b434a3b361d284011d8.jpg 1320w",
+                "sources": [
+                  {
+                    "type": "image/webp",
+                    "srcset": "https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=320/cee005030cd85b434a3b361d284011d8.webp 320w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=520/cee005030cd85b434a3b361d284011d8.webp 520w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=720/cee005030cd85b434a3b361d284011d8.webp 720w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=920/cee005030cd85b434a3b361d284011d8.webp 920w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=1120/cee005030cd85b434a3b361d284011d8.webp 1120w, https://amp.example.com/data/images/d7275445-c287-47d2-b71a-3baff5b4d23c/w=1320/cee005030cd85b434a3b361d284011d8.webp 1320w"
+                  }
+                ],
+                "sizes": "(min-width: 1200px) calc(1200px - 2 * 16px), (min-width: 576px) calc(100vw - 2 * 16px), 100vw",
+                "dimensions": {
+                  "width": 1320,
+                  "height": 400
+                }
+              }
+            ]
+          },
+          {
+            "id": "1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217",
+            "name": "Homepage top - second",
+            "score": 0,
+            "campaign_id": "a6c98208-b707-46c2-80c3-8f3753a522b8",
+            "campaign_code": "test-campaign",
+            "campaign_name": "Test campaign",
+            "close_expiration": 86400,
+            "contents": [
+              {
+                "breakpoint": null,
+                "type": "img",
+                "href": "https://www.example.com/top-second",
+                "target": null,
+                "alt": "Homepage top - second",
+                "title": "Homepage top - second",
+                "src": "https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=1320/d551946507aad54e40de5ba48fd8ed38.jpg",
+                "srcset": "https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=320/d551946507aad54e40de5ba48fd8ed38.jpg 320w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=520/d551946507aad54e40de5ba48fd8ed38.jpg 520w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=720/d551946507aad54e40de5ba48fd8ed38.jpg 720w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=920/d551946507aad54e40de5ba48fd8ed38.jpg 920w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=1120/d551946507aad54e40de5ba48fd8ed38.jpg 1120w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=1320/d551946507aad54e40de5ba48fd8ed38.jpg 1320w",
+                "sources": [
+                  {
+                    "type": "image/webp",
+                    "srcset": "https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=320/d551946507aad54e40de5ba48fd8ed38.webp 320w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=520/d551946507aad54e40de5ba48fd8ed38.webp 520w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=720/d551946507aad54e40de5ba48fd8ed38.webp 720w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=920/d551946507aad54e40de5ba48fd8ed38.webp 920w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=1120/d551946507aad54e40de5ba48fd8ed38.webp 1120w, https://amp.example.com/data/images/1b3f5f5a-f67d-4e0f-9d5e-b607f99fb217/w=1320/d551946507aad54e40de5ba48fd8ed38.webp 1320w"
+                  }
+                ],
+                "sizes": "(min-width: 1200px) calc(1200px - 2 * 16px), (min-width: 576px) calc(100vw - 2 * 16px), 100vw",
+                "dimensions": {
+                  "width": 1320,
+                  "height": 400
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "homepage.middle": {
+        "position_id": "82fde136-1ba5-4556-b7f1-5d7e870f08d1",
+        "position_name": "Homepage - middle",
+        "rotation_seconds": 5,
+        "display_type": "random",
+        "breakpoint_type": "min",
+        "mode": "managed",
+        "close_expiration": 3600,
+        "options": {},
+        "banners": []
+      },
+      "homepage.missing": {
+        "position_id": null,
+        "position_name": null,
+        "rotation_seconds": 0,
+        "display_type": null,
+        "breakpoint_type": "min",
+        "mode": "managed",
+        "close_expiration": null,
+        "options": {},
+        "banners": []
+      },
+      "homepage.bottom": {
+        "position_id": "ac13dfd6-547f-4f5e-801f-5799ce24ee09",
+        "position_name": "Homepage - bottom",
+        "rotation_seconds": 5,
+        "display_type": "single",
+        "breakpoint_type": "min",
+        "mode": "managed",
+        "close_expiration": 3600,
+        "options": {},
+        "banners": [
+          {
+            "id": "54c72f46-2b6c-4d80-a75e-28fed4d79f5c",
+            "name": "Homepage bottom",
+            "score": 0,
+            "campaign_id": "a6c98208-b707-46c2-80c3-8f3753a522b8",
+            "campaign_code": "test-campaign",
+            "campaign_name": "Test campaign",
+            "close_expiration": 86400,
+            "contents": [
+              {
+                "breakpoint": null,
+                "type": "img",
+                "href": "https://www.example.com/bottom",
+                "target": "_blank",
+                "alt": "Homepage bottom",
+                "title": "Homepage bottom",
+                "src": "https://amp.example.com/data/images/54c72f46-2b6c-4d80-a75e-28fed4d79f5c/w=500/462316f2-30f2-4eb5-ad0d-dbc06ef0e06b.jpg",
+                "srcset": "https://amp.example.com/data/images/54c72f46-2b6c-4d80-a75e-28fed4d79f5c/w=320/462316f2-30f2-4eb5-ad0d-dbc06ef0e06b.jpg 320w, https://amp.example.com/data/images/54c72f46-2b6c-4d80-a75e-28fed4d79f5c/w=520/462316f2-30f2-4eb5-ad0d-dbc06ef0e06b.jpg 520w",
+                "sources": [],
+                "sizes": "100vw",
+                "dimensions": {
+                  "width": 800,
+                  "height": 300
+                }
+              },
+              {
+                "breakpoint": 500,
+                "type": "html",
+                "html": "<div class=\"alert alert-info w-100\">Homepage bottom</div>"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
