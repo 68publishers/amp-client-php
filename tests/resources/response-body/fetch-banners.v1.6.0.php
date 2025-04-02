@@ -36,7 +36,7 @@ return new BannersResponse(
                     null,
                     null,
                     null,
-                    86400,
+                    null,
                     [
                         new ImageContent(
                             null,
@@ -67,7 +67,7 @@ return new BannersResponse(
                     'a6c98208-b707-46c2-80c3-8f3753a522b8',
                     'test-campaign',
                     'Test campaign',
-                    86400,
+                    null,
                     [
                         new ImageContent(
                             null,
@@ -101,7 +101,7 @@ return new BannersResponse(
             Position::DisplayTypeRandom,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
-            3600,
+            null,
             [],
             [],
         ),
@@ -125,7 +125,7 @@ return new BannersResponse(
             Position::DisplayTypeSingle,
             Position::BreakpointTypeMin,
             Position::ModeManaged,
-            3600,
+            null,
             [],
             [
                 new Banner(
@@ -135,7 +135,7 @@ return new BannersResponse(
                     'a6c98208-b707-46c2-80c3-8f3753a522b8',
                     'test-campaign',
                     'Test campaign',
-                    86400,
+                    null,
                     [
                         new ImageContent(
                             null,

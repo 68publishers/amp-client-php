@@ -71,7 +71,7 @@ final class Renderer implements RendererInterface
 
             switch ($position->getDisplayType()) {
                 case ResponsePosition::DisplayTypeMultiple:
-                    $banners = $this->bannersResolver->resolveMultiple($position, $settings->getCloseRevision());
+                    $banners = $this->bannersResolver->resolveMultiple($position, $settings->getClosedRevision());
 
                     return [] !== $banners
                         ? $this->rendererBridge->renderMultiple(
@@ -86,7 +86,7 @@ final class Renderer implements RendererInterface
                             $options,
                         );
                 case ResponsePosition::DisplayTypeRandom:
-                    $banner = $this->bannersResolver->resolveRandom($position, $settings->getCloseRevision());
+                    $banner = $this->bannersResolver->resolveRandom($position, $settings->getClosedRevision());
 
                     return null !== $banner
                         ? $this->rendererBridge->renderRandom(
@@ -102,7 +102,7 @@ final class Renderer implements RendererInterface
                         );
                 case ResponsePosition::DisplayTypeSingle:
                 default:
-                    $banner = $this->bannersResolver->resolveSingle($position, $settings->getCloseRevision());
+                    $banner = $this->bannersResolver->resolveSingle($position, $settings->getClosedRevision());
 
                     return null !== $banner
                         ? $this->rendererBridge->renderSingle(
