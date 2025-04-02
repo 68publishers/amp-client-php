@@ -7,6 +7,7 @@ namespace SixtyEightPublishers\AmpClient\Renderer;
 use SixtyEightPublishers\AmpClient\Exception\RendererException;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Settings;
 
 interface RendererInterface
 {
@@ -16,7 +17,12 @@ interface RendererInterface
      *
      * @throws RendererException
      */
-    public function render(ResponsePosition $position, array $elementAttributes = [], array $options = []): string;
+    public function render(
+        ResponsePosition $position,
+        Settings $settings,
+        array $elementAttributes = [],
+        array $options = []
+    ): string;
 
     /**
      * @param array<string, mixed>  $elementAttributes

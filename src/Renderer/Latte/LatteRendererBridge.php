@@ -7,6 +7,7 @@ namespace SixtyEightPublishers\AmpClient\Renderer\Latte;
 use Latte\Engine;
 use SixtyEightPublishers\AmpClient\Renderer\ClientSideMode;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\ClientSideTemplate;
+use SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\ClosedTemplate;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\MultipleTemplate;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\NotFoundTemplate;
 use SixtyEightPublishers\AmpClient\Renderer\Latte\Templates\RandomTemplate;
@@ -35,6 +36,7 @@ final class LatteRendererBridge implements RendererBridgeInterface
             Templates::Multiple => __DIR__ . '/Templates/multiple.latte',
             Templates::NotFound => __DIR__ . '/Templates/notFound.latte',
             Templates::ClientSide => __DIR__ . '/Templates/clientSide.latte',
+            Templates::Closed => __DIR__ . '/Templates/closed.latte',
         ]);
     }
 
@@ -90,6 +92,14 @@ final class LatteRendererBridge implements RendererBridgeInterface
         return $this->getLatte()->renderToString(
             $this->templates->getTemplateFile(Templates::ClientSide),
             new ClientSideTemplate($position, $mode, $elementAttributes, $options),
+        );
+    }
+
+    public function renderClosed(ResponsePosition $position, array $elementAttributes, Options $options): string
+    {
+        return $this->getLatte()->renderToString(
+            $this->templates->getTemplateFile(Templates::Closed),
+            new ClosedTemplate($position, $elementAttributes, $options),
         );
     }
 

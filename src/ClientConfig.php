@@ -30,6 +30,7 @@ final class ClientConfig
     public const MethodPost = 'POST';
 
     public const Version1 = 1;
+    public const Version2 = 2;
 
     public const Methods = [
         self::MethodGet,
@@ -38,6 +39,7 @@ final class ClientConfig
 
     public const Versions = [
         self::Version1,
+        self::Version2,
     ];
 
     private const OptMethod = 'method';
@@ -66,7 +68,7 @@ final class ClientConfig
         return new self([
             self::OptMethod => self::MethodGet,
             self::OptUrl => rtrim($url, '/'),
-            self::OptVersion => self::Version1,
+            self::OptVersion => self::Version2,
             self::OptChannel => $channel,
             self::OptLocale => null,
             self::OptDefaultResources => [],

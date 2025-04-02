@@ -21,7 +21,7 @@ final class ClientConfigTest extends TestCase
         Assert::same('https://www.example.com', $config->getUrl());
         Assert::same('test', $config->getChannel());
         Assert::same('GET', $config->getMethod());
-        Assert::same(1, $config->getVersion());
+        Assert::same(2, $config->getVersion());
         Assert::null($config->getLocale());
         Assert::same([], $config->getDefaultResources());
         Assert::null($config->getOrigin());
@@ -79,6 +79,16 @@ final class ClientConfigTest extends TestCase
             InvalidArgumentException::class,
             'Invalid version 1000 passed.',
         );
+    }
+
+    public function testVersionShouldBeChanged(): void
+    {
+        $config = ClientConfig::create('https://www.example.com', 'test');
+        $modified = $config->withVersion(1);
+
+        Assert::notSame($config, $modified);
+        Assert::same(2, $config->getVersion());
+        Assert::same(1, $modified->getVersion());
     }
 
     public function testLocaleShouldBeChanged(): void

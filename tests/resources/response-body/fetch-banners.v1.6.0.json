@@ -8,7 +8,6 @@
       "display_type": "multiple",
       "breakpoint_type": "min",
       "mode": "managed",
-      "close_expiration": null,
       "options": {
         "loading": ">=1:lazy"
       },
@@ -20,7 +19,6 @@
           "campaign_id": null,
           "campaign_code": null,
           "campaign_name": null,
-          "close_expiration": 86400,
           "contents": [
             {
               "breakpoint": null,
@@ -52,7 +50,6 @@
           "campaign_id": "a6c98208-b707-46c2-80c3-8f3753a522b8",
           "campaign_code": "test-campaign",
           "campaign_name": "Test campaign",
-          "close_expiration": 86400,
           "contents": [
             {
               "breakpoint": null,
@@ -86,7 +83,6 @@
       "display_type": "random",
       "breakpoint_type": "min",
       "mode": "managed",
-      "close_expiration": 3600,
       "options": {},
       "banners": []
     },
@@ -97,7 +93,6 @@
       "display_type": null,
       "breakpoint_type": "min",
       "mode": "managed",
-      "close_expiration": null,
       "options": {},
       "banners": []
     },
@@ -108,7 +103,6 @@
       "display_type": "single",
       "breakpoint_type": "min",
       "mode": "managed",
-      "close_expiration": 3600,
       "options": {},
       "banners": [
         {
@@ -118,7 +112,6 @@
           "campaign_id": "a6c98208-b707-46c2-80c3-8f3753a522b8",
           "campaign_code": "test-campaign",
           "campaign_name": "Test campaign",
-          "close_expiration": 86400,
           "contents": [
             {
               "breakpoint": null,

@@ -35,4 +35,6 @@ final class AmpClientConfig
     public HttpConfig $http;
 
     public RendererConfig $renderer;
+
+    public ClosingConfig $closing;
 }

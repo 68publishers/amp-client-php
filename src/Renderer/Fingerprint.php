@@ -35,7 +35,7 @@ final class Fingerprint
             'campaignId' => $banner->getCampaignId(),
             'campaignCode' => $banner->getCampaignCode(),
             'campaignName' => $banner->getCampaignName(),
-            'closeExpiration' => $banner->getCloseExpiration(),
+            'closedExpiration' => $banner->getClosedExpiration(),
         ];
 
         try {

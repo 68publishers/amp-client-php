@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\AmpClient\Renderer;
 
 use Closure;
+use SixtyEightPublishers\AmpClient\Closing\ClosingManager;
+use SixtyEightPublishers\AmpClient\Closing\ClosingManagerInterface;
+use SixtyEightPublishers\AmpClient\Closing\NullClosedEntriesStore;
 use SixtyEightPublishers\AmpClient\Exception\RendererException;
 use SixtyEightPublishers\AmpClient\Expression\ExpressionParser;
 use SixtyEightPublishers\AmpClient\Expression\ExpressionParserInterface;
@@ -12,6 +15,7 @@ use SixtyEightPublishers\AmpClient\Renderer\Phtml\PhtmlRendererBridge;
 use SixtyEightPublishers\AmpClient\Request\ValueObject\Position as RequestPosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Settings;
 use Throwable;
 use function explode;
 use function get_class;
@@ -35,56 +39,83 @@ final class Renderer implements RendererInterface
         $this->expressionParser = $expressionParser;
     }
 
-    public static function create(?RendererBridgeInterface $rendererBridge = null): self
-    {
+    public static function create(
+        ?RendererBridgeInterface $rendererBridge = null,
+        ?ClosingManagerInterface $closingManager = null
+    ): self {
         return new self(
-            new BannersResolver(),
+            new BannersResolver(
+                $closingManager ?? new ClosingManager(
+                    new NullClosedEntriesStore(),
+                ),
+            ),
             $rendererBridge ?? new PhtmlRendererBridge(),
             new ExpressionParser(),
         );
     }
 
-    public function render(ResponsePosition $position, array $elementAttributes = [], array $options = []): string
+    public function render(ResponsePosition $position, Settings $settings, array $elementAttributes = [], array $options = []): string
     {
         try {
             $options = new Options($options, $this->expressionParser);
             $options->override($position->getOptions());
+            $displayType = $position->getDisplayType();
+
+            if (null === $displayType || [] === $position->getBanners()) {
+                return $this->rendererBridge->renderNotFound(
+                    $position,
+                    $this->resolveElementAttributes($elementAttributes, null),
+                    $options,
+                );
+            }
 
             switch ($position->getDisplayType()) {
-                case null:
-                    return $this->rendererBridge->renderNotFound(
-                        $position,
-                        $this->resolveElementAttributes($elementAttributes, null),
-                        $options,
-                    );
                 case ResponsePosition::DisplayTypeMultiple:
-                    $banners = $this->bannersResolver->resolveMultiple($position);
+                    $banners = $this->bannersResolver->resolveMultiple($position, $settings->getClosedRevision());
 
-                    return $this->rendererBridge->renderMultiple(
-                        $position,
-                        $banners,
-                        $this->resolveElementAttributes($elementAttributes, $banners),
-                        $options,
-                    );
+                    return [] !== $banners
+                        ? $this->rendererBridge->renderMultiple(
+                            $position,
+                            $banners,
+                            $this->resolveElementAttributes($elementAttributes, $banners),
+                            $options,
+                        )
+                        : $this->rendererBridge->renderClosed(
+                            $position,
+                            $this->resolveElementAttributes($elementAttributes, null),
+                            $options,
+                        );
                 case ResponsePosition::DisplayTypeRandom:
-                    $banner = $this->bannersResolver->resolveRandom($position);
+                    $banner = $this->bannersResolver->resolveRandom($position, $settings->getClosedRevision());
 
-                    return $this->rendererBridge->renderRandom(
-                        $position,
-                        $banner,
-                        $this->resolveElementAttributes($elementAttributes, $banner),
-                        $options,
-                    );
+                    return null !== $banner
+                        ? $this->rendererBridge->renderRandom(
+                            $position,
+                            $banner,
+                            $this->resolveElementAttributes($elementAttributes, $banner),
+                            $options,
+                        )
+                        : $this->rendererBridge->renderClosed(
+                            $position,
+                            $this->resolveElementAttributes($elementAttributes, null),
+                            $options,
+                        );
                 case ResponsePosition::DisplayTypeSingle:
                 default:
-                    $banner = $this->bannersResolver->resolveSingle($position);
+                    $banner = $this->bannersResolver->resolveSingle($position, $settings->getClosedRevision());
 
-                    return $this->rendererBridge->renderSingle(
-                        $position,
-                        $banner,
-                        $this->resolveElementAttributes($elementAttributes, $banner),
-                        $options,
-                    );
+                    return null !== $banner
+                        ? $this->rendererBridge->renderSingle(
+                            $position,
+                            $banner,
+                            $this->resolveElementAttributes($elementAttributes, $banner),
+                            $options,
+                        )
+                        : $this->rendererBridge->renderClosed(
+                            $position,
+                            $this->resolveElementAttributes($elementAttributes, null),
+                            $options,
+                        );
             }
         } catch (Throwable $e) {
             if ($e instanceof RendererException) {

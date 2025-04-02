@@ -22,6 +22,7 @@ use SixtyEightPublishers\AmpClient\Request\ValueObject\BannerResource;
 use SixtyEightPublishers\AmpClient\Response\BannersResponse;
 use SixtyEightPublishers\AmpClient\Response\Hydrator\BannersResponseHydratorHandler;
 use SixtyEightPublishers\AmpClient\Response\Hydrator\ResponseHydrator;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Settings;
 use stdClass;
 use function array_map;
 use function count;
@@ -100,7 +101,10 @@ final class AmpClient implements AmpClientInterface
         $positions = $request->getPositions();
 
         if (0 >= count($positions)) {
-            return new BannersResponse([]);
+            return new BannersResponse(
+                new Settings(0),
+                [],
+            );
         }
 
         $client = $this->getHttpClient();

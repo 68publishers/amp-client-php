@@ -25,6 +25,7 @@ use SixtyEightPublishers\AmpClient\Request\ValueObject\Position;
 use SixtyEightPublishers\AmpClient\Response\BannersResponse;
 use SixtyEightPublishers\AmpClient\Response\Hydrator\BannersResponseHydratorHandler;
 use SixtyEightPublishers\AmpClient\Response\Hydrator\ResponseHydrator;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\Settings;
 use stdClass;
 use Tester\Assert;
 use Tester\TestCase;
@@ -97,7 +98,7 @@ final class AmpClientTest extends TestCase
 
         $request = new BannersRequest([]);
 
-        Assert::equal(new BannersResponse([]), $client->fetchBanners($request));
+        Assert::equal(new BannersResponse(new Settings(0), []), $client->fetchBanners($request));
     }
 
     /**
@@ -141,7 +142,7 @@ final class AmpClientTest extends TestCase
             ->andReturnUsing(static function (HttpRequest $request) use ($expectedHttpRequest): BannersResponse {
                 Assert::equal($expectedHttpRequest, $request);
 
-                return new BannersResponse([]);
+                return new BannersResponse(new Settings(0), []);
             });
 
         Assert::noError(static fn () => $client->fetchBanners($bannersRequest));
@@ -159,7 +160,7 @@ final class AmpClientTest extends TestCase
         return [
             'GET, [Request]: single position, no resources' => [
                 0 => ClientConfig::create('https://www.example.com', 'test'),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware()]),
                 3 => new CacheControl(0, null),
                 4 => new BannersRequest([
@@ -185,7 +186,7 @@ final class AmpClientTest extends TestCase
             'POST, [Request]: single position, no resources' => [
                 0 => ClientConfig::create('https://www.example.com', 'test')
                     ->withMethod('POST'),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware()]),
                 3 => new CacheControl(0, null),
                 4 => new BannersRequest([
@@ -208,7 +209,7 @@ final class AmpClientTest extends TestCase
             ],
             'GET, [Request]: multiple positions, one with resources' => [
                 0 => ClientConfig::create('https://www.example.com', 'test'),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware()]),
                 3 => new CacheControl(0, null),
                 4 => new BannersRequest([
@@ -242,7 +243,7 @@ final class AmpClientTest extends TestCase
             'POST, [Request]: multiple positions, one with resources' => [
                 0 => ClientConfig::create('https://www.example.com', 'test')
                     ->withMethod('POST'),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware()]),
                 3 => new CacheControl(0, null),
                 4 => new BannersRequest([
@@ -277,7 +278,7 @@ final class AmpClientTest extends TestCase
                         new BannerResource('first', ['a', 'c']),
                         new BannerResource('third', ['a']),
                     ]),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware()]),
                 3 => new CacheControl(0, null),
                 4 => new BannersRequest([
@@ -319,7 +320,7 @@ final class AmpClientTest extends TestCase
                         new BannerResource('first', ['a', 'c']),
                         new BannerResource('third', ['a']),
                     ]),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware()]),
                 3 => new CacheControl(0, null),
                 4 => new BannersRequest([
@@ -355,7 +356,7 @@ final class AmpClientTest extends TestCase
             'GET, [Request]: single position, no resources, [Config]: origin' => [
                 0 => ClientConfig::create('https://www.example.com', 'test')
                     ->withOrigin('https://example.io'),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware(), new XAmpOriginHeaderMiddleware('https://example.io')]),
                 3 => new CacheControl(0, null),
                 4 => new BannersRequest([
@@ -382,7 +383,7 @@ final class AmpClientTest extends TestCase
                 0 => ClientConfig::create('https://www.example.com', 'test')
                     ->withMethod('POST')
                     ->withOrigin('https://example.io'),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware(), new XAmpOriginHeaderMiddleware('https://example.io')]),
                 3 => new CacheControl(0, null),
                 4 => new BannersRequest([
@@ -406,7 +407,7 @@ final class AmpClientTest extends TestCase
             'GET, [Request]: single position, no resources, [Config]: locale' => [
                 0 => ClientConfig::create('https://www.example.com', 'test')
                     ->withLocale('en'),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware()]),
                 3 => new CacheControl(0, null),
                 4 => new BannersRequest([
@@ -434,7 +435,7 @@ final class AmpClientTest extends TestCase
                 0 => ClientConfig::create('https://www.example.com', 'test')
                     ->withMethod('POST')
                     ->withLocale('en'),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware()]),
                 3 => new CacheControl(0, null),
                 4 => new BannersRequest([
@@ -458,7 +459,7 @@ final class AmpClientTest extends TestCase
             'GET, [Request]: single position, no resources, locale, [Config]: locale' => [
                 0 => ClientConfig::create('https://www.example.com', 'test')
                     ->withLocale('en'),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware()]),
                 3 => new CacheControl(0, null),
                 4 => new BannersRequest([
@@ -486,7 +487,7 @@ final class AmpClientTest extends TestCase
                 0 => ClientConfig::create('https://www.example.com', 'test')
                     ->withMethod('POST')
                     ->withLocale('en'),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware()]),
                 3 => new CacheControl(0, null),
                 4 => new BannersRequest([
@@ -511,7 +512,7 @@ final class AmpClientTest extends TestCase
                 0 => ClientConfig::create('https://www.example.com', 'test')
                     ->withCacheExpiration(3600)
                     ->withCacheControlHeaderOverride('no-cache, max-age=200'),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware()]),
                 3 => new CacheControl(3600, 'no-cache, max-age=200'),
                 4 => new BannersRequest([
@@ -539,7 +540,7 @@ final class AmpClientTest extends TestCase
                     ->withMethod('POST')
                     ->withCacheExpiration(3600)
                     ->withCacheControlHeaderOverride('no-cache, max-age=200'),
-                1 => 'https://www.example.com/api/v1',
+                1 => 'https://www.example.com/api/v2',
                 2 => new Middlewares([new UnexpectedErrorMiddleware(), new ResponseExceptionMiddleware()]),
                 3 => new CacheControl(3600, 'no-cache, max-age=200'),
                 4 => new BannersRequest([

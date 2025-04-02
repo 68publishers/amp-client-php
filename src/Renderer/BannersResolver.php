@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\AmpClient\Renderer;
 
+use SixtyEightPublishers\AmpClient\Closing\ClosingManagerInterface;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
+use function array_filter;
 use function array_map;
 use function array_search;
+use function array_values;
 use function count;
 use function max;
 use function mt_getrandmax;
@@ -16,9 +19,26 @@ use function usort;
 
 class BannersResolver implements BannersResolverInterface
 {
-    public function resolveSingle(Position $position): ?Banner
+    private ClosingManagerInterface $closingManager;
+
+    public function __construct(
+        ClosingManagerInterface $closingManager
+    ) {
+        $this->closingManager = $closingManager;
+    }
+
+    public function resolveSingle(Position $position, int $closedRevision = 0): ?Banner
     {
-        $banners = $position->getBanners();
+        if ($this->closingManager->isPositionClosed($position->getCode(), $closedRevision)) {
+            return null;
+        }
+
+        $banners = array_values(
+            array_filter(
+                $position->getBanners(),
+                fn (Banner $banner): bool => !$this->closingManager->isBannerClosed($position->getCode(), $banner->getId(), $closedRevision),
+            ),
+        );
 
         if (0 >= count($banners)) {
             return null;
@@ -33,9 +53,18 @@ class BannersResolver implements BannersResolverInterface
         return $banners[$firstHighestScoreKey] ?? null;
     }
 
-    public function resolveRandom(Position $position): ?Banner
+    public function resolveRandom(Position $position, int $closedRevision = 0): ?Banner
     {
-        $banners = $position->getBanners();
+        if ($this->closingManager->isPositionClosed($position->getCode(), $closedRevision)) {
+            return null;
+        }
+
+        $banners = array_values(
+            array_filter(
+                $position->getBanners(),
+                fn (Banner $banner): bool => !$this->closingManager->isBannerClosed($position->getCode(), $banner->getId(), $closedRevision),
+            ),
+        );
 
         if (0 >= count($banners)) {
             return null;
@@ -65,9 +94,18 @@ class BannersResolver implements BannersResolverInterface
         return $banners[$key] ?? $banners[0];
     }
 
-    public function resolveMultiple(Position $position): array
+    public function resolveMultiple(Position $position, int $closedRevision = 0): array
     {
-        $banners = $position->getBanners();
+        if ($this->closingManager->isPositionClosed($position->getCode(), $closedRevision)) {
+            return [];
+        }
+
+        $banners = array_values(
+            array_filter(
+                $position->getBanners(),
+                fn (Banner $banner): bool => !$this->closingManager->isBannerClosed($position->getCode(), $banner->getId(), $closedRevision),
+            ),
+        );
 
         if (0 >= count($banners)) {
             return [];

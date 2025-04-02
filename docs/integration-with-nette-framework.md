@@ -70,6 +70,11 @@ amp_client:
             multiple: %appDir%/templates/amp/multiple.latte
             not_found: %appDir%/templates/amp/not_found.latte
             client_side: %appDir%/templates/amp/client_side.latte
+            closed: %appDir%/templates/amp/closed.latte
+            
+    closing:
+        # name of the cookie that stores the state of closed banners (must be the same as the one used by the JS client)
+        cookieName: amp-c
 ```
 
 Two important services are now available in the DI Container - `AmpClientInterface` and `RendererInterface`.
@@ -98,8 +103,8 @@ final class MyPresenter extends Presenter {
 
         $response = $this->client->fetchBanners($request);
 
-        bdump($this->renderer->render($response->getPosition('homepage.top')));
-        bdump($this->renderer->render($response->getPosition('homepage.promo')));
+        bdump($this->renderer->render($response->getPosition('homepage.top'), $response->getSettings()));
+        bdump($this->renderer->render($response->getPosition('homepage.promo'), $response->getSettings()));
     }
 }
 ```
