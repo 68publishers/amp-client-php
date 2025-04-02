@@ -6,16 +6,16 @@ namespace SixtyEightPublishers\AmpClient\Response\ValueObject;
 
 final class Settings
 {
-    private int $closeRevision;
+    private int $closedRevision;
 
     public function __construct(
-        int $closeRevision
+        int $closedRevision
     ) {
-        $this->closeRevision = $closeRevision;
+        $this->closedRevision = $closedRevision;
     }
 
-    public function getCloseRevision(): int
+    public function getClosedRevision(): int
     {
-        return $this->closeRevision;
+        return $this->closedRevision;
     }
 }
