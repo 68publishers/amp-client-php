@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.4.0] - 2024-05-06
 ### Added
 - Added integration of the new fields `close_expiration` into Position and Banner entities and also into the `data-amp-banner-external` and `data-amp-banner-fingerprint` attributes.
 - Added services of type `ClosingManagerInterface` and `ClosedEntriesStoreInterface` that are used by banner resolver to check if the passed position and its banners are closed.
