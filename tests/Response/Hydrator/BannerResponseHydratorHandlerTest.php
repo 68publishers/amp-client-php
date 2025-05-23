@@ -53,6 +53,16 @@ final class BannerResponseHydratorHandlerTest extends TestCase
 
         Assert::equal($expected, $handler->hydrate($response));
     }
+
+    public function testResponseShouldBeHydratedForVersion210(): void
+    {
+        $response = json_decode(file_get_contents(__DIR__ . '/../../resources/response-body/fetch-banners.v2.1.0.json'), true);
+        $expected = require __DIR__ . '/../../resources/response-body/fetch-banners.v2.1.0.php';
+
+        $handler = new BannersResponseHydratorHandler();
+
+        Assert::equal($expected, $handler->hydrate($response));
+    }
 }
 
 (new BannerResponseHydratorHandlerTest())->run();
