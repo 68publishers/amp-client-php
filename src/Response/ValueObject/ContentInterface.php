@@ -8,6 +8,7 @@ interface ContentInterface
 {
     public const TypeImage = 'img';
     public const TypeHtml = 'html';
+    public const TypeNoContent = 'noContent';
 
     public function getBreakpoint(): ?int;
 }

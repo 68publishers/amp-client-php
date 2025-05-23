@@ -6,6 +6,7 @@ use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Dimensions;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\NoContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position as ResponsePosition;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Source;
@@ -225,5 +226,80 @@ return [
             'loading' => 'lazy',
         ],
         __DIR__ . '/bannerWithMultipleContents.html',
+    ],
+    'Banner with multiple contents: no content as default' => [
+        $position,
+        new Banner('1234', 'Main', 0, null, null, null, null, [
+            new NoContent(
+                null,
+            ),
+            new ImageContent(
+                600,
+                'https://www.example.com/main1',
+                '_blank',
+                'Main 1',
+                'Main 1',
+                'https://img.example.com/1000/main1.png',
+                'https://img.example.com/800/main1.png 800w, https://img.example.com/1000/main1.png 1000w',
+                '(min-width: 1000px) 1000px, 100vw',
+                [
+                    new Source('image/avif', 'https://img.example.com/800/main1.avif 800w, https://img.example.com/1000/main1.avif 1000w'),
+                    new Source('image/webp', 'https://img.example.com/800/main1.webp 800w, https://img.example.com/1000/main1.webp 1000w'),
+                ],
+                new Dimensions(1000, 300),
+            ),
+            new ImageContent(
+                400,
+                'https://www.example.com/main2',
+                '_blank',
+                'Main 2',
+                'Main 2',
+                'https://img.example.com/600/main2.png',
+                'https://img.example.com/600/main2.png 600w',
+                '100vw',
+                [
+                    new Source('image/avif', 'https://img.example.com/600/main2.avif 600w'),
+                    new Source('image/webp', 'https://img.example.com/600/main2.webp 600w'),
+                ],
+                new Dimensions(600, 300),
+            ),
+        ]),
+        [],
+        [
+            'loading' => 'lazy',
+        ],
+        __DIR__ . '/bannerWithMultipleContents.withNoContentAsDefault.html',
+    ],
+    'Banner with multiple contents: no content as alternative' => [
+        $position,
+        new Banner('1234', 'Main', 0, null, null, null, null, [
+            new HtmlContent(
+                null,
+                '<p>Small content</p>',
+            ),
+            new NoContent(
+                600,
+            ),
+            new ImageContent(
+                400,
+                'https://www.example.com/main2',
+                '_blank',
+                'Main 2',
+                'Main 2',
+                'https://img.example.com/600/main2.png',
+                'https://img.example.com/600/main2.png 600w',
+                '100vw',
+                [
+                    new Source('image/avif', 'https://img.example.com/600/main2.avif 600w'),
+                    new Source('image/webp', 'https://img.example.com/600/main2.webp 600w'),
+                ],
+                new Dimensions(600, 300),
+            ),
+        ]),
+        [],
+        [
+            'loading' => 'lazy',
+        ],
+        __DIR__ . '/bannerWithMultipleContents.withNoContentAsAlternative.html',
     ],
 ];

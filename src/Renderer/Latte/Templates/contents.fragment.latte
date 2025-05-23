@@ -10,6 +10,7 @@
         {varType SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent $content}
 
         <a data-amp-content-breakpoint="{$content->getBreakpoint() ?? 'default'}"
+           data-amp-content-type="img"
            class="amp-banner__content amp-banner__content--img"
            href="{$content->getHref()}"
            n:attr="target => $content->getTarget()">
@@ -42,8 +43,16 @@
         {varType SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent $content}
 
         <div data-amp-content-breakpoint="{$content->getBreakpoint() ?? 'default'}"
+             data-amp-content-type="html"
              class="amp-banner__content amp-banner__content--html">
             {$content->getHtml()|noescape}
+        </div>
+    {elseif $content instanceof SixtyEightPublishers\AmpClient\Response\ValueObject\NoContent}
+        {varType SixtyEightPublishers\AmpClient\Response\ValueObject\NoContent $content}
+
+        <div data-amp-content-breakpoint="{$content->getBreakpoint() ?? 'default'}"
+             data-amp-content-type="noContent"
+             class="amp-banner__content amp-banner__content--noContent">
         </div>
     {/if}
 {/foreach}

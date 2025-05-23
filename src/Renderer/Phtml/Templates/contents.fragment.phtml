@@ -7,6 +7,7 @@ namespace SixtyEightPublishers\AmpClient\Renderer\Phtml;
 use SixtyEightPublishers\AmpClient\Renderer\Options;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\NoContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent;
 use SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle\BreakpointStyle;
@@ -20,6 +21,7 @@ $style = new BreakpointStyle($position, $banner);
 <?php foreach ($banner->getContents() as $content) : ?>
     <?php if ($content instanceof ImageContent) : ?>
         <a data-amp-content-breakpoint="<?= Helpers::escapeHtmlAttr($content->getBreakpoint() ?? 'default') ?>"
+           data-amp-content-type="img"
            class="amp-banner__content amp-banner__content--img"
            href="<?= Helpers::escapeHtmlAttr($content->getHref()) ?>"
            <?php if (NULL !== $content->getTarget()) : ?>target="<?= Helpers::escapeHtmlAttr($content->getTarget()) ?>"<?php endif ?>>
@@ -46,8 +48,14 @@ $style = new BreakpointStyle($position, $banner);
         </a>
     <?php elseif ($content instanceof HtmlContent) : ?>
         <div data-amp-content-breakpoint="<?= Helpers::escapeHtmlAttr($content->getBreakpoint() ?? 'default') ?>"
+             data-amp-content-type="html"
              class="amp-banner__content amp-banner__content--html">
             <?= $content->getHtml() ?>
+        </div>
+    <?php elseif ($content instanceof NoContent) : ?>
+        <div data-amp-content-breakpoint="<?= Helpers::escapeHtmlAttr($content->getBreakpoint() ?? 'default') ?>"
+             data-amp-content-type="noContent"
+             class="amp-banner__content amp-banner__content--noContent">
         </div>
     <?php endif ?>
 <?php endforeach ?>
