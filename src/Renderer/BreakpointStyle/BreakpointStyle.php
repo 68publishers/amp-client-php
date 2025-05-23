@@ -6,6 +6,7 @@ namespace SixtyEightPublishers\AmpClient\Renderer\BreakpointStyle;
 
 use SixtyEightPublishers\AmpClient\Renderer\Phtml\Helpers;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Banner;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\NoContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use function array_key_last;
 use function array_map;
@@ -28,12 +29,12 @@ final class BreakpointStyle
 
     public function __construct(Position $position, Banner $banner)
     {
-        $selectorMask = sprintf(
-            '[data-amp-banner="%s"] [data-amp-banner-id="%s"] [data-amp-content-breakpoint="%s"]',
+        $baseSelectorMask = sprintf(
+            '[data-amp-banner="%s"] [data-amp-banner-id="%s"]',
             Helpers::escapeHtmlAttr($position->getCode()),
             Helpers::escapeHtmlAttr($banner->getId()),
-            '%s',
         );
+        $selectorMask = $baseSelectorMask . ' [data-amp-content-breakpoint="%s"]';
 
         $defaultContent = null;
         $alternativeContents = [];
@@ -64,6 +65,13 @@ final class BreakpointStyle
             $mediaForInvisibleContent[null] = [];
         }
 
+        if ($defaultContent instanceof NoContent) {
+            $this->selectors[] = $selector = new Selector($baseSelectorMask);
+            $selector->properties[] = new Property('display', 'none');
+        }
+
+        $lastAlternativeContentIsNoContent = $defaultContent instanceof NoContent;
+
         foreach ($alternativeContents as $alternativeContent) {
             $lastMediaForInvisibleContentKey = array_key_last($mediaForInvisibleContent);
 
@@ -81,17 +89,34 @@ final class BreakpointStyle
                 );
             }
 
-            $this->selectors[] = $selector = new Selector(sprintf(
-                $selectorMask,
-                $alternativeContent->getBreakpoint(),
-            ));
+            if (!($defaultContent instanceof NoContent)) {
+                $this->selectors[] = $selector = new Selector(sprintf(
+                    $selectorMask,
+                    $alternativeContent->getBreakpoint(),
+                ));
 
-            $selector->properties[] = new Property('display', 'none');
+                $selector->properties[] = new Property('display', 'none');
+            }
 
             $this->media[] = $media = new Media(sprintf(
                 $mediaRuleMask,
                 $alternativeContent->getBreakpoint(),
             ));
+
+            if ($alternativeContent instanceof NoContent) {
+                $media->selectors[] = $selectorInMedia = new Selector($baseSelectorMask);
+                $selectorInMedia->properties[] = new Property('display', 'none');
+                $lastAlternativeContentIsNoContent = true;
+
+                continue;
+            }
+
+            if ($lastAlternativeContentIsNoContent) {
+                $media->selectors[] = $selectorInMedia = new Selector($baseSelectorMask);
+                $selectorInMedia->properties[] = new Property('display', 'block');
+            }
+
+            $lastAlternativeContentIsNoContent = false;
 
             if (null !== $defaultContent) {
                 $media->selectors[] = $selectorInMedia = new Selector(sprintf(

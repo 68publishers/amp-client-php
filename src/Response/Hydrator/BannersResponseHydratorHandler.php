@@ -10,6 +10,7 @@ use SixtyEightPublishers\AmpClient\Response\ValueObject\ContentInterface;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Dimensions;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\HtmlContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\ImageContent;
+use SixtyEightPublishers\AmpClient\Response\ValueObject\NoContent;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Position;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Settings;
 use SixtyEightPublishers\AmpClient\Response\ValueObject\Source;
@@ -39,6 +40,11 @@ use function array_map;
  *      dimensions?: DimensionsData,
  *  }
  *
+ * @phpstan-type NoContentData = array{
+ *     breakpoint: int|null,
+ *     type: string,
+ * }
+ *
  * @phpstan-type BannerData = array{
  *     id: string,
  *     name: string,
@@ -47,7 +53,7 @@ use function array_map;
  *     campaign_code: string|null,
  *     campaign_name: string|null,
  *     closed_expiration: int|null,
- *     contents: array<int, HtmlContentData|ImageContentData>,
+ *     contents: array<int, HtmlContentData|ImageContentData|NoContentData>,
  * }
  *
  * @phpstan-type DimensionsData = array{
@@ -172,7 +178,7 @@ final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInt
     }
 
     /**
-     * @param array<int, HtmlContentData|ImageContentData> $contentsData
+     * @param array<int, HtmlContentData|ImageContentData|NoContentData> $contentsData
      *
      * @return array<int, ContentInterface>
      */
@@ -209,6 +215,13 @@ final class BannersResponseHydratorHandler implements ResponseHydratorHandlerInt
                     $contents[] = new HtmlContent(
                         $contentData['breakpoint'],
                         $contentData['html'],
+                    );
+
+                    break;
+                case ContentInterface::TypeNoContent:
+                    /** @var NoContentData $contentData */
+                    $contents[] = new NoContent(
+                        $contentData['breakpoint'],
                     );
 
                     break;
