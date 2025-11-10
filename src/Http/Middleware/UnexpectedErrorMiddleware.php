@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\AmpClient\Http\Middleware;
 
 use Closure;
+use Exception;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use SixtyEightPublishers\AmpClient\Exception\AmpExceptionInterface;
@@ -27,7 +28,11 @@ final class UnexpectedErrorMiddleware implements MiddlewareInterface
     {
         return static function (RequestInterface $request, array $options) use ($next): PromiseInterface {
             try {
-                return $next($request, $options);
+                return $next($request, $options)->otherwise(static function ($e) {
+                    $throwable = $e instanceof Throwable ? $e : new Exception('Unknown error.');
+
+                    throw ($throwable instanceof AmpExceptionInterface ? $throwable : new UnexpectedErrorException($throwable));
+                });
             } catch (Throwable $e) {
                 throw ($e instanceof AmpExceptionInterface ? $e : new UnexpectedErrorException($e));
             }
