@@ -14,7 +14,8 @@ final class OutputBuffer
 
     public static function capture(Closure $function): string
     {
-        ob_start(function () {});
+        ob_start(function () {
+        });
 
         try {
             $function();

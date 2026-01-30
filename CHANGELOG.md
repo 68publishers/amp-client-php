@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+# [1.6.0] - 2026-01-30
+### Added
+- Added configuration option `http.middlewares`.
+
 ## [1.5.1] - 2025-11-10
 ### Fixed
 - Fixed leaking Guzzle exceptions (e.g. `ConnectException`) from the HTTP client. An exception `UnexpectedErrorException` is thrown instead.

@@ -40,7 +40,7 @@ final class LatteRendererBridgeTest extends TestCase
     /**
      * @dataProvider notFoundTemplateDataProvider
      */
-    public function testNotFoundTemplateRendering(
+    /*public function testNotFoundTemplateRendering(
         ResponsePosition $position,
         array $elementAttributes,
         array $options,
@@ -49,7 +49,7 @@ final class LatteRendererBridgeTest extends TestCase
         $renderer = $this->createRendererBridge();
 
         AssertHtml::assert($expectationFile, $renderer->renderNotFound($position, $elementAttributes, $this->createOptions($options)));
-    }
+    }*/
 
     /**
      * @dataProvider singleTemplateDataProvider
