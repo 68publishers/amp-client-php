@@ -49,6 +49,7 @@ use SixtyEightPublishers\AmpClient\Response\Hydrator\ResponseHydrator;
 use SixtyEightPublishers\AmpClient\Response\Hydrator\ResponseHydratorHandlerInterface;
 use SixtyEightPublishers\AmpClient\Response\Hydrator\ResponseHydratorInterface;
 use function array_filter;
+use function array_map;
 use function array_values;
 use function assert;
 use function class_exists;
@@ -98,6 +99,13 @@ final class AmpClientExtension extends CompilerExtension
             ])->castTo(CacheConfig::class),
             'http' => Expect::structure([
                 'guzzle_config' => Expect::array(),
+                'middlewares' => Expect::listOf(Expect::anyOf(Expect::string(), Expect::type(Statement::class)))
+                    ->before(static function (array $middlewares): array {
+                        return array_map(
+                            static fn ($middleware): Statement => $middleware instanceof Statement ? $middleware : new Statement($middleware),
+                            $middlewares,
+                        );
+                    }),
             ])->castTo(HttpConfig::class),
             'renderer' => Expect::structure([
                 'bridge' => Expect::anyOf(Expect::string(), Expect::type(Statement::class)),
@@ -156,6 +164,7 @@ final class AmpClientExtension extends CompilerExtension
             ->setFactory(HttpClientFactory::class, [
                 'responseHydrator' => new Reference($this->prefix('responseHydrator')),
                 'guzzleClientConfig' => $config->http->guzzle_config,
+                'middlewares' => $config->http->middlewares,
             ]);
 
         $builder->addDefinition($this->prefix('ampClient'))
